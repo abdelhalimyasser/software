@@ -11,9 +11,9 @@ class Employee extends User
     use HasParent, HasChildren;
 
     protected array $childTypes = [
-        UserRole::HR_ADMIN->value => UserRole::class,
+        UserRole::HR_ADMIN->value => HrAdmin::class,
         UserRole::INTERVIEWER->value => Interviewer::class,
-        UserRole::DEPARTMENT_MANGER->value = DepartmentManager::class,
+        UserRole::DEPARTMENT_MANGER->value => DepartmentManager::class,
         UserRole::SHADOW_INTERVIEWER->value => ShadowInterviewer::class
     ];
 

@@ -4,7 +4,7 @@ namespace App\Models;
 
 use App\Models\Employee;
 
-class AbstractInterviewer extends Employee
+abstract class AbstractInterviewer extends Employee
 {
     public function attendInterview()
     {

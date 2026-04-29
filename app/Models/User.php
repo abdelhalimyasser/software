@@ -5,15 +5,25 @@ namespace App\Models;
 use App\Models\Enums\UserRole;
 use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Database\Factories\UserFactory;
-use Illuminate\Database\Eloquent\Attributes\Fillable;
-use Illuminate\Database\Eloquent\Attributes\Hidden;
 use Illuminate\Database\Eloquent\Concerns\HasUuids;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Parental\HasChildren;
 
-class User extends Authenticatable
+/**
+ * Class User
+ *
+ * The User class represents a user in the application and serves as the base model for different user roles such as
+ * Candidate, Employee, HR Admin, Interviewer, Shadow Interviewer, and Department Manager.
+ * It implements the MustVerifyEmail interface to ensure that users verify their email addresses.
+ * The class uses several traits to provide functionality for factory creation, notifications, UUIDs, and handling child models based on user roles.
+ *
+ * @version 1.0
+ * @since 28-04-2026
+ * @author Abdelhalim Yasser
+ */
+class User extends Authenticatable implements MustVerifyEmail
 {
     /** @use HasFactory<UserFactory> */
     use HasFactory, Notifiable, HasUuids, HasChildren;
@@ -31,13 +41,13 @@ class User extends Authenticatable
         'birth_date',
         'email',
         'phone_number',
-        'username',
         'password',
         'role',
         'skills',
         'experience_years',
+        'profile_picture_path',
         'resume_path',
-        'docs_Path',
+        'docs_path',
     ];
 
     /**
@@ -48,10 +58,11 @@ class User extends Authenticatable
      */
     protected array $childTypes = [
         UserRole::CANDIDATE->value => Candidate::class,
-        UserRole::EMPLOYEE->value => Candidate::class,
+        UserRole::EMPLOYEE->value => Employee::class,
         UserRole::HR_ADMIN->value => HrAdmin::class,
         UserRole::INTERVIEWER->value => Interviewer::class,
         UserRole::SHADOW_INTERVIEWER->value => ShadowInterviewer::class,
+        UserRole::DEPARTMENT_MANGER->value => DepartmentManager::class
     ];
 
     /**
