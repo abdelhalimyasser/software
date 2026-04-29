@@ -5,123 +5,97 @@ namespace App\Http\Controllers;
 use App\Http\Requests\LoginUserRequest;
 use App\Http\Requests\RegisterUserRequest;
 use App\Http\Requests\UpdateProfileRequest;
+use App\Http\Requests\RegisterEmployeeRequest;
+use App\Http\Requests\UpdateEmployeeRequest;
+use App\Models\Employee;
 use App\Services\AuthService;
 use Exception;
-use Illuminate\Http\Request;
-use Illuminate\Http\JsonResponse;
-// use Illuminate\Validation\Rules\Password;
-use Illuminate\Support\Facades\Password;
-use Illuminate\Support\Facades\Hash;
 use Illuminate\Auth\Events\PasswordReset;
+use Illuminate\Http\JsonResponse;
+use Illuminate\Http\Request;
+use Illuminate\Routing\Controller;
+use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Password;
 
-
-/**
- * Class AuthController
- *
- * @version 1.0
- * @since 29-04-2026
- * @author Abdelhalim Yasser
- */
 class AuthController extends Controller
 {
     public function __construct(protected AuthService $authService) {}
 
     /**
-     * This is register function that handles the registration of both candidates and employees.
-     * It validates the incoming request data, processes file uploads for
-     * profile pictures, resumes, and documents, and then delegates the actual registration logic to the AuthService.
-     * The function also includes error handling to manage potential issues during file uploads and registration,
-     * returning appropriate JSON responses based on the outcome.
-     *
-     * <ul>
-     *     <li>
-     *         It uses the RegisterUserRequest to validate the incoming data, ensuring that all required fields are present and meet the specified criteria.
-     *     </li>
-     *      <li>
-     *          It uses the AuthService to handle the registration logic, which abstracts away the details of creating user records and generating authentication tokens.
-     *      </li>
-     * </ul>
-     *
-     * @param RegisterUserRequest $request
-     * @return JsonResponse
+     * Public Routes for Candidates
      */
-    public function register(RegisterUserRequest $request): JsonResponse
+    public function registerCandidate(RegisterUserRequest $request): JsonResponse
     {
-        $data = $request->validated();
-
+        // try to validate data
         try {
-            if (isset($data['profile_picture'])) {
-                try {
-                    $data['profile_picture_path'] = $request->file('profile_picture')->store('profile_pictures', 'public');
-                    unset($data['profile_picture']);
-                } catch (Exception $e) {
-                    return response()->json([
-                        'error' => 'Failed to upload profile picture: ' . $e->getMessage()
-                    ], 500);
-                }
-            }
+            $data = $request->validated();
+        } catch (Exception $e) {
+            return response()->json([
+                'error' => 'Unprocessable Entity: ' . $e->getMessage()
+            ], 422);
+        }
 
-            if (isset($data['resume'])) {
-                try {
-                    $data['resume_path'] = $request->file('resume')->store('resumes', 'public');
-                    unset($data['resume_path']);
-                } catch (Exception $e) {
-                    return response()->json([
-                        'error' => 'Failed to upload resume: ' . $e->getMessage()
-                    ], 500);
-                }
+        // try to upload profile picture
+        if ($request->hasFile('profile_picture')) {
+            try {
+                $data['profile_picture_path'] = $request->file('profile_picture_path')->store('profiles', 'public');
+                unset($data['profile_picture']);
+            } catch (Exception $e) {
+                return response()->json([
+                    'error' => 'Failed to upload profile picture: ' . $e->getMessage()
+                ], 500);
             }
+        }
 
-            if (isset($data['docs'])) {
-                try {
-                    $data['docs_path'] = $request->file('docs')->store('docs', 'public');
-                    unset($data['docs_path']);
-                } catch (Exception $e) {
-                    return response()->json([
-                        'error' => 'Failed to upload documents: ' . $e->getMessage()
-                    ], 500);
-                }
+        // try to upload resume
+        if ($request->hasFile('resume')) {
+            try {
+                $data['resume_path'] = $request->file('resume_path')->store('resumes', 'local');
+                unset($data['resume']);
+            } catch (Exception $e) {
+                return response()->json([
+                    'error' => 'Failed to upload resume: ' . $e->getMessage()
+                ], 500);
             }
+        }
 
-            ($data['role'] === 'candidate')
-                ? [$user, $token] = $this->authService->registerCandidate($data)
-                : [$user, $token] = $this->authService->registerEmployee($data);
+        // try to upload docs
+        if ($request->hasFile('docs')) {
+            try {
+                $data['docs_path'] = $request->file('docs_path')->store('documents', 'local');
+                unset($data['docs']);
+            } catch (Exception $e) {
+                return response()->json([
+                    'error' => 'Failed to upload documents: ' . $e->getMessage()
+                ], 500);
+            }
+        }
+
+        // try register the user
+        try {
+            [$user, $token] = $this->authService->registerCandidate($data);
 
             return response()->json([
+                'message' => 'Candidate registered successfully',
                 'user' => $user,
                 'token' => $token
             ], 201);
+
         } catch (Exception $e) {
             return response()->json([
-                'error' => $e->getMessage()
-            ],500);
+                'error' => 'Failed to register candidate: ' . $e->getMessage()
+            ], 500);
         }
     }
 
-    /**
-     * This is the login function that handles user authentication.
-     * It validates the incoming request data to ensure that the email and password are provided and meet the specified criteria.
-     * The function then uses the AuthService to attempt to authenticate the user with the provided credentials.
-     * If authentication is successful, it returns a JSON response containing the authenticated user's information and an authentication token.
-     * If authentication fails, it catches the exception and returns a JSON response with an error message and a 401 status code, indicating unauthorized access.
-     *
-     * <ul>
-     *      <li>
-     *          It uses the AuthService to handle the login logic, which abstracts away the details of verifying user credentials and generating authentication tokens.
-     *      </li>
-     * <ul></ul>
-     *
-     * @param LoginUserRequest $request
-     * @return JsonResponse
-     */
     public function login(LoginUserRequest $request): JsonResponse
     {
         try {
-            $request->validated();
+            $data = $request->validated();
         } catch (Exception $e) {
             return response()->json([
-                'error' => 'Failed to validate request: ' . $e->getMessage()
-            ], 400);
+                'error' => 'Unprocessable Entity: ' . $e->getMessage()
+            ], 422);
         }
 
         try {
@@ -141,10 +115,7 @@ class AuthController extends Controller
     }
 
     /**
-     * This is the logout function that handles user logout by deleting the current access token associated with the authenticated user.
-     *
-     * @param Request $request
-     * @return JsonResponse
+     * Private Routes
      */
     public function logout(Request $request): JsonResponse
     {
@@ -157,61 +128,50 @@ class AuthController extends Controller
 
     public function updateProfile(UpdateProfileRequest $request): JsonResponse
     {
-        $user = $request->user();
-
         try {
-            $validatedData = $request->validated();
+            $data = $request->validated();
         } catch (Exception $e) {
-            return response()->json([
-                'error' => 'Failed to validate request: ' . $e->getMessage()
-            ], 400);
+            return response()->json(['error' => 'Unprocessable Entity: ' . $e->getMessage()], 422);
         }
 
+        // handle optional uploads
         if ($request->hasFile('profile_picture')) {
             try {
-                $validatedData['profile_picture_path'] = $request->file('profile_picture')->store('profile_pictures', 'public');
-                unset($validatedData['profile_picture']);
+                $data['profile_picture_path'] = $request->file('profile_picture')->store('profiles', 'public');
+                unset($data['profile_picture']);
             } catch (Exception $e) {
-                return response()->json([
-                    'error' => 'Failed to upload profile picture: ' . $e->getMessage()
-                ], 500);
+                return response()->json(['error' => 'Failed to upload profile picture: ' . $e->getMessage()], 500);
             }
         }
 
-        if($request->hasFile('resume')) {
+        if ($request->hasFile('resume')) {
             try {
-                $validatedData['resume_path'] = $request->file('resume')->store('resumes', 'public');
-                unset($validatedData['resume']);
+                $data['resume_path'] = $request->file('resume')->store('resumes', 'local');
+                unset($data['resume']);
             } catch (Exception $e) {
-                return response()->json([
-                    'error' => 'Failed to upload resume: ' . $e->getMessage()
-                ], 500);
+                return response()->json(['error' => 'Failed to upload resume: ' . $e->getMessage()], 500);
             }
         }
 
         if ($request->hasFile('docs')) {
             try {
-                $validatedData['docs_path'] = $request->file('docs')->store('docs', 'public');
-                unset($validatedData['docs']);
+                $data['docs_path'] = $request->file('docs')->store('documents', 'local');
+                unset($data['docs']);
             } catch (Exception $e) {
-                return response()->json([
-                    'error' => 'Failed to upload documents: ' . $e->getMessage()
-                ], 500);
+                return response()->json(['error' => 'Failed to upload documents: ' . $e->getMessage()], 500);
             }
         }
 
         try {
-            $user->update($validatedData);
+            $user = $request->user();
+            $user->update($data);
 
             return response()->json([
                 'message' => 'Profile updated successfully',
-                'user' => $user->fresh()
+                'user' => $user->fresh(),
             ], 200);
-
         } catch (Exception $e) {
-            return response()->json([
-                'error' => 'Failed to update profile: ' . $e->getMessage()
-            ], 500);
+            return response()->json(['error' => 'Failed to update profile: ' . $e->getMessage()], 500);
         }
     }
 
@@ -235,7 +195,7 @@ class AuthController extends Controller
             'token' => 'required|string',
             'password' => [
                 'required', 'string', 'confirmed',
-                \Illuminate\Validation\Rules\Password::min(8)->mixedCase()->numbers()->symbols()
+                Password::min(8)->mixedCase()->numbers()->symbols()
             ],
         ]);
 
@@ -255,5 +215,81 @@ class AuthController extends Controller
         return $status === Password::PASSWORD_RESET
             ? response()->json(['message' => 'Password has been successfully reset.'])
             : response()->json(['error' => 'Invalid token or email.'], 400);
+    }
+
+
+    /**
+     * Private Routes for Employees
+     */
+    public function registerEmployee(RegisterEmployeeRequest $request): JsonResponse
+    {
+        try {
+            $data = $request->validated();
+        } catch (Exception $e) {
+            return response()->json(['error' => 'Unprocessable Entity: ' . $e->getMessage()], 422);
+        }
+
+        // handle optional file uploads
+        if ($request->hasFile('profile_picture')) {
+            try {
+                $data['profile_picture_path'] = $request->file('profile_picture')->store('profiles', 'public');
+                unset($data['profile_picture']);
+            } catch (Exception $e) {
+                return response()->json(['error' => 'Failed to upload profile picture: ' . $e->getMessage()], 500);
+            }
+        }
+
+        try {
+            [$user, $token] = $this->authService->registerEmployee($data);
+
+            return response()->json([
+                'message' => 'Employee registered successfully',
+                'employee' => $user->fresh(),
+                'id' => $user->getKey(),
+                'token' => $token,
+            ], 201);
+
+        } catch (Exception $e) {
+            return response()->json(['error' => 'Failed to register employee: ' . $e->getMessage()], 500);
+        }
+    }
+
+    /**
+     * Update an existing employee's data.
+     */
+    public function updateEmployee(UpdateEmployeeRequest $request, $id): JsonResponse
+    {
+        try {
+            $employee = Employee::findOrFail($id);
+        } catch (Exception $e) {
+            return response()->json(['error' => 'Employee not found.'], 404);
+        }
+
+        try {
+            $data = $request->validated();
+        } catch (Exception $e) {
+            return response()->json(['error' => 'Unprocessable Entity: ' . $e->getMessage()], 422);
+        }
+
+        // handle optional file uploads
+        if ($request->hasFile('profile_picture')) {
+            try {
+                $data['profile_picture_path'] = $request->file('profile_picture')->store('profiles', 'public');
+                unset($data['profile_picture']);
+            } catch (Exception $e) {
+                return response()->json(['error' => 'Failed to upload profile picture: ' . $e->getMessage()], 500);
+            }
+        }
+
+        try {
+            $employee->update($data);
+
+            return response()->json([
+                'message' => 'Employee updated successfully',
+                'employee' => $employee->fresh(),
+            ], 200);
+        } catch (Exception $e) {
+            return response()->json(['error' => 'Failed to update employee: ' . $e->getMessage()], 500);
+        }
     }
 }

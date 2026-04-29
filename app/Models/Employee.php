@@ -8,16 +8,24 @@ use Parental\HasParent;
 
 class Employee extends User
 {
-    use HasParent, HasChildren;
+    use HasParent;
 
-    protected array $childTypes = [
-        UserRole::HR_ADMIN->value => HrAdmin::class,
-        UserRole::INTERVIEWER->value => Interviewer::class,
-        UserRole::DEPARTMENT_MANGER->value => DepartmentManager::class,
-        UserRole::SHADOW_INTERVIEWER->value => ShadowInterviewer::class
+    protected $fillable = [
+        'emp_id'
     ];
 
-    public function makeReferal(int $userId)
+    protected static function booted(): void
+    {
+        static::creating(function (Employee $employee) {
+            do {
+                $generatedId = 'NH-EMP-' . date('Y') . '-' . str_pad((string) mt_rand(1, 9999), 4, '0', STR_PAD_LEFT);
+            } while (self::where('emp_id', $generatedId)->exists());
+
+            $employee->emp_id = $generatedId;
+        });
+    }
+
+    public function makeReferral(int $userId)
     {
         // Logic to create a referral for the given user ID
     }

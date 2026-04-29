@@ -21,7 +21,7 @@ class CheckRole
             return response()->json(['error' => 'Unauthorized'], 401);
         }
 
-        $userRole = $user->role->value;
+        $userRole = $user->role;
 
         if (!in_array($userRole, $roles)) {
             return response()->json([

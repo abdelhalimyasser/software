@@ -38,7 +38,7 @@ class RegisterUserRequest extends FormRequest
      */
     public function authorize(): bool
     {
-        return false;
+        return true;
     }
 
     /**
@@ -67,8 +67,8 @@ class RegisterUserRequest extends FormRequest
             'skills' => 'nullable|array',
             'experience_years' => 'required|integer|min:0|max:50',
             'profile_picture' => 'required|image|mimes:jpeg,png,jpg,webp|max:2048',
-            'resume' => 'required|file|mimes:pdf,doc,docx|max:5120',
-            'docs' => 'required|file|mimes:pdf,png,jpg,zip|max:10240',
+            'resume_path' => 'required|file|mimes:pdf,doc,docx|max:5120',
+            'docs_path' => 'required|file|mimes:pdf,png,jpg,zip|max:10240',
         ];
     }
 
@@ -77,7 +77,7 @@ class RegisterUserRequest extends FormRequest
      *
      * @return string[]
      */
-    public function message(): array
+    public function messages(): array
     {
         return [
             // First Name Validation Messages

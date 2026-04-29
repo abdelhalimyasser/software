@@ -43,11 +43,7 @@ class User extends Authenticatable implements MustVerifyEmail
         'phone_number',
         'password',
         'role',
-        'skills',
-        'experience_years',
         'profile_picture_path',
-        'resume_path',
-        'docs_path',
     ];
 
     /**
@@ -62,7 +58,7 @@ class User extends Authenticatable implements MustVerifyEmail
         UserRole::HR_ADMIN->value => HrAdmin::class,
         UserRole::INTERVIEWER->value => Interviewer::class,
         UserRole::SHADOW_INTERVIEWER->value => ShadowInterviewer::class,
-        UserRole::DEPARTMENT_MANGER->value => DepartmentManager::class
+        UserRole::DEPARTMENT_MANAGER->value => DepartmentManager::class
     ];
 
     /**

@@ -8,6 +8,7 @@
     "require": {
         "php": "^8.3",
         "calebporzio/parental": "^1.6",
+        "dedoc/scramble": "^0.13.22",
         "laravel/framework": "^13.0",
         "laravel/tinker": "^3.0"
     },
