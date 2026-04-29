@@ -1,0 +1,873 @@
+openapi: 3.0.3
+
+info:
+  title: NextHire — AI-Driven Smart Recruitment API
+  description: |
+    RESTful API for the **NextHire** recruitment and interview management system.
+
+    ## Authentication
+    All **private** endpoints require a Bearer token obtained from the Login or Registration endpoints.
+    Include it in the `Authorization` header as `Bearer {token}`.
+
+    ## User Roles
+    | Role | Value | Description |
+    |------|-------|-------------|
+    | Candidate | `CANDIDATE` | Job applicant — self-registers |
+    | Employee | `EMPLOYEE` | Company employee |
+    | HR Admin | `HR_ADMIN` | Human resources administrator |
+    | Interviewer | `INTERVIEWER` | Conducts interviews |
+    | Shadow Interviewer | `SHADOW_INTERVIEWER` | Observes interviews |
+    | Department Manager | `DEPARTMENT_MANAGER` | Approves requisitions |
+
+    ## Password Policy
+    - **Candidate Registration:** min 8, mixed case, numbers, symbols, uncompromised (HIBP)
+    - **Login:** min 8, mixed case, numbers, symbols
+    - **Employee Registration:** min 8 only
+    - **Password Reset:** min 8, mixed case, numbers, symbols, confirmed
+  version: 1.0.0
+  contact:
+    name: Abdelhalim Yasser
+  license:
+    name: Proprietary
+
+servers:
+  - url: http://localhost:8000/api
+    description: Local Development (XAMPP)
+
+tags:
+  - name: Public — Candidate
+    description: Self-service candidate registration
+  - name: Public — Auth
+    description: Login and password recovery (no auth required)
+  - name: Private — Authenticated
+    description: Requires a valid Bearer token
+  - name: Private — Employee
+    description: Employee management endpoints
+
+# ─────────────────────────────────────────────
+#  Security Schemes
+# ─────────────────────────────────────────────
+components:
+
+  securitySchemes:
+    BearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: Sanctum
+      description: Laravel Sanctum personal access token returned by Login or Register
+
+  # ─────────────────────────────────────────
+  #  Reusable Schemas
+  # ─────────────────────────────────────────
+  schemas:
+
+    # ── User Object ──────────────────────────
+    UserObject:
+      type: object
+      properties:
+        id:
+          type: integer
+          example: 1
+        first_name:
+          type: string
+          example: Jane
+        last_name:
+          type: string
+          example: Doe
+        name:
+          type: string
+          description: Auto-computed from first_name + last_name
+          example: Jane Doe
+        birth_date:
+          type: string
+          format: date
+          nullable: true
+          example: "2000-01-01"
+        email:
+          type: string
+          format: email
+          example: jane@example.com
+        phone_number:
+          type: string
+          nullable: true
+          example: "0100000000"
+        role:
+          $ref: "#/components/schemas/UserRole"
+        emp_id:
+          type: string
+          nullable: true
+          description: Auto-generated for employees (NH-EMP-YYYY-XXXX)
+          example: null
+        profile_picture_path:
+          type: string
+          nullable: true
+          example: profiles/abc123.png
+        resume_path:
+          type: string
+          nullable: true
+          example: resumes/def456.pdf
+        docs_path:
+          type: string
+          nullable: true
+          example: documents/ghi789.zip
+        skills:
+          type: array
+          nullable: true
+          items:
+            type: string
+          example: ["PHP", "Laravel"]
+        experience_years:
+          type: integer
+          nullable: true
+          example: 4
+        email_verified_at:
+          type: string
+          format: date-time
+          nullable: true
+        created_at:
+          type: string
+          format: date-time
+          example: "2026-04-29T18:00:00.000000Z"
+        updated_at:
+          type: string
+          format: date-time
+          example: "2026-04-29T18:00:00.000000Z"
+
+    # ── Employee Object (extends User) ───────
+    EmployeeObject:
+      allOf:
+        - $ref: "#/components/schemas/UserObject"
+        - type: object
+          properties:
+            emp_id:
+              type: string
+              description: Auto-generated unique employee ID
+              example: NH-EMP-2026-4271
+
+    # ── User Role Enum ───────────────────────
+    UserRole:
+      type: string
+      enum:
+        - CANDIDATE
+        - EMPLOYEE
+        - HR_ADMIN
+        - INTERVIEWER
+        - SHADOW_INTERVIEWER
+        - DEPARTMENT_MANAGER
+      example: CANDIDATE
+
+    # ── Error Response ───────────────────────
+    ErrorResponse:
+      type: object
+      properties:
+        error:
+          type: string
+          example: Human-readable error message.
+
+    # ── Validation Error Response ────────────
+    ValidationErrorResponse:
+      type: object
+      properties:
+        message:
+          type: string
+          example: "The first name field is required. (and 3 more errors)"
+        errors:
+          type: object
+          additionalProperties:
+            type: array
+            items:
+              type: string
+          example:
+            first_name: ["Please enter your first name."]
+            email: ["Please enter a valid email address."]
+
+    # ── Message Response ─────────────────────
+    MessageResponse:
+      type: object
+      properties:
+        message:
+          type: string
+
+# ─────────────────────────────────────────────
+#  Paths
+# ─────────────────────────────────────────────
+paths:
+
+  # ══════════════════════════════════════════
+  #  1. Register Candidate
+  # ══════════════════════════════════════════
+  /v1/public/auth/register:
+    post:
+      operationId: registerCandidate
+      tags: [Public — Candidate]
+      summary: Register a new candidate
+      description: |
+        Creates a new candidate account with file uploads.
+        A verification email is dispatched and an auth token is returned.
+        Requires `multipart/form-data` because of file uploads.
+      requestBody:
+        required: true
+        content:
+          multipart/form-data:
+            schema:
+              type: object
+              required:
+                - first_name
+                - last_name
+                - birth_date
+                - email
+                - phone_number
+                - password
+                - experience_years
+                - profile_picture
+                - resume
+                - docs
+              properties:
+                first_name:
+                  type: string
+                  maxLength: 255
+                  description: Candidate's first name
+                  example: Jane
+                last_name:
+                  type: string
+                  maxLength: 255
+                  description: Candidate's last name
+                  example: Doe
+                birth_date:
+                  type: string
+                  format: date
+                  description: Date of birth — must be at least 18 years old
+                  example: "2000-01-01"
+                email:
+                  type: string
+                  format: email
+                  maxLength: 255
+                  description: Unique email address
+                  example: jane@example.com
+                phone_number:
+                  type: string
+                  maxLength: 15
+                  description: Unique phone number
+                  example: "0100000000"
+                password:
+                  type: string
+                  format: password
+                  minLength: 8
+                  maxLength: 255
+                  description: "Min 8 chars, mixed case, numbers, symbols, uncompromised"
+                  example: "Str0ng!Pass#99x"
+                skills:
+                  type: array
+                  items:
+                    type: string
+                  description: Optional list of skills
+                  example: ["PHP", "Laravel"]
+                experience_years:
+                  type: integer
+                  minimum: 0
+                  maximum: 50
+                  description: Years of professional experience
+                  example: 4
+                profile_picture:
+                  type: string
+                  format: binary
+                  description: "Profile photo (jpeg/png/jpg/webp, max 2 MB)"
+                resume:
+                  type: string
+                  format: binary
+                  description: "Resume file (pdf/doc/docx, max 5 MB)"
+                docs:
+                  type: string
+                  format: binary
+                  description: "Supporting documents (pdf/png/jpg/zip, max 10 MB)"
+      responses:
+        "201":
+          description: Candidate registered successfully
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: Candidate registered successfully
+                  user:
+                    $ref: "#/components/schemas/UserObject"
+                  token:
+                    type: string
+                    description: Sanctum access token
+                    example: "1|abc123def456..."
+        "422":
+          description: Validation error
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ValidationErrorResponse"
+        "500":
+          description: Server error (file upload failure or DB error)
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+
+  # ══════════════════════════════════════════
+  #  2. Login
+  # ══════════════════════════════════════════
+  /v1/auth/login:
+    post:
+      operationId: login
+      tags: [Public — Auth]
+      summary: Authenticate user
+      description: |
+        Authenticates any user (Candidate, Employee, HR Admin, etc.) and returns
+        a Sanctum access token. An identical endpoint exists at `/v1/private/auth/login`.
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required: [email, password]
+              properties:
+                email:
+                  type: string
+                  format: email
+                  description: Must exist in the users table
+                  example: jane@example.com
+                password:
+                  type: string
+                  format: password
+                  minLength: 8
+                  description: "Min 8 chars, mixed case, numbers, symbols"
+                  example: "Str0ng!Pass#99x"
+      responses:
+        "200":
+          description: Authentication successful
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  user:
+                    $ref: "#/components/schemas/UserObject"
+                  token:
+                    type: string
+                    description: Sanctum access token
+                    example: "2|xyz789abc012..."
+        "401":
+          description: Invalid password
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+              example:
+                error: "The provided credentials are incorrect."
+        "422":
+          description: Validation error (email not found, weak password)
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ValidationErrorResponse"
+
+  /v1/private/auth/login:
+    post:
+      operationId: loginEmployee
+      tags: [Private — Employee]
+      summary: Authenticate user (employee alias)
+      description: Identical to `POST /v1/auth/login`. Provided for client convenience.
+      requestBody:
+        $ref: "#/paths/~1v1~1auth~1login/post/requestBody"
+      responses:
+        "200":
+          $ref: "#/paths/~1v1~1auth~1login/post/responses/200"
+        "401":
+          $ref: "#/paths/~1v1~1auth~1login/post/responses/401"
+        "422":
+          $ref: "#/paths/~1v1~1auth~1login/post/responses/422"
+
+  # ══════════════════════════════════════════
+  #  3. Logout
+  # ══════════════════════════════════════════
+  /v1/logout:
+    post:
+      operationId: logout
+      tags: [Private — Authenticated]
+      summary: Revoke current token
+      description: Deletes the current Sanctum access token, logging the user out.
+      security:
+        - BearerAuth: []
+      responses:
+        "200":
+          description: Successfully logged out
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/MessageResponse"
+              example:
+                message: Successfully logged out
+        "401":
+          description: Unauthenticated
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+              example:
+                error: Unauthenticated.
+
+  # ══════════════════════════════════════════
+  #  4. Update Profile
+  # ══════════════════════════════════════════
+  /v1/profile/update:
+    post:
+      operationId: updateProfile
+      tags: [Private — Authenticated]
+      summary: Update own profile
+      description: |
+        Updates the authenticated user's profile. All fields are optional —
+        only send what needs changing. Use `multipart/form-data` when including file uploads.
+      security:
+        - BearerAuth: []
+      requestBody:
+        required: false
+        content:
+          multipart/form-data:
+            schema:
+              type: object
+              properties:
+                first_name:
+                  type: string
+                  maxLength: 255
+                  example: Jane
+                last_name:
+                  type: string
+                  maxLength: 255
+                  example: Updated
+                phone_number:
+                  type: string
+                  maxLength: 15
+                  description: Unique (excludes current user)
+                  example: "0100000005"
+                skills:
+                  type: array
+                  items:
+                    type: string
+                  example: ["PHP", "Testing"]
+                experience_years:
+                  type: integer
+                  minimum: 0
+                  maximum: 50
+                  example: 5
+                profile_picture:
+                  type: string
+                  format: binary
+                  description: "Image (jpeg/png/jpg/webp, max 2 MB)"
+                resume:
+                  type: string
+                  format: binary
+                  description: "Resume (pdf/doc/docx, max 5 MB)"
+                docs:
+                  type: string
+                  format: binary
+                  description: "Documents (pdf/png/jpg/zip, max 10 MB)"
+          application/json:
+            schema:
+              type: object
+              properties:
+                first_name:
+                  type: string
+                  example: Jane
+                last_name:
+                  type: string
+                  example: Updated
+                phone_number:
+                  type: string
+                  example: "0100000005"
+                skills:
+                  type: array
+                  items:
+                    type: string
+                experience_years:
+                  type: integer
+                  example: 5
+      responses:
+        "200":
+          description: Profile updated successfully
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: Profile updated successfully
+                  user:
+                    $ref: "#/components/schemas/UserObject"
+        "401":
+          description: Unauthenticated
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+        "422":
+          description: Validation error
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ValidationErrorResponse"
+        "500":
+          description: Server error
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+
+  # ══════════════════════════════════════════
+  #  5. Forget Password
+  # ══════════════════════════════════════════
+  /v1/auth/forget-password:
+    post:
+      operationId: forgetPassword
+      tags: [Public — Auth]
+      summary: Request password reset link
+      description: Sends a password reset link to the registered email address.
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required: [email]
+              properties:
+                email:
+                  type: string
+                  format: email
+                  description: Must exist in the users table
+                  example: jane@example.com
+      responses:
+        "200":
+          description: Reset link sent
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/MessageResponse"
+              example:
+                message: Reset link sent to your email.
+        "422":
+          description: Email not found
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ValidationErrorResponse"
+        "500":
+          description: Mail delivery failure
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+              example:
+                error: Unable to send reset link.
+
+  # ══════════════════════════════════════════
+  #  6. Reset Password
+  # ══════════════════════════════════════════
+  /v1/auth/reset-password:
+    post:
+      operationId: resetPassword
+      tags: [Public — Auth]
+      summary: Reset password with token
+      description: |
+        Resets the user's password using the token received via the forget-password email.
+        Fires a `PasswordReset` event on success.
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required: [email, token, password, password_confirmation]
+              properties:
+                email:
+                  type: string
+                  format: email
+                  description: Must exist in the users table
+                  example: jane@example.com
+                token:
+                  type: string
+                  description: Reset token from email link
+                  example: a1b2c3d4e5f6...
+                password:
+                  type: string
+                  format: password
+                  minLength: 8
+                  description: "Min 8, mixed case, numbers, symbols"
+                  example: "N3w!Secure#Pass"
+                password_confirmation:
+                  type: string
+                  format: password
+                  description: Must match `password`
+                  example: "N3w!Secure#Pass"
+      responses:
+        "200":
+          description: Password reset successful
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/MessageResponse"
+              example:
+                message: Password has been successfully reset.
+        "400":
+          description: Invalid or expired token
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+              example:
+                error: Invalid token or email.
+        "422":
+          description: Validation error
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ValidationErrorResponse"
+
+  # ══════════════════════════════════════════
+  #  7. Register Employee
+  # ══════════════════════════════════════════
+  /v1/private/auth/register-new-employee:
+    post:
+      operationId: registerEmployee
+      tags: [Private — Employee]
+      summary: Register a new employee
+      description: |
+        Creates a new employee account. The system auto-generates a unique `emp_id`
+        in the format `NH-EMP-YYYY-XXXX`. A verification email is dispatched.
+
+        > **Note:** This endpoint should be restricted to HR Admins in production.
+      requestBody:
+        required: true
+        content:
+          multipart/form-data:
+            schema:
+              type: object
+              required: [first_name, last_name, email, password, role]
+              properties:
+                first_name:
+                  type: string
+                  maxLength: 255
+                  example: John
+                last_name:
+                  type: string
+                  maxLength: 255
+                  example: Smith
+                email:
+                  type: string
+                  format: email
+                  maxLength: 255
+                  description: Unique email
+                  example: john@example.com
+                password:
+                  type: string
+                  format: password
+                  minLength: 8
+                  example: Password123!
+                role:
+                  type: string
+                  enum: [EMPLOYEE, HR_ADMIN, INTERVIEWER, SHADOW_INTERVIEWER, DEPARTMENT_MANAGER]
+                  description: Employee role (not CANDIDATE)
+                  example: EMPLOYEE
+                phone_number:
+                  type: string
+                  maxLength: 15
+                  nullable: true
+                  description: Optional, unique
+                  example: "0100000001"
+                profile_picture:
+                  type: string
+                  format: binary
+                  description: "Optional image (jpeg/png/jpg/webp, max 2 MB)"
+          application/json:
+            schema:
+              type: object
+              required: [first_name, last_name, email, password, role]
+              properties:
+                first_name:
+                  type: string
+                  example: John
+                last_name:
+                  type: string
+                  example: Smith
+                email:
+                  type: string
+                  format: email
+                  example: john@example.com
+                password:
+                  type: string
+                  format: password
+                  example: Password123!
+                role:
+                  type: string
+                  enum: [EMPLOYEE, HR_ADMIN, INTERVIEWER, SHADOW_INTERVIEWER, DEPARTMENT_MANAGER]
+                  example: EMPLOYEE
+                phone_number:
+                  type: string
+                  nullable: true
+                  example: "0100000001"
+      responses:
+        "201":
+          description: Employee registered successfully
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: Employee registered successfully
+                  employee:
+                    $ref: "#/components/schemas/EmployeeObject"
+                  id:
+                    type: integer
+                    description: Employee's database ID
+                    example: 2
+                  token:
+                    type: string
+                    description: Sanctum access token
+                    example: "3|mno345pqr678..."
+        "422":
+          description: Validation error
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ValidationErrorResponse"
+        "500":
+          description: Server error
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+
+  # ══════════════════════════════════════════
+  #  8. Update Employee
+  # ══════════════════════════════════════════
+  /v1/private/auth/update-employee/{id}:
+    put:
+      operationId: updateEmployee
+      tags: [Private — Employee]
+      summary: Update an existing employee
+      description: |
+        Updates an existing employee's data by ID. All fields are optional —
+        only send what needs changing. Unique constraints exclude the current record.
+
+        > **Note:** This endpoint should be restricted to HR Admins in production.
+      parameters:
+        - name: id
+          in: path
+          required: true
+          description: Employee's database ID
+          schema:
+            type: integer
+            example: 2
+      requestBody:
+        required: false
+        content:
+          multipart/form-data:
+            schema:
+              type: object
+              properties:
+                first_name:
+                  type: string
+                  maxLength: 255
+                  example: John
+                last_name:
+                  type: string
+                  maxLength: 255
+                  example: Updated
+                email:
+                  type: string
+                  format: email
+                  maxLength: 255
+                  description: Unique (excludes current employee)
+                  example: john.updated@example.com
+                password:
+                  type: string
+                  format: password
+                  minLength: 8
+                  example: NewPass456!
+                role:
+                  type: string
+                  enum: [EMPLOYEE, HR_ADMIN, INTERVIEWER, SHADOW_INTERVIEWER, DEPARTMENT_MANAGER]
+                  example: HR_ADMIN
+                emp_id:
+                  type: string
+                  description: Unique (excludes current employee)
+                  example: NH-EMP-2026-9999
+                phone_number:
+                  type: string
+                  maxLength: 15
+                  description: Unique (excludes current employee)
+                  example: "0100000099"
+                profile_picture:
+                  type: string
+                  format: binary
+                  description: "Image (jpeg/png/jpg/webp, max 2 MB)"
+          application/json:
+            schema:
+              type: object
+              properties:
+                first_name:
+                  type: string
+                  example: John
+                last_name:
+                  type: string
+                  example: Updated
+                email:
+                  type: string
+                  format: email
+                  example: john.updated@example.com
+                password:
+                  type: string
+                  format: password
+                  example: NewPass456!
+                role:
+                  type: string
+                  enum: [EMPLOYEE, HR_ADMIN, INTERVIEWER, SHADOW_INTERVIEWER, DEPARTMENT_MANAGER]
+                  example: HR_ADMIN
+                emp_id:
+                  type: string
+                  example: NH-EMP-2026-9999
+                phone_number:
+                  type: string
+                  example: "0100000099"
+      responses:
+        "200":
+          description: Employee updated successfully
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: Employee updated successfully
+                  employee:
+                    $ref: "#/components/schemas/EmployeeObject"
+        "404":
+          description: Employee not found
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+              example:
+                error: Employee not found.
+        "422":
+          description: Validation error
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ValidationErrorResponse"
+        "500":
+          description: Server error
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
