@@ -16,6 +16,7 @@ use Illuminate\Http\Request;
 use Illuminate\Routing\Controller;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Password;
+use Illuminate\Validation\Rules\Password as PasswordRules;
 
 class AuthController extends Controller
 {
@@ -38,7 +39,7 @@ class AuthController extends Controller
         // try to upload profile picture
         if ($request->hasFile('profile_picture')) {
             try {
-                $data['profile_picture_path'] = $request->file('profile_picture_path')->store('profiles', 'public');
+                $data['profile_picture_path'] = $request->file('profile_picture')->store('profiles', 'public');
                 unset($data['profile_picture']);
             } catch (Exception $e) {
                 return response()->json([
@@ -50,7 +51,7 @@ class AuthController extends Controller
         // try to upload resume
         if ($request->hasFile('resume')) {
             try {
-                $data['resume_path'] = $request->file('resume_path')->store('resumes', 'local');
+                $data['resume_path'] = $request->file('resume')->store('resumes', 'local');
                 unset($data['resume']);
             } catch (Exception $e) {
                 return response()->json([
@@ -62,7 +63,7 @@ class AuthController extends Controller
         // try to upload docs
         if ($request->hasFile('docs')) {
             try {
-                $data['docs_path'] = $request->file('docs_path')->store('documents', 'local');
+                $data['docs_path'] = $request->file('docs')->store('documents', 'local');
                 unset($data['docs']);
             } catch (Exception $e) {
                 return response()->json([
@@ -195,7 +196,7 @@ class AuthController extends Controller
             'token' => 'required|string',
             'password' => [
                 'required', 'string', 'confirmed',
-                Password::min(8)->mixedCase()->numbers()->symbols()
+                PasswordRules::min(8)->mixedCase()->numbers()->symbols()
             ],
         ]);
 

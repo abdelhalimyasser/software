@@ -11,18 +11,29 @@ class Employee extends User
     use HasParent;
 
     protected $fillable = [
-        'emp_id'
+        'name',
+        'first_name',
+        'last_name',
+        'birth_date',
+        'email',
+        'phone_number',
+        'password',
+        'role',
+        'profile_picture_path',
+        'emp_id',
     ];
 
-    protected static function booted(): void
+    public function save(array $options = []): bool
     {
-        static::creating(function (Employee $employee) {
+        if (!$this->exists && empty($this->emp_id)) {
             do {
                 $generatedId = 'NH-EMP-' . date('Y') . '-' . str_pad((string) mt_rand(1, 9999), 4, '0', STR_PAD_LEFT);
             } while (self::where('emp_id', $generatedId)->exists());
 
-            $employee->emp_id = $generatedId;
-        });
+            $this->emp_id = $generatedId;
+        }
+
+        return parent::save($options);
     }
 
     public function makeReferral(int $userId)

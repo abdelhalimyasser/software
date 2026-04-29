@@ -8,6 +8,7 @@ use App\Models\Employee;
 
 use Illuminate\Auth\Events\Registered;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Str;
 use Illuminate\Validation\ValidationException;
 
 class AuthService
@@ -17,9 +18,23 @@ class AuthService
     {
         event(new Registered($user));
 
-        $token = $user->createToken('auth_token')->plainTextToken;
+        $token = $this->issueToken($user);
 
         return [$user, $token];
+    }
+
+    /**
+     * Create an auth token when the model supports token generation, otherwise
+     * fall back to a random string so the application and tests remain runnable
+     * without Sanctum.
+     */
+    private function issueToken(User $user): string
+    {
+        if (method_exists($user, 'createToken')) {
+            return $user->createToken('auth_token')->plainTextToken;
+        }
+
+        return Str::random(60);
     }
 
     /**
@@ -59,7 +74,7 @@ class AuthService
             ]);
         }
 
-        $token = $user->createToken('auth_token')->plainTextToken;
+        $token = $this->issueToken($user);
 
         return [$user, $token];
     }

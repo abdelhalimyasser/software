@@ -5,7 +5,7 @@ namespace App\Models;
 use App\Models\Enums\UserRole;
 use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Database\Factories\UserFactory;
-use Illuminate\Database\Eloquent\Concerns\HasUuids;
+
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
@@ -26,7 +26,7 @@ use Parental\HasChildren;
 class User extends Authenticatable implements MustVerifyEmail
 {
     /** @use HasFactory<UserFactory> */
-    use HasFactory, Notifiable, HasUuids, HasChildren;
+    use HasFactory, Notifiable, HasChildren;
 
     protected string $childColumn = 'role';
 
@@ -36,6 +36,7 @@ class User extends Authenticatable implements MustVerifyEmail
      * @var string[]
      */
     protected $fillable = [
+        'name',
         'first_name',
         'last_name',
         'birth_date',
@@ -45,6 +46,15 @@ class User extends Authenticatable implements MustVerifyEmail
         'role',
         'profile_picture_path',
     ];
+
+    public function save(array $options = []): bool
+    {
+        if (empty($this->name) && ($this->first_name || $this->last_name)) {
+            $this->name = trim(($this->first_name ?? '') . ' ' . ($this->last_name ?? ''));
+        }
+
+        return parent::save($options);
+    }
 
     /**
      * This array defines the possible child types for the User model,
