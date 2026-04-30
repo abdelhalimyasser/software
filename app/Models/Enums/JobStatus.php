@@ -6,10 +6,8 @@ namespace App\Models\Enums;
 
 enum JobStatus: string
 {
-    case DRAFT = 'DRAFT';
     case PENDING = 'PENDING';
-    case APPROVEL = 'APPROVEL';
-    case ACTIVE = 'ACTIVE';
+    case REJECTED = 'REJECTED';
+    case APPROVED = 'APPROVED';
     case CLOSED = 'CLOSED';
-    case ARCHIVED = 'ARCHIVED';
 }

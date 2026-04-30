@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\AuthController;
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\JobRequisitionController;
 
 // Public Routes for Candidates
 Route::prefix('v1/public/auth')->group(function () {
@@ -26,4 +27,13 @@ Route::prefix('v1/private/auth')->group(function () {
     Route::post('/register-new-employee', [AuthController::class, 'registerEmployee']);
     Route::post('/login', [AuthController::class, 'login']);
     Route::put('/update-employee/{id}', [AuthController::class, 'updateEmployee']);
+});
+
+// Private Routes for Job Requisitions
+Route::middleware('auth:sanctum')->prefix('v1/jobs')->group(function () {
+    Route::get('/', [JobRequisitionController::class, 'index']);
+    Route::get('/{job}', [JobRequisitionController::class, 'show']);
+    Route::post('/add', [JobRequisitionController::class, 'store']);
+    Route::post('/{job}/approve', [JobRequisitionController::class, 'approve']);
+    Route::post('/{job}/reject', [JobRequisitionController::class, 'reject']);
 });
