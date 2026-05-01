@@ -562,3 +562,87 @@ Generated automatically on first save. Guaranteed unique via DB check loop.
 | Contains symbols | ✅ | ✅ | ❌ | ✅ |
 | Not compromised (HIBP) | ✅ | ❌ | ❌ | ❌ |
 | Confirmation required | ❌ | ❌ | ❌ | ✅ |
+
+## Job Posts (Requisitions)
+
+### 1. Get All Job Posts
+- **Endpoint:** `/api/v1/jobs`
+- **Method:** `GET`
+- **Authentication:** Bearer Token required
+- **Description:** Returns all job posts. If the user is a Candidate, it filters jobs by matching experience_years and skills (>80% match).
+- **Response (200 OK):**
+  ```json
+  {
+      "jobs": [
+          {
+              "id": 1,
+              "title": "Software Engineer",
+              "description": "Great job",
+              "department": "Engineering",
+              "location": "Remote",
+              "experience_level": 3,
+              "skills": ["PHP", "Laravel"],
+              "status": "APPROVED",
+              "created_by": 1,
+              "status_updated_by": 2,
+              "status_reason": "Approved budget"
+          }
+      ]
+  }
+  ```
+
+### 2. Create Job Post
+- **Endpoint:** `/api/v1/jobs`
+- **Method:** `POST`
+- **Authentication:** Bearer Token required (HR_ADMIN only)
+- **Body Parameters:**
+  - `title` (string, required)
+  - `description` (string, required)
+  - `department` (string, required)
+  - `experience_level` (integer, required)
+- **Response (201 Created):**
+  ```json
+  {
+      "message": "Job created. Managers have been notified.",
+      "job": { ... }
+  }
+  ```
+
+### 3. Get Job Post Details
+- **Endpoint:** `/api/v1/jobs/{job}`
+- **Method:** `GET`
+- **Authentication:** Bearer Token required
+- **Response (200 OK):**
+  ```json
+  {
+      "job": { ... }
+  }
+  ```
+
+### 4. Approve Job Post
+- **Endpoint:** `/api/v1/jobs/{job}/approve`
+- **Method:** `POST`
+- **Authentication:** Bearer Token required (DEPARTMENT_MANAGER only)
+- **Body Parameters:**
+  - `reason` (string, required)
+- **Response (200 OK):**
+  ```json
+  {
+      "message": "Job approved successfully. HR has been notified.",
+      "job": { ... }
+  }
+  ```
+
+### 5. Reject Job Post
+- **Endpoint:** `/api/v1/jobs/{job}/reject`
+- **Method:** `POST`
+- **Authentication:** Bearer Token required (DEPARTMENT_MANAGER only)
+- **Body Parameters:**
+  - `reason` (string, required)
+- **Response (200 OK):**
+  ```json
+  {
+      "message": "Job rejected. HR has been notified.",
+      "job": { ... }
+  }
+  ```

@@ -13,14 +13,34 @@ use Illuminate\Validation\ValidationException;
 
 class AuthService
 {
-    // Helper function to send email then create token for each user
-    private function register(User $user): array
+    /**
+     * @param array $data
+     * @return array
+     */
+    public function registerCandidate(array $data): array
     {
-        event(new Registered($user));
+        $candidate = Candidate::create($data);
+        event(new Registered($candidate));
+        
+        $token = $this->issueToken($candidate);
 
-        $token = $this->issueToken($user);
+        return [$candidate, $token];
+    }
 
-        return [$user, $token];
+    /**
+     * @param array $data
+     * @return array
+     */
+    public function registerEmployee(array $data): array
+    {
+        $employee = Employee::create($data);
+        
+        // Mark employee email as verified instantly
+        $employee->markEmailAsVerified();
+
+        $token = $this->issueToken($employee);
+
+        return [$employee, $token];
     }
 
     /**
@@ -37,41 +57,37 @@ class AuthService
         return Str::random(60);
     }
 
-    /**
-     * @param array $data
-     * @return array
-     */
-    public function registerCandidate(array $data): array
-    {
-        return $this->register(Candidate::create($data));
-    }
 
-    /**
-     * @param array $data
-     * @return array
-     */
-    public function registerEmployee(array $data): array
-    {
-        return $this->register(Employee::create($data));
-    }
 
     /**
      * @param string $email
-     * @param string $password
+     * @param string|null $password
+     * @param string|null $empId
      * @return array
      * @throws ValidationException
      */
-    public function login(string $email, string $password): array
+    public function login(string $email, ?string $password = null, ?string $empId = null): array
     {
         $user = User::where('email', $email)->first();
 
-        if (!$user || !Hash::check($password, $user->password))
-        {
+        if (!$user) {
             throw ValidationException::withMessages([
-                    'email' => [
-                        'The provided credentials are incorrect.'
-                    ]
+                'email' => ['The provided credentials are incorrect.']
             ]);
+        }
+
+        if ($user instanceof Employee) {
+            if ($user->emp_id !== $empId) {
+                throw ValidationException::withMessages([
+                    'email' => ['The provided credentials are incorrect.']
+                ]);
+            }
+        } else {
+            if (!Hash::check($password, $user->password)) {
+                throw ValidationException::withMessages([
+                    'email' => ['The provided credentials are incorrect.']
+                ]);
+            }
         }
 
         $token = $this->issueToken($user);

@@ -35,13 +35,21 @@ class LoginUserRequestTest extends TestCase
         $this->assertStringContainsString('email', $rules['email']);
     }
 
-    public function test_password_is_required(): void
+    public function test_password_is_required_without_emp_id(): void
     {
         $rules = $this->rules();
 
-        // Password rules are an array
-        $this->assertIsArray($rules['password']);
-        $this->assertContains('required', $rules['password']);
+        $this->assertIsString($rules['password']);
+        $this->assertStringContainsString('required_without:emp_id', $rules['password']);
+    }
+
+    public function test_emp_id_is_required_without_password(): void
+    {
+        $rules = $this->rules();
+
+        $this->assertArrayHasKey('emp_id', $rules);
+        $this->assertIsString($rules['emp_id']);
+        $this->assertStringContainsString('required_without:password', $rules['emp_id']);
     }
 
     public function test_custom_error_messages_are_defined(): void

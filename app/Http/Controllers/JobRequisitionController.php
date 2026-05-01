@@ -14,6 +14,10 @@ use Illuminate\Http\JsonResponse;
 use Illuminate\Support\Facades\Gate;
 use Illuminate\Support\Facades\Notification;
 
+use App\Http\Requests\StoreJobPostRequest;
+use App\Http\Requests\ApproveJobPostRequest;
+use App\Http\Requests\RejectJobPostRequest;
+
 /**
  * Class JobRequisitionController
  *
@@ -42,57 +46,52 @@ class JobRequisitionController extends Controller
         $approvedJobs = JobPost::where('status', JobStatus::APPROVED)->get();
 
         $matchedJobs = $approvedJobs->filter(function ($job) use ($user) {
-            if ($user->experience_years < ($job->experience_level - 1)) {
+            $userExperience = (int) $user->experience_years;
+            if ($userExperience < ($job->experience_level - 1)) {
                 return false;
             }
 
-            if (!empty($job->skills) && !empty($user->skills)) {
-                $candidateSkills = array_map('strtolower', $user->skills);
-                $jobSkills = array_map('strtolower', $job->skills);
+            if (empty($job->skills)) {
+                return true; // No skills required, it's a match regarding skills
+            }
 
-                $commonSkills = array_intersect($jobSkills, $candidateSkills);
-                $jobSkillsCount = count($jobSkills);
+            if (empty($user->skills)) {
+                return false; // Job requires skills, but user has none
+            }
 
-                if ($jobSkillsCount > 0) {
-                    $matchPercentage = (count($commonSkills) / $jobSkillsCount) * 100;
-                    if ($matchPercentage < 80) {
-                        return false;
-                    }
-                }
-            } else {
+            $candidateSkills = array_map('strtolower', $user->skills);
+            $jobSkills = array_map('strtolower', $job->skills);
+
+            $commonSkills = array_intersect($jobSkills, $candidateSkills);
+            $jobSkillsCount = count($jobSkills);
+
+            $matchPercentage = (count($commonSkills) / $jobSkillsCount) * 100;
+            if ($matchPercentage < 80) {
                 return false;
             }
 
             return true;
         })->values();
 
-        return response()->json([
-            'message' => 'Here are the best jobs matching your profile.',
-            'jobs' => $matchedJobs
-        ], 200);
+        return response()->json(['jobs' => $matchedJobs], 200);
     }
 
-    public function store(Request $request): JsonResponse
+    public function store(StoreJobPostRequest $request): JsonResponse
     {
         Gate::authorize('create', JobPost::class);
 
-        $data = $request->validate([
-            'title' => 'required|string|max:255',
-            'description' => 'required|string',
-            'department' => 'required|string|max:255',
-            'experience_level' => 'required|integer',
-        ]);
+        $validatedData = $request->validated();
+        $validatedData['created_by'] = $request->user()->id;
+        $validatedData['status'] = JobStatus::PENDING;
 
-        $data['created_by'] = $request->user()->id;
-        $data['status'] = JobStatus::PENDING;
+        $job = JobPost::create($validatedData);
 
-        $job = JobPost::create($data);
-
-        $managers = User::where('role', UserRole::DEPARTMENT_MANAGER->value)->get();
-        Notification::send($managers, new JobRequiresApprovalNotification($job));
+        // Notify all department managers
+        $departmentManagers = User::where('role', UserRole::DEPARTMENT_MANAGER->value)->get();
+        Notification::send($departmentManagers, new JobRequiresApprovalNotification($job));
 
         return response()->json([
-            'message' => 'Job created. Managers have been notified.',
+            'message' => 'Job created successfully. Waiting for department manager approval.',
             'job' => $job
         ], 201);
     }
@@ -101,23 +100,24 @@ class JobRequisitionController extends Controller
     {
         Gate::authorize('view', $job);
 
-        return response()->json([
-            'job' => $job->load('creator')
-        ], 200);
+        return response()->json(['job' => $job->load(['creator', 'statusUpdater'])], 200);
     }
 
-    public function approve(JobPost $job, Request $request): JsonResponse
+    public function approve(ApproveJobPostRequest $request, JobPost $job): JsonResponse
     {
         Gate::authorize('approve', $job);
 
-        $request->validate([
-            'reason' => 'required|string|max:500'
-        ]);
+        $reason = $request->validated('reason');
 
+        // Assuming the authenticated user is a DepartmentManager
+        /** @var \App\Models\DepartmentManager $manager */
         $manager = $request->user();
-        $manager->approveJobRequisition($job, $request->reason);
+        $manager->approveJobRequisition($job, $reason);
 
-        $job->creator->notify(new JobStatusUpdatedNotification($job));
+        // Notify the creator
+        if ($job->creator) {
+            Notification::send($job->creator, new JobStatusUpdatedNotification($job));
+        }
 
         return response()->json([
             'message' => 'Job approved successfully. HR has been notified.',
@@ -125,18 +125,21 @@ class JobRequisitionController extends Controller
         ], 200);
     }
 
-    public function reject(JobPost $job, Request $request): JsonResponse
+    public function reject(RejectJobPostRequest $request, JobPost $job): JsonResponse
     {
         Gate::authorize('reject', $job);
 
-        $request->validate([
-            'reason' => 'required|string|max:500'
-        ]);
+        $reason = $request->validated('reason');
 
+        // Assuming the authenticated user is a DepartmentManager
+        /** @var \App\Models\DepartmentManager $manager */
         $manager = $request->user();
-        $manager->rejectJobRequisition($job, $request->reason);
+        $manager->rejectJobRequisition($job, $reason);
 
-        $job->creator->notify(new JobStatusUpdatedNotification($job));
+        // Notify the creator
+        if ($job->creator) {
+            Notification::send($job->creator, new JobStatusUpdatedNotification($job));
+        }
 
         return response()->json([
             'message' => 'Job rejected. HR has been notified.',

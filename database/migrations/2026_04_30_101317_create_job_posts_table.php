@@ -11,12 +11,16 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('job_requisitions', function (Blueprint $table) {
+        Schema::create('job_posts', function (Blueprint $table) {
             $table->id();
             $table->string('title');
             $table->text('description');
             $table->string('department');
+            $table->string('location')->nullable();
+            $table->json('skills')->nullable();
+            $table->integer('experience_level')->default(0);
             $table->string('status')->default('PENDING');
+            $table->text('status_reason')->nullable();
             $table->unsignedBigInteger('created_by');
             $table->unsignedBigInteger('status_updated_by')->nullable();
             $table->timestamps();
@@ -31,6 +35,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('job_requisitions');
+        Schema::dropIfExists('job_posts');
     }
 };

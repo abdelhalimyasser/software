@@ -26,7 +26,7 @@ class AuthServiceTest extends TestCase
             'birth_date' => '1990-01-01',
             'email' => 'jane@example.com',
             'password' => 'Password1!',
-            'role' => 'candidate'
+            'role' => \App\Models\Enums\UserRole::CANDIDATE->value
         ];
 
         [$user, $token] = $service->registerCandidate($data);
@@ -46,7 +46,7 @@ class AuthServiceTest extends TestCase
             'last_name' => 'Smith',
             'email' => 'john@example.com',
             'password' => 'Password1!',
-            'role' => 'employee',
+            'role' => \App\Models\Enums\UserRole::EMPLOYEE->value,
             'emp_id' => 'EMP001'
         ];
 
@@ -65,7 +65,7 @@ class AuthServiceTest extends TestCase
             'last_name' => 'In',
             'email' => 'login@example.com',
             'password' => Hash::make($password),
-            'role' => 'candidate'
+            'role' => \App\Models\Enums\UserRole::CANDIDATE->value
         ]);
 
         $service = new AuthService();

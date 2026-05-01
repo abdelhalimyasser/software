@@ -2,24 +2,24 @@
 
 namespace App\Policies;
 
-use App\Models\JobRequisition;
+use App\Models\JobPost;
 use App\Models\User;
 use App\Models\HrAdmin;
 use App\Models\DepartmentManager;
 use App\Models\Candidate;
 use App\Models\Enums\JobStatus;
 
-class JobRequisitionPolicy
+class JobPostPolicy
 {
     public function viewAny(User $user): bool
     {
         return true; 
     }
 
-    public function view(User $user, JobRequisition $jobRequisition): bool
+    public function view(User $user, JobPost $jobPost): bool
     {
         if ($user instanceof Candidate) {
-            return $jobRequisition->status === JobStatus::APPROVED;
+            return $jobPost->status === JobStatus::APPROVED;
         }
 
         return true;
@@ -30,12 +30,12 @@ class JobRequisitionPolicy
         return $user instanceof HrAdmin;
     }
 
-    public function approve(User $user, JobRequisition $jobRequisition): bool
+    public function approve(User $user, JobPost $jobPost): bool
     {
         return $user instanceof DepartmentManager;
     }
 
-    public function reject(User $user, JobRequisition $jobRequisition): bool
+    public function reject(User $user, JobPost $jobPost): bool
     {
         return $user instanceof DepartmentManager;
     }

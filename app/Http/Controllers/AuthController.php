@@ -100,9 +100,13 @@ class AuthController extends Controller
         }
 
         try {
-            $credentials = $request->only('email', 'password');
+            $credentials = $request->only('email', 'password', 'emp_id');
 
-            [$user, $token] = $this->authService->login($credentials['email'], $credentials['password']);
+            [$user, $token] = $this->authService->login(
+                $credentials['email'],
+                $credentials['password'] ?? null,
+                $credentials['emp_id'] ?? null
+            );
 
             return response()->json([
                 'user' => $user,
@@ -243,11 +247,21 @@ class AuthController extends Controller
         try {
             [$user, $token] = $this->authService->registerEmployee($data);
 
+            // Generate PDF Report
+            $pdfFileName = 'employee_report_' . $user->emp_id . '_' . time() . '.pdf';
+            $pdfPath = 'reports/' . $pdfFileName;
+            
+            $pdf = \Barryvdh\DomPDF\Facade\Pdf::loadView('pdf.employee_report', ['employee' => $user->fresh()]);
+            \Illuminate\Support\Facades\Storage::disk('public')->put($pdfPath, $pdf->output());
+
+            $pdfUrl = url('storage/' . $pdfPath);
+
             return response()->json([
                 'message' => 'Employee registered successfully',
                 'employee' => $user->fresh(),
                 'id' => $user->getKey(),
                 'token' => $token,
+                'pdf_report_url' => $pdfUrl,
             ], 201);
 
         } catch (Exception $e) {

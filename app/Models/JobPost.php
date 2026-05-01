@@ -36,6 +36,7 @@ class JobPost extends Model
     {
         return [
             'status' => JobStatus::class,
+            'skills' => 'array',
         ];
     }
 

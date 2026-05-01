@@ -49,13 +49,7 @@ class Employee extends User
         return parent::save($options);
     }
 
-    protected function empId(): Attribute
-    {
-        return Attribute::make(
-            get: fn (string $value) => strtolower($value),
-            set: fn (string $value) => strtolower($value),
-        );
-    }   
+
 
     public function makeReferral(int $userId)
     {

@@ -7,22 +7,22 @@ use App\Models\DepartmentManager;
 use App\Models\Employee;
 use App\Models\Enums\JobStatus;
 use App\Models\Enums\UserRole;
-use App\Models\JobRequisition;
+use App\Models\JobPost;
 use App\Models\User;
-use App\Policies\JobRequisitionPolicy;
+use App\Policies\JobPostPolicy;
 use Illuminate\Foundation\Testing\DatabaseMigrations;
 use Tests\TestCase;
 
-class JobRequisitionPolicyTest extends TestCase
+class JobPostPolicyTest extends TestCase
 {
     use DatabaseMigrations;
 
-    private JobRequisitionPolicy $policy;
+    private JobPostPolicy $policy;
 
     protected function setUp(): void
     {
         parent::setUp();
-        $this->policy = new JobRequisitionPolicy();
+        $this->policy = new JobPostPolicy();
     }
 
     // ── viewAny ─────────────────────────────
@@ -42,7 +42,7 @@ class JobRequisitionPolicyTest extends TestCase
 
     public function test_view_allows_employees_to_see_any_job(): void
     {
-        $employee = $this->makeUserAs(UserRole::EMPLOYEE);
+        $employee = $this->makeUserAs(UserRole::EMPLOYEE, 'emp2@test.com');
         $job = $this->makeJob(JobStatus::PENDING);
 
         $this->assertTrue($this->policy->view($employee, $job));
@@ -50,7 +50,7 @@ class JobRequisitionPolicyTest extends TestCase
 
     public function test_view_allows_candidates_to_see_approved_jobs(): void
     {
-        $candidate = $this->makeUserAs(UserRole::CANDIDATE);
+        $candidate = $this->makeUserAs(UserRole::CANDIDATE, 'cand2@test.com');
         $job = $this->makeJob(JobStatus::APPROVED);
 
         $this->assertTrue($this->policy->view($candidate, $job));
@@ -58,7 +58,7 @@ class JobRequisitionPolicyTest extends TestCase
 
     public function test_view_blocks_candidates_from_pending_jobs(): void
     {
-        $candidate = $this->makeUserAs(UserRole::CANDIDATE);
+        $candidate = $this->makeUserAs(UserRole::CANDIDATE, 'cand3@test.com');
         $job = $this->makeJob(JobStatus::PENDING);
 
         $this->assertFalse($this->policy->view($candidate, $job));
@@ -66,7 +66,7 @@ class JobRequisitionPolicyTest extends TestCase
 
     public function test_view_blocks_candidates_from_rejected_jobs(): void
     {
-        $candidate = $this->makeUserAs(UserRole::CANDIDATE);
+        $candidate = $this->makeUserAs(UserRole::CANDIDATE, 'cand4@test.com');
         $job = $this->makeJob(JobStatus::REJECTED);
 
         $this->assertFalse($this->policy->view($candidate, $job));
@@ -76,28 +76,28 @@ class JobRequisitionPolicyTest extends TestCase
 
     public function test_create_allows_hr_admin(): void
     {
-        $hrAdmin = $this->makeUserAs(UserRole::HR_ADMIN);
+        $hrAdmin = $this->makeUserAs(UserRole::HR_ADMIN, 'hr@test.com');
 
         $this->assertTrue($this->policy->create($hrAdmin));
     }
 
     public function test_create_blocks_candidate(): void
     {
-        $candidate = $this->makeUserAs(UserRole::CANDIDATE, 'cand2@test.com');
+        $candidate = $this->makeUserAs(UserRole::CANDIDATE, 'cand5@test.com');
 
         $this->assertFalse($this->policy->create($candidate));
     }
 
     public function test_create_blocks_regular_employee(): void
     {
-        $employee = $this->makeUserAs(UserRole::EMPLOYEE, 'emp2@test.com');
+        $employee = $this->makeUserAs(UserRole::EMPLOYEE, 'emp3@test.com');
 
         $this->assertFalse($this->policy->create($employee));
     }
 
     public function test_create_blocks_department_manager(): void
     {
-        $manager = $this->makeUserAs(UserRole::DEPARTMENT_MANAGER, 'mgr@test.com');
+        $manager = $this->makeUserAs(UserRole::DEPARTMENT_MANAGER, 'mgr2@test.com');
 
         $this->assertFalse($this->policy->create($manager));
     }
@@ -106,7 +106,7 @@ class JobRequisitionPolicyTest extends TestCase
 
     public function test_approve_allows_department_manager(): void
     {
-        $manager = $this->makeUserAs(UserRole::DEPARTMENT_MANAGER, 'mgr@test.com');
+        $manager = $this->makeUserAs(UserRole::DEPARTMENT_MANAGER, 'mgr3@test.com');
         $job = $this->makeJob(JobStatus::PENDING);
 
         $this->assertTrue($this->policy->approve($manager, $job));
@@ -114,7 +114,7 @@ class JobRequisitionPolicyTest extends TestCase
 
     public function test_approve_blocks_hr_admin(): void
     {
-        $hrAdmin = $this->makeUserAs(UserRole::HR_ADMIN, 'hr@test.com');
+        $hrAdmin = $this->makeUserAs(UserRole::HR_ADMIN, 'hr2@test.com');
         $job = $this->makeJob(JobStatus::PENDING);
 
         $this->assertFalse($this->policy->approve($hrAdmin, $job));
@@ -122,7 +122,7 @@ class JobRequisitionPolicyTest extends TestCase
 
     public function test_approve_blocks_candidate(): void
     {
-        $candidate = $this->makeUserAs(UserRole::CANDIDATE);
+        $candidate = $this->makeUserAs(UserRole::CANDIDATE, 'cand6@test.com');
         $job = $this->makeJob(JobStatus::PENDING);
 
         $this->assertFalse($this->policy->approve($candidate, $job));
@@ -132,7 +132,7 @@ class JobRequisitionPolicyTest extends TestCase
 
     public function test_reject_allows_department_manager(): void
     {
-        $manager = $this->makeUserAs(UserRole::DEPARTMENT_MANAGER, 'mgr@test.com');
+        $manager = $this->makeUserAs(UserRole::DEPARTMENT_MANAGER, 'mgr4@test.com');
         $job = $this->makeJob(JobStatus::PENDING);
 
         $this->assertTrue($this->policy->reject($manager, $job));
@@ -140,7 +140,7 @@ class JobRequisitionPolicyTest extends TestCase
 
     public function test_reject_blocks_regular_employee(): void
     {
-        $employee = $this->makeUserAs(UserRole::EMPLOYEE);
+        $employee = $this->makeUserAs(UserRole::EMPLOYEE, 'emp4@test.com');
         $job = $this->makeJob(JobStatus::PENDING);
 
         $this->assertFalse($this->policy->reject($employee, $job));
@@ -148,9 +148,6 @@ class JobRequisitionPolicyTest extends TestCase
 
     // ── Helpers ─────────────────────────────
 
-    /**
-     * Create a user and re-fetch so Parental resolves the correct child class.
-     */
     private function makeUserAs(UserRole $role, string $email = 'user@test.com'): User
     {
         $user = User::create([
@@ -162,11 +159,10 @@ class JobRequisitionPolicyTest extends TestCase
             'role' => $role->value,
         ]);
 
-        // Re-fetch so Parental resolves to the correct child model (Candidate, Employee, HrAdmin, etc.)
         return User::find($user->id);
     }
 
-    private function makeJob(JobStatus $status): JobRequisition
+    private function makeJob(JobStatus $status): JobPost
     {
         $creator = User::firstOrCreate(
             ['email' => 'creator@test.com'],
@@ -179,10 +175,13 @@ class JobRequisitionPolicyTest extends TestCase
             ]
         );
 
-        return JobRequisition::create([
+        return JobPost::create([
             'title' => 'Test Job',
             'description' => 'A test position',
             'department' => 'Engineering',
+            'location' => 'Remote',
+            'skills' => ['PHP'],
+            'experience_level' => 3,
             'created_by' => $creator->id,
             'status' => $status,
         ]);
