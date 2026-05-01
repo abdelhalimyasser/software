@@ -252,7 +252,7 @@ class AuthControllerTest extends TestCase
         $response->assertJsonValidationErrors(['email']);
     }
 
-    public function test_login_with_weak_password_returns_422(): void
+    public function test_login_with_wrong_password_returns_401(): void
     {
         $this->makeUser(['email' => 'login@example.com']);
 
@@ -261,7 +261,7 @@ class AuthControllerTest extends TestCase
             'password' => 'short',
         ]);
 
-        $response->assertStatus(422);
+        $response->assertStatus(401);
     }
 
     //  Update Employee

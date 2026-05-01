@@ -55,4 +55,13 @@ class Employee extends User
     {
         // Logic to create a referral for the given user ID
     }
+
+    /**
+     * Employees do not need email verification.
+     * @return bool
+     */
+    public function hasVerifiedEmail(): bool
+    {
+        return true;
+    }
 }

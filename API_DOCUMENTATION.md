@@ -374,6 +374,7 @@ Resets the user's password using the token from the reset email.
 ---
 
 ### 7. Register Employee
+Returns a `pdf_report_url` in the JSON response containing the employee's official credentials.
 
 Creates a new employee account. The system auto-generates a unique `emp_id` in the format `NH-EMP-YYYY-XXXX`.
 

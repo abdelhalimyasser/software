@@ -252,6 +252,10 @@ paths:
                 password:
                   type: string
                   format: password
+                  description: Required for Candidates.
+                emp_id:
+                  type: string
+                  description: Required for Employees.
                   minLength: 8
                   maxLength: 255
                   description: "Min 8 chars, mixed case, numbers, symbols, uncompromised"
@@ -327,7 +331,7 @@ paths:
           application/json:
             schema:
               type: object
-              required: [email, password]
+              required: [email]
               properties:
                 email:
                   type: string
@@ -337,6 +341,10 @@ paths:
                 password:
                   type: string
                   format: password
+                  description: Required for Candidates.
+                emp_id:
+                  type: string
+                  description: Required for Employees.
                   minLength: 8
                   description: "Min 8 chars, mixed case, numbers, symbols"
                   example: "Str0ng!Pass#99x"
@@ -598,6 +606,10 @@ paths:
                 password:
                   type: string
                   format: password
+                  description: Required for Candidates.
+                emp_id:
+                  type: string
+                  description: Required for Employees.
                   minLength: 8
                   description: "Min 8, mixed case, numbers, symbols"
                   example: "N3w!Secure#Pass"
@@ -668,6 +680,10 @@ paths:
                 password:
                   type: string
                   format: password
+                  description: Required for Candidates.
+                emp_id:
+                  type: string
+                  description: Required for Employees.
                   minLength: 8
                   example: Password123!
                 role:
@@ -703,6 +719,10 @@ paths:
                 password:
                   type: string
                   format: password
+                  description: Required for Candidates.
+                emp_id:
+                  type: string
+                  description: Required for Employees.
                   example: Password123!
                 role:
                   type: string
@@ -791,6 +811,10 @@ paths:
                 password:
                   type: string
                   format: password
+                  description: Required for Candidates.
+                emp_id:
+                  type: string
+                  description: Required for Employees.
                   minLength: 8
                   example: NewPass456!
                 role:
@@ -827,6 +851,10 @@ paths:
                 password:
                   type: string
                   format: password
+                  description: Required for Candidates.
+                emp_id:
+                  type: string
+                  description: Required for Employees.
                   example: NewPass456!
                 role:
                   type: string

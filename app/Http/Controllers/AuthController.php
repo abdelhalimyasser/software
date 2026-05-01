@@ -256,6 +256,10 @@ class AuthController extends Controller
 
             $pdfUrl = url('storage/' . $pdfPath);
 
+            // Send Email with PDF Attachment
+            \Illuminate\Support\Facades\Mail::to($user->email)
+                ->send(new \App\Mail\EmployeeCredentialsMail($user->fresh(), $pdfPath));
+
             return response()->json([
                 'message' => 'Employee registered successfully',
                 'employee' => $user->fresh(),

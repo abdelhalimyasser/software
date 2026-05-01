@@ -101,7 +101,8 @@ class AuthServiceTest extends TestCase
         $this->assertStringStartsWith('NH-EMP-', $user->emp_id);
         $this->assertIsString($token);
         $this->assertNotEmpty($token);
-        Event::assertDispatched(Registered::class);
+        $this->assertTrue($user->hasVerifiedEmail());
+        Event::assertNotDispatched(Registered::class);
     }
 
     public function test_login_returns_user_and_token_for_valid_credentials(): void
