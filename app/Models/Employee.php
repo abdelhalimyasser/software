@@ -3,9 +3,20 @@
 namespace App\Models;
 
 use App\Models\Enums\UserRole;
-use Parental\HasChildren;
-use Parental\HasParent;
 
+use Parental\HasParent;
+use Illuminate\Database\Eloquent\Casts\Attribute;
+
+/**
+ * Class Employee
+ * 
+ * Represents an employee.
+ * 
+ * @package App\Models
+ * @version 1.0
+ * @since 28-04-2026
+ * @author Abdelhalim Yasser
+ */
 class Employee extends User
 {
     use HasParent;
@@ -37,6 +48,14 @@ class Employee extends User
 
         return parent::save($options);
     }
+
+    protected function empId(): Attribute
+    {
+        return Attribute::make(
+            get: fn (string $value) => strtolower($value),
+            set: fn (string $value) => strtolower($value),
+        );
+    }   
 
     public function makeReferral(int $userId)
     {

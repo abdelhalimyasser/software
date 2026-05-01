@@ -9,8 +9,25 @@ use Illuminate\Http\Request;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Support\Facades\Gate;
 
+
+/**
+ * Class JobRequisitionController
+ * 
+ * Controller for managing job requisitions.
+ * 
+ * @package App\Http\Controllers
+ * @version 1.0
+ * @since 05-01-2026
+ * @author Abdelhalim Yasser
+ */
 class JobRequisitionController extends Controller
 {
+    /**
+     * Display a listing of the job requisitions.
+     * 
+     * @param \Illuminate\Http\Request $request
+     * @return \Illuminate\Http\JsonResponse
+     */
     public function index(Request $request): JsonResponse
     {
         Gate::authorize('viewAny', JobRequisition::class);
@@ -31,6 +48,12 @@ class JobRequisitionController extends Controller
     }
 
 
+    /**
+     * Store a newly created job requisition in storage.
+     *
+     * @param \Illuminate\Http\Request $request
+     * @return \Illuminate\Http\JsonResponse
+     */
     public function store(Request $request): JsonResponse
     {
         Gate::authorize('create', JobRequisition::class);
@@ -53,6 +76,12 @@ class JobRequisitionController extends Controller
     }
 
 
+    /**
+     * Display the specified job requisition.
+     *
+     * @param \App\Models\JobRequisition $job
+     * @return \Illuminate\Http\JsonResponse
+     */
     public function show(JobRequisition $job): JsonResponse
     {
         Gate::authorize('view', $job);
@@ -63,14 +92,19 @@ class JobRequisitionController extends Controller
     }
 
 
+    /**
+     * Approve the specified job requisition.
+     *
+     * @param \App\Models\JobRequisition $job
+     * @param \Illuminate\Http\Request $request
+     * @return \Illuminate\Http\JsonResponse
+     */
     public function approve(JobRequisition $job, Request $request): JsonResponse
     {
         Gate::authorize('approve', $job);
 
-        $job->update([
-            'status' => JobStatus::APPROVED,
-            'status_updated_by' => $request->user()->id
-        ]);
+        $manager = $request->user();
+        $manager->approveJobRequisition($job);
 
         return response()->json([
             'message' => 'Job requisition approved successfully.',
@@ -78,15 +112,19 @@ class JobRequisitionController extends Controller
         ], 200);
     }
 
-
+    /**
+     * Reject the specified job requisition.
+     *
+     * @param \App\Models\JobRequisition $job
+     * @param \Illuminate\Http\Request $request
+     * @return \Illuminate\Http\JsonResponse
+     */
     public function reject(JobRequisition $job, Request $request): JsonResponse
     {
         Gate::authorize('reject', $job);
 
-        $job->update([
-            'status' => JobStatus::REJECTED,
-            'status_updated_by' => $request->user()->id
-        ]);
+        $manager = $request->user();
+        $manager->rejectJobRequisition($job);
 
         return response()->json([
             'message' => 'Job requisition rejected.',

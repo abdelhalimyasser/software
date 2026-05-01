@@ -52,4 +52,28 @@ class Job extends Model
             set: fn (string $value) => strtolower($value),
         );
     }
+
+    protected function department(): Attribute
+    {
+        return Attribute::make(
+            get: fn (string $value) => ucfirst($value),
+            set: fn (string $value) => strtolower($value),
+        );
+    }
+
+    protected function description(): Attribute
+    {
+        return Attribute::make(
+            get: fn (string $value) => ucfirst($value),
+            set: fn (string $value) => strtolower($value),
+        );
+    }
+
+    protected function status(): Attribute
+    {
+        return Attribute::make(
+            get: fn (string|JobStatus $value) => ucfirst($value),
+            set: fn (string|JobStatus $value) => strtolower($value),
+        );
+    }
 }

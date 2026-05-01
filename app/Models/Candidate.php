@@ -4,6 +4,16 @@ namespace App\Models;
 
 use Parental\HasParent;
 
+/**
+ * Class Candidate
+ * 
+ * Represents a candidate.
+ * 
+ * @package App\Models
+ * @version 1.0
+ * @since 28-04-2026
+ * @author Abdelhalim Yasser
+ */
 class Candidate extends User
 {
     use HasParent;
