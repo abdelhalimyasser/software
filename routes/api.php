@@ -33,7 +33,24 @@ Route::prefix('v1/private/auth')->group(function () {
 Route::middleware('auth:sanctum')->prefix('v1/jobs')->group(function () {
     Route::get('/', [JobRequisitionController::class, 'index']);
     Route::get('/{job}', [JobRequisitionController::class, 'show']);
-    Route::post('/add', [JobRequisitionController::class, 'store']);
+    Route::post('/', [JobRequisitionController::class, 'store']);
     Route::post('/{job}/approve', [JobRequisitionController::class, 'approve']);
     Route::post('/{job}/reject', [JobRequisitionController::class, 'reject']);
+});
+
+// AJAX Routes for Notifications
+Route::middleware('auth:sanctum')->prefix('v1/notifications')->group(function () {
+    Route::get('/unread', function (\Illuminate\Http\Request $request) {
+        return response()->json([
+            'notifications' => $request->user()->unreadNotifications
+        ], 200);
+    });
+
+    Route::post('/{id}/read', function ($id, \Illuminate\Http\Request $request) {
+        $notification = $request->user()->notifications()->findOrFail($id);
+        $notification->markAsRead();
+        return response()->json([
+            'message' => 'Notification marked as read'
+        ], 200);
+    });
 });
