@@ -13,7 +13,7 @@ class QuestionFactory extends Factory
             'question' => $this->faker->sentence,
             'description' => $this->faker->paragraph,
             'category' => 'PROGRAMMING',
-            'difficulty' => 'MEDIUM',
+            'difficulty_level' => 'MEDIUM',
         ];
     }
 }

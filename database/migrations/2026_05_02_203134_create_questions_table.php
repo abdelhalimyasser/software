@@ -16,9 +16,9 @@ return new class extends Migration
             $table->text('question');
             $table->text('description')->nullable();
             $table->string('category');
-            $table->text('recommended_base_answer')->nullable();
+            $table->text('recommended_answer')->nullable();
             $table->json('test_cases')->nullable();
-            $table->string('difficulty');
+            $table->string('difficulty_level');
             $table->timestamps();
         });
     }

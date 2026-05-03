@@ -13,7 +13,7 @@ class ApplicationFactory extends Factory
     {
         return [
             'candidate_id' => User::factory(),
-            'job_post_id' => 1, // We could make a JobPost factory, but let's assume it exists or isn't strict constraint right now, else we'd use JobPost::factory()
+            'job_id' => JobPost::factory(),
             'status' => 'PENDING',
             'created_at' => now(),
             'updated_at' => now(),

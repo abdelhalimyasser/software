@@ -19,7 +19,7 @@ class Application extends Model
     protected function casts(): array
     {
         return [
-            'status' => ApplicationsStatus::class,
+            'status' => ApplicationStatus::class,
         ];
     }
 

@@ -33,8 +33,8 @@ class AssessmentServiceTest extends TestCase
             'distribution_rules' => ['HARD' => 1, 'MEDIUM' => 1]
         ]);
 
-        Question::factory()->create(['difficulty' => 'HARD']);
-        Question::factory()->create(['difficulty' => 'MEDIUM']);
+        Question::factory()->create(['difficulty_level' => 'HARD']);
+        Question::factory()->create(['difficulty_level' => 'MEDIUM']);
 
         $attempt = $this->service->startAttempt($application, $assessment);
 
@@ -74,14 +74,15 @@ class AssessmentServiceTest extends TestCase
             'distribution_rules' => ['HARD' => 2, 'MEDIUM' => 1]
         ]);
 
-        Question::factory()->create(['difficulty' => 'HARD']);
-        Question::factory()->count(2)->create(['difficulty' => 'MEDIUM']);
+        Question::factory()->create(['difficulty_level' => 'HARD']);
+        Question::factory()->count(2)->create(['difficulty_level' => 'MEDIUM']);
 
         // Satisfies cooldown, allowing retake
         AssessmentAttempt::factory()->create([
             'application_id' => $application->id,
             'assessment_id' => $assessment->id,
             'status' => 'FAILED',
+            'score' => 45, // Scored < pass mark (50) but >= 40, so shift HARD -> MEDIUM
             'completed_at' => now()->subHours(30)
         ]);
 
@@ -91,8 +92,8 @@ class AssessmentServiceTest extends TestCase
         // Retake logic logic should shift it to HARD => 1, MEDIUM => 2
         $questions = $attempt->questions;
         
-        $hardCount = $questions->where('difficulty', 'HARD')->count();
-        $mediumCount = $questions->where('difficulty', 'MEDIUM')->count();
+        $hardCount = $questions->where('difficulty_level', 'HARD')->count();
+        $mediumCount = $questions->where('difficulty_level', 'MEDIUM')->count();
 
         $this->assertEquals(1, $hardCount);
         $this->assertEquals(2, $mediumCount);

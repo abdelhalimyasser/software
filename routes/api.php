@@ -61,6 +61,7 @@ Route::middleware('auth:sanctum')->prefix('v1/notifications')->group(function ()
 // Phase 3 & 4: Assessment & Monitoring Endpoints
 Route::prefix('v1/assessments')->group(function () {
     Route::post('/{assessment_id}/start', [AssessmentController::class, 'startAttempt']);
+    Route::post('/{attempt_id}/submit', [AssessmentController::class, 'submitAttempt']);
     Route::post('/{attempt_id}/logs', [AssessmentLogController::class, 'storeBatch']);
 });
 

@@ -31,21 +31,23 @@ return new class extends Migration
 	 */
 	public function down(): void
 	{
-		Schema::table('users', function (Blueprint $table) {
-			$table->dropColumn([
-				'first_name',
-				'last_name',
-				'birth_date',
-				'phone_number',
-				'role',
-				'emp_id',
-				'profile_picture_path',
-				'resume_path',
-				'docs_path',
-				'skills',
-				'experience_years',
-			]);
-		});
+		if (config('database.default') !== 'sqlite') {
+			Schema::table('users', function (Blueprint $table) {
+				$table->dropColumn([
+					'first_name',
+					'last_name',
+					'birth_date',
+					'phone_number',
+					'role',
+					'emp_id',
+					'profile_picture_path',
+					'resume_path',
+					'docs_path',
+					'skills',
+					'experience_years',
+				]);
+			});
+		}
 	}
 };
 

@@ -1,0 +1,2054 @@
+﻿diff --git a/API_DOCUMENTATION.md b/API_DOCUMENTATION.md
+index 995c25d..bb1ea45 100644
+--- a/API_DOCUMENTATION.md
++++ b/API_DOCUMENTATION.md
+@@ -24,6 +24,13 @@ ## Table of Contents
+    - [Reset Password](#6-reset-password)
+    - [Register Employee](#7-register-employee)
+    - [Update Employee](#8-update-employee)
++   - [Get Jobs](#9-get-jobs)
++   - [Create Job](#10-create-job)
++   - [Get Job Details](#11-get-job-details)
++   - [Approve Job](#12-approve-job)
++   - [Reject Job](#13-reject-job)
++   - [Get Unread Notifications](#14-get-unread-notifications)
++   - [Mark Notification as Read](#15-mark-notification-as-read)
+ 6. [Endpoint Summary](#endpoint-summary)
+ 7. [Data Models](#data-models)
+ 8. [File Upload Specifications](#file-upload-specifications)
+@@ -488,6 +495,137 @@ #### Error Responses
+ 
+ ---
+ 
++
++---
++
++### 9. Get Jobs
++Retrieve a list of jobs. For `HR_ADMIN`, it returns all jobs. For `CANDIDATE`, it returns only approved jobs that match their experience and skills (minimum 80% skill match).
++- **Endpoint:** `GET /v1/jobs`
++- **Auth Required:** Yes (Bearer Token)
++- **Roles Allowed:** `HR_ADMIN`, `CANDIDATE`
++- **Response (200 OK):**
++  ```json
++  {
++      "jobs": {
++          "data": [
++              {
++                  "id": 1,
++                  "title": "Software Engineer",
++                  "department": "Engineering",
++                  "status": "APPROVED",
++                  "experience_level": 3,
++                  "skills": ["PHP", "Laravel"]
++              }
++          ]
++      }
++  }
++  ```
++
++---
++
++### 10. Create Job
++Create a new job requisition. Notifies all Department Managers.
++- **Endpoint:** `POST /v1/jobs`
++- **Auth Required:** Yes
++- **Roles Allowed:** `HR_ADMIN`
++- **Request Body:**
++  - `title` (string, required)
++  - `description` (string, required)
++  - `department` (string, required)
++  - `experience_level` (integer, required)
++  - `skills` (array of strings, optional)
++- **Response (201 Created):**
++  ```json
++  {
++      "message": "Job created successfully. Waiting for department manager approval.",
++      "job": { ... }
++  }
++  ```
++
++---
++
++### 11. Get Job Details
++Fetch specific job details including the creator and status updater.
++- **Endpoint:** `GET /v1/jobs/{job}`
++- **Auth Required:** Yes
++- **Roles Allowed:** All authenticated users who can view jobs.
++- **Response (200 OK):**
++  ```json
++  {
++      "job": { ... }
++  }
++  ```
++
++---
++
++### 12. Approve Job
++Approve a pending job requisition. Notifies the HR Admin who created the job.
++- **Endpoint:** `POST /v1/jobs/{job}/approve`
++- **Auth Required:** Yes
++- **Roles Allowed:** `DEPARTMENT_MANAGER`
++- **Request Body:**
++  - `reason` (string, required)
++- **Response (200 OK):**
++  ```json
++  {
++      "message": "Job approved successfully. HR has been notified.",
++      "job": { ... }
++  }
++  ```
++
++---
++
++### 13. Reject Job
++Reject a pending job requisition. Notifies the HR Admin who created the job.
++- **Endpoint:** `POST /v1/jobs/{job}/reject`
++- **Auth Required:** Yes
++- **Roles Allowed:** `DEPARTMENT_MANAGER`
++- **Request Body:**
++  - `reason` (string, required)
++- **Response (200 OK):**
++  ```json
++  {
++      "message": "Job rejected. HR has been notified.",
++      "job": { ... }
++  }
++  ```
++
++---
++
++### 14. Get Unread Notifications
++Retrieve all unread system and job notifications for the authenticated user.
++- **Endpoint:** `GET /v1/notifications/unread`
++- **Auth Required:** Yes
++- **Response (200 OK):**
++  ```json
++  {
++      "notifications": [
++          {
++              "id": "uuid",
++              "type": "App\\Notifications\\JobRequiresApprovalNotification",
++              "data": {
++                  "job_id": 1,
++                  "message": "New job requires approval: Software Engineer"
++              },
++              "read_at": null
++          }
++      ]
++  }
++  ```
++
++---
++
++### 15. Mark Notification as Read
++Mark a specific notification as read.
++- **Endpoint:** `POST /v1/notifications/{id}/read`
++- **Auth Required:** Yes
++- **Response (200 OK):**
++  ```json
++  {
++      "message": "Notification marked as read"
++  }
++  ```
++
+ ## Endpoint Summary
+ 
+ | # | Method | URL | Auth | Description |
+@@ -563,87 +701,135 @@ ## Password Policy
+ | Contains symbols | Γ£à | Γ£à | Γ¥î | Γ£à |
+ | Not compromised (HIBP) | Γ£à | Γ¥î | Γ¥î | Γ¥î |
+ | Confirmation required | Γ¥î | Γ¥î | Γ¥î | Γ£à |
+-
+-## Job Posts (Requisitions)
+-
+-### 1. Get All Job Posts
+-- **Endpoint:** `/api/v1/jobs`
+-- **Method:** `GET`
+-- **Authentication:** Bearer Token required
+-- **Description:** Returns all job posts. If the user is a Candidate, it filters jobs by matching experience_years and skills (>80% match).
+-- **Response (200 OK):**
+-  ```json
+-  {
+-      "jobs": [
+-          {
+-              "id": 1,
+-              "title": "Software Engineer",
+-              "description": "Great job",
+-              "department": "Engineering",
+-              "location": "Remote",
+-              "experience_level": 3,
+-              "skills": ["PHP", "Laravel"],
+-              "status": "APPROVED",
+-              "created_by": 1,
+-              "status_updated_by": 2,
+-              "status_reason": "Approved budget"
+-          }
+-      ]
+-  }
+-  ```
+-
+-### 2. Create Job Post
+-- **Endpoint:** `/api/v1/jobs`
+-- **Method:** `POST`
+-- **Authentication:** Bearer Token required (HR_ADMIN only)
+-- **Body Parameters:**
+-  - `title` (string, required)
+-  - `description` (string, required)
+-  - `department` (string, required)
+-  - `experience_level` (integer, required)
+-- **Response (201 Created):**
+-  ```json
+-  {
+-      "message": "Job created. Managers have been notified.",
+-      "job": { ... }
+-  }
+-  ```
+-
+-### 3. Get Job Post Details
+-- **Endpoint:** `/api/v1/jobs/{job}`
+-- **Method:** `GET`
+-- **Authentication:** Bearer Token required
+-- **Response (200 OK):**
+-  ```json
+-  {
+-      "job": { ... }
+-  }
+-  ```
+-
+-### 4. Approve Job Post
+-- **Endpoint:** `/api/v1/jobs/{job}/approve`
+-- **Method:** `POST`
+-- **Authentication:** Bearer Token required (DEPARTMENT_MANAGER only)
+-- **Body Parameters:**
+-  - `reason` (string, required)
+-- **Response (200 OK):**
+-  ```json
+-  {
+-      "message": "Job approved successfully. HR has been notified.",
+-      "job": { ... }
+-  }
+-  ```
+-
+-### 5. Reject Job Post
+-- **Endpoint:** `/api/v1/jobs/{job}/reject`
+-- **Method:** `POST`
+-- **Authentication:** Bearer Token required (DEPARTMENT_MANAGER only)
+-- **Body Parameters:**
+-  - `reason` (string, required)
+-- **Response (200 OK):**
+-  ```json
+-  {
+-      "message": "Job rejected. HR has been notified.",
+-      "job": { ... }
+-  }
+-  ```
++
++## Job Posts (Requisitions)
++
++### 1. Get All Job Posts
++- **Endpoint:** `/api/v1/jobs`
++- **Method:** `GET`
++- **Authentication:** Bearer Token required
++- **Description:** Returns all job posts. If the user is a Candidate, it filters jobs by matching experience_years and skills (>80% match).
++- **Response (200 OK):**
++  ```json
++  {
++      "jobs": [
++          {
++              "id": 1,
++              "title": "Software Engineer",
++              "description": "Great job",
++              "department": "Engineering",
++              "location": "Remote",
++              "experience_level": 3,
++              "skills": ["PHP", "Laravel"],
++              "status": "APPROVED",
++              "created_by": 1,
++              "status_updated_by": 2,
++              "status_reason": "Approved budget"
++          }
++      ]
++  }
++  ```
++
++### 2. Create Job Post
++- **Endpoint:** `/api/v1/jobs`
++- **Method:** `POST`
++- **Authentication:** Bearer Token required (HR_ADMIN only)
++- **Body Parameters:**
++  - `title` (string, required)
++  - `description` (string, required)
++  - `department` (string, required)
++  - `experience_level` (integer, required)
++- **Response (201 Created):**
++  ```json
++  {
++      "message": "Job created. Managers have been notified.",
++      "job": { ... }
++  }
++  ```
++
++### 3. Get Job Post Details
++- **Endpoint:** `/api/v1/jobs/{job}`
++- **Method:** `GET`
++- **Authentication:** Bearer Token required
++- **Response (200 OK):**
++  ```json
++  {
++      "job": { ... }
++  }
++  ```
++
++### 4. Approve Job Post
++- **Endpoint:** `/api/v1/jobs/{job}/approve`
++- **Method:** `POST`
++- **Authentication:** Bearer Token required (DEPARTMENT_MANAGER only)
++- **Body Parameters:**
++  - `reason` (string, required)
++- **Response (200 OK):**
++  ```json
++  {
++      "message": "Job approved successfully. HR has been notified.",
++      "job": { ... }
++  }
++  ```
++
++### 5. Reject Job Post
++- **Endpoint:** `/api/v1/jobs/{job}/reject`
++- **Method:** `POST`
++- **Authentication:** Bearer Token required (DEPARTMENT_MANAGER only)
++- **Body Parameters:**
++  - `reason` (string, required)
++- **Response (200 OK):**
++  ```json
++  {
++      "message": "Job rejected. HR has been notified.",
++      "job": { ... }
++  }
++  ```
++
++ # # #   1 6 .   S t a r t   A s s e s s m e n t   A t t e m p t 
++ I n i t i a l i z e   c a n d i d a t e   t e s t   d y n a m i c a l l y   a d h e r i n g   t o   d i s t r i b u t i o n   r u l e s . 
++ 
++ |   P r o p e r t y   |   V a l u e   | 
++ | - - - - - - - - - - | - - - - - - - | 
++ |   * * U R L * *   |   \ / a p i / v 1 / a s s e s s m e n t s / { a s s e s s m e n t _ i d } / s t a r t \   | 
++ |   * * M e t h o d * *   |   \ P O S T \   | 
++ |   * * A u t h * *   |   '  R e q u i r e d   | 
++ |   * * C o n t e n t - T y p e * *   |   \  p p l i c a t i o n / j s o n \   | 
++ 
++ # # # #   R e q u e s t   B o d y 
++ |   F i e l d   |   T y p e   |   R e q u i r e d   |   D e s c r i p t i o n   | 
++ | - - - - - - - | - - - - - - | - - - - - - - - - - | - - - - - - - - - - - - - | 
++ |   \  p p l i c a t i o n _ i d \   |   \ i n t e g e r \   |   '  |   C a n d i d a t e   A p p l i c a t i o n   I D   | 
++ 
++ - - - 
++ 
++ # # #   1 7 .   B a t c h   P u s h   A t t e m p t   L o g s   ( A n t i - C h e a t ) 
++ H i g h - t h r o u g h p u t   t r a c k i n g   b u l k   l o g g i n g   l o g i c   b y p a s s i n g   u p d a t e d _ a t   f o r   p e r f o r m a n c e . 
++ 
++ |   P r o p e r t y   |   V a l u e   | 
++ | - - - - - - - - - - | - - - - - - - | 
++ |   * * U R L * *   |   \ / a p i / v 1 / a s s e s s m e n t s / { a t t e m p t _ i d } / l o g s \   | 
++ |   * * M e t h o d * *   |   \ P O S T \   | 
++ |   * * A u t h * *   |   '  R e q u i r e d   | 
++ |   * * C o n t e n t - T y p e * *   |   \  p p l i c a t i o n / j s o n \   | 
++ 
++ # # # #   R e q u e s t   B o d y 
++ |   F i e l d   |   T y p e   |   R e q u i r e d   |   D e s c r i p t i o n   | 
++ | - - - - - - - | - - - - - - | - - - - - - - - - - | - - - - - - - - - - - - - | 
++ |   \ l o g s \   |   \  r r a y \   |   '  |   B a t c h   e v e n t s   p a y l o a d   | 
++ |   \ l o g s . * . e v e n t _ t y p e \   |   \ s t r i n g \   |   '  |   e . g .   T A B _ S W I T C H   | 
++ |   \ l o g s . * . o c c u r r e d _ a t \   |   \ d a t e t i m e \   |   '  |   Y - m - d   H : i : s . v   m s   p r e c i s i o n   | 
++ 
++ - - - 
++ 
++ # # #   1 8 .   M i c r o s e r v i c e   M O S S   W e b h o o k 
++ N o d e . j s   w o r k e r   r e p o r t i n g   b a c k   p l a g i a r i s m   s c o r e s . 
++ 
++ |   P r o p e r t y   |   V a l u e   | 
++ | - - - - - - - - - - | - - - - - - - | 
++ |   * * U R L * *   |   \ / a p i / v 1 / w e b h o o k s / m o s s - r e s u l t s \   | 
++ |   * * M e t h o d * *   |   \ P O S T \   | 
++ |   * * A u t h * *   |   L'  I n t e r n a l   A P I   | 
++ |   * * C o n t e n t - T y p e * *   |   \  p p l i c a t i o n / j s o n \   | 
++ 
+ 
++ 
+\ No newline at end of file
+diff --git a/app/Http/Controllers/API/AssessmentController.php b/app/Http/Controllers/API/AssessmentController.php
+new file mode 100644
+index 0000000..edf56ea
+--- /dev/null
++++ b/app/Http/Controllers/API/AssessmentController.php
+@@ -0,0 +1,45 @@
++<?php
++
++namespace App\Http\Controllers\API;
++
++use App\Http\Controllers\Controller;
++use App\Models\Assessment;
++use App\Models\Application;
++use App\Services\AssessmentService;
++use Illuminate\Http\JsonResponse;
++use Illuminate\Http\Request;
++
++class AssessmentController extends Controller
++{
++    protected AssessmentService $assessmentService;
++
++    public function __construct(AssessmentService $assessmentService)
++    {
++        $this->assessmentService = $assessmentService;
++    }
++
++    /**
++     * Start a new assessment attempt based on the Candidate application
++     */
++    public function startAttempt(Request $request, int $assessmentId): JsonResponse
++    {
++        // For simplicity, passing application_id in request. 
++        // In real-world, might be inferred from auth()
++        $request->validate(['application_id' => 'required|exists:applications,id']);
++
++        $assessment = Assessment::findOrFail($assessmentId);
++        $application = Application::findOrFail($request->application_id);
++
++        try {
++            $attempt = $this->assessmentService->startAttempt($application, $assessment);
++            return response()->json([
++                'message' => 'Assessment started successfully.',
++                'data' => $attempt->load('questions')
++            ], 201);
++        } catch (\Symfony\Component\HttpKernel\Exception\HttpException $e) {
++            return response()->json([
++                'message' => $e->getMessage()
++            ], $e->getStatusCode());
++        }
++    }
++}
+diff --git a/app/Http/Controllers/API/AssessmentLogController.php b/app/Http/Controllers/API/AssessmentLogController.php
+new file mode 100644
+index 0000000..d42dd23
+--- /dev/null
++++ b/app/Http/Controllers/API/AssessmentLogController.php
+@@ -0,0 +1,37 @@
++<?php
++
++namespace App\Http\Controllers\API;
++
++use App\Http\Controllers\Controller;
++use App\Http\Requests\StoreBatchedLogsRequest;
++use App\Models\AssessmentLog;
++use Illuminate\Http\JsonResponse;
++
++class AssessmentLogController extends Controller
++{
++    /**
++     * Store high-throughput batched tracking logs (Anti-Cheat Monitoring)
++     */
++    public function storeBatch(StoreBatchedLogsRequest $request, int $attempt_id): JsonResponse
++    {
++        $logs = $request->validated('logs');
++
++        // Preparing array for bulk insert
++        $insertData = array_map(function ($log) use ($attempt_id) {
++            return [
++                'assessment_attempt_id' => $attempt_id,
++                'event_type' => $log['event_type'],
++                'metadata' => isset($log['metadata']) ? json_encode($log['metadata']) : null,
++                'occurred_at' => $log['occurred_at'],
++                'created_at' => now(),
++            ];
++        }, $logs);
++
++        // High-performance bulk insertion (Bypasses Eloquent instantiation overhead)
++        AssessmentLog::insert($insertData);
++
++        return response()->json([
++            'message' => count($insertData) . ' logs recorded successfully.'
++        ], 201);
++    }
++}
+diff --git a/app/Http/Controllers/API/WebhookController.php b/app/Http/Controllers/API/WebhookController.php
+new file mode 100644
+index 0000000..4cae596
+--- /dev/null
++++ b/app/Http/Controllers/API/WebhookController.php
+@@ -0,0 +1,31 @@
++<?php
++
++namespace App\Http\Controllers\API;
++
++use App\Http\Controllers\Controller;
++use App\Http\Requests\MossWebhookRequest;
++use App\Models\AssessmentAttempt;
++use Illuminate\Http\JsonResponse;
++
++class WebhookController extends Controller
++{
++    /**
++     * Handle the MOSS result from Node.js microservice
++     */
++    public function mossResults(MossWebhookRequest $request): JsonResponse
++    {
++        $data = $request->validated();
++        
++        $attempt = AssessmentAttempt::findOrFail($data['attempt_id']);
++        
++        $attempt->update([
++            'plagiarism_score' => $data['plagiarism_score'],
++            'moss_report_url' => $data['moss_report_url'],
++        ]);
++
++        return response()->json([
++            'message' => 'Assessment attempt updated successfully with MOSS results.',
++            'data' => $attempt
++        ]);
++    }
++}
+diff --git a/app/Http/Controllers/ApplicationController.php b/app/Http/Controllers/ApplicationController.php
+new file mode 100644
+index 0000000..9a2c8b2
+--- /dev/null
++++ b/app/Http/Controllers/ApplicationController.php
+@@ -0,0 +1,53 @@
++<?php
++
++namespace App\Http\Controllers;
++
++use App\Models\JobPost;
++use App\Models\Application;
++use App\Models\Enums\ApplicationsStatus;
++use Illuminate\Http\Request;
++use Illuminate\Http\JsonResponse;
++
++class ApplicationController extends Controller
++{
++    public function apply(Request $request, JobPost $job): JsonResponse
++    {
++        /** @var \App\Models\Candidate $user */
++        $user = $request->user();
++
++        if ($user->role->value !== 'CANDIDATE') {
++            return response()->json(['error' => 'Only candidates can apply for jobs.'], 403);
++        }
++
++        $alreadyApplied = Application::where('candidate_id', $user->id)
++                                     ->where('job_id', $job->id)
++                                     ->exists();
++
++        if ($alreadyApplied) {
++            return response()->json(['error' => 'You have already applied for this job.'], 400);
++        }
++
++        $matchScore = 0;
++        if (!empty($job->skills) && !empty($user->skills)) {
++            $candidateSkills = array_map('strtolower', $user->skills);
++            $jobSkills = array_map('strtolower', $job->skills);
++            $commonSkills = array_intersect($jobSkills, $candidateSkills);
++            
++            if (count($jobSkills) > 0) {
++                $matchScore = (count($commonSkills) / count($jobSkills)) * 100;
++            }
++        }
++
++        $application = Application::create([
++            'candidate_id' => $user->id,
++            'job_id' => $job->id,
++            'status' => ApplicationsStatus::APPLIED,
++            'ai_match_score' => round($matchScore, 2)
++        ]);
++
++        return response()->json([
++            'message' => 'Application submitted successfully!',
++            'application' => $application
++        ], 201);
++    }
++}
+\ No newline at end of file
+diff --git a/app/Http/Requests/MossWebhookRequest.php b/app/Http/Requests/MossWebhookRequest.php
+new file mode 100644
+index 0000000..ff3fc63
+--- /dev/null
++++ b/app/Http/Requests/MossWebhookRequest.php
+@@ -0,0 +1,29 @@
++<?php
++
++namespace App\Http\Requests;
++
++use Illuminate\Foundation\Http\FormRequest;
++
++class MossWebhookRequest extends FormRequest
++{
++    /**
++     * Determine if the user is authorized to make this request.
++     */
++    public function authorize(): bool
++    {
++        // Add middleware authorization in route
++        return true;
++    }
++
++    /**
++     * Get the validation rules that apply to the request.
++     */
++    public function rules(): array
++    {
++        return [
++            'attempt_id' => ['required', 'exists:assessment_attempts,id'],
++            'plagiarism_score' => ['required', 'numeric', 'min:0', 'max:100'],
++            'moss_report_url' => ['required', 'url'],
++        ];
++    }
++}
+diff --git a/app/Http/Requests/StoreBatchedLogsRequest.php b/app/Http/Requests/StoreBatchedLogsRequest.php
+new file mode 100644
+index 0000000..7cb84c1
+--- /dev/null
++++ b/app/Http/Requests/StoreBatchedLogsRequest.php
+@@ -0,0 +1,29 @@
++<?php
++
++namespace App\Http\Requests;
++
++use Illuminate\Foundation\Http\FormRequest;
++
++class StoreBatchedLogsRequest extends FormRequest
++{
++    /**
++     * Determine if the user is authorized to make this request.
++     */
++    public function authorize(): bool
++    {
++        return true;
++    }
++
++    /**
++     * Get the validation rules that apply to the request.
++     */
++    public function rules(): array
++    {
++        return [
++            'logs' => ['required', 'array', 'min:1'],
++            'logs.*.event_type' => ['required', 'string'],
++            'logs.*.occurred_at' => ['required', 'date_format:Y-m-d H:i:s.v'], // e.g. "2026-05-03 14:30:00.123"
++            'logs.*.metadata' => ['nullable', 'array']
++        ];
++    }
++}
+diff --git a/app/Models/Application.php b/app/Models/Application.php
+new file mode 100644
+index 0000000..6e1c0a8
+--- /dev/null
++++ b/app/Models/Application.php
+@@ -0,0 +1,35 @@
++<?php
++
++namespace App\Models;
++
++use Illuminate\Database\Eloquent\Factories\HasFactory;
++use Illuminate\Database\Eloquent\Model;
++use App\Models\Enums\ApplicationStatus;
++
++class Application extends Model
++{
++    use \Illuminate\Database\Eloquent\Factories\HasFactory;
++
++    protected $fillable = [
++        'candidate_id',
++        'job_id',
++        'ai_match_score'
++    ];
++
++    protected function casts(): array
++    {
++        return [
++            'status' => ApplicationsStatus::class,
++        ];
++    }
++
++    public function candidate()
++    {
++        return $this->belongsTo(Candidate::class, 'candidate_id');
++    }
++    
++    public function job()
++    {
++        return $this->belongsTo(JobPost::class, 'job_id');
++    }
++}
+\ No newline at end of file
+diff --git a/app/Models/Assessment.php b/app/Models/Assessment.php
+new file mode 100644
+index 0000000..712f064
+--- /dev/null
++++ b/app/Models/Assessment.php
+@@ -0,0 +1,34 @@
++<?php
++
++namespace App\Models;
++
++use Illuminate\Database\Eloquent\Factories\HasFactory;
++use Illuminate\Database\Eloquent\Model;
++
++class Assessment extends Model
++{
++    use HasFactory;
++
++    protected $fillable = [
++        'name',
++        'description',
++        'duration_minutes',
++        'pass_mark',
++        'total_mark',
++        'created_by',
++        'cooldown_period',
++        'distribution_rules',
++        'stage',
++        'moss_userid',      // ╪º┘ä┘Ç ID ╪¿╪¬╪º╪╣ ╪º┘ä╪¬┘â┘å┘è┘â╪º┘ä ╪╣┘ä┘ë MOSS
++        'moss_language',    // ┘ä╪║╪⌐ ╪º┘ä╪¿╪▒┘à╪¼╪⌐ (java, python, c, etc.) ╪╣╪┤╪º┘å MOSS ┘è┘ü┘ç┘à┘ç╪º
++        'moss_sensitivity',
++    ];
++
++    protected function casts(): array
++    {
++        return [
++            'distribution_rules' => 'array',
++            'stage' => AssessmentStage::class,
++        ];
++    }
++}
+\ No newline at end of file
+diff --git a/app/Models/AssessmentAttempt.php b/app/Models/AssessmentAttempt.php
+new file mode 100644
+index 0000000..5856d16
+--- /dev/null
++++ b/app/Models/AssessmentAttempt.php
+@@ -0,0 +1,37 @@
++<?php
++
++namespace App\Models;
++
++use Illuminate\Database\Eloquent\Model;
++use App\Models\Enums\AttemptStatus;
++
++class AssessmentAttempt extends Model
++{
++    use \Illuminate\Database\Eloquent\Factories\HasFactory;
++
++    protected $fillable = [
++        'application_id', // ╪▒╪¿╪╖┘å╪º┘ç ╪¿╪º┘ä╪¬┘é╪»┘è┘à ╪¿╪¬╪º╪╣ ╪º┘ä┘à╪▒╪┤╪¡
++        'assessment_id', // ╪º┘ä╪º┘à╪¬╪¡╪º┘å ╪º┘ä┘ä┘è ╪¿┘è┘à╪¬╪¡┘å┘ç
++        'score',
++        'status',
++        'started_at',
++        'completed_at',
++        'plagiarism_score', // ┘å╪│╪¿╪⌐ ╪º┘ä╪º┘é╪¬╪¿╪º╪│ ╪º┘ä┘ä┘è ╪▒╪º╪¼╪╣╪⌐ ┘à┘å MOSS (┘à╪½┘ä╪º┘ï 85%)
++        'moss_report_url',
++    ];
++
++    protected function casts(): array
++    {
++        return [
++            'started_at' => 'datetime',
++            'completed_at' => 'datetime',
++            'status' => AttemptStatus::class,
++        ];
++    }
++
++    public function questions()
++    {
++        return $this->belongsToMany(Question::class, 'attempt_questions')
++                    ->withPivot('candidate_answer', 'is_correct', 'earned_mark');
++    }
++}
+\ No newline at end of file
+diff --git a/app/Models/AssessmentLog.php b/app/Models/AssessmentLog.php
+new file mode 100644
+index 0000000..0a63b99
+--- /dev/null
++++ b/app/Models/AssessmentLog.php
+@@ -0,0 +1,33 @@
++<?php
++
++namespace App\Models;
++
++use App\Models\Enums\EventType; // ╪º┘ä┘Ç Enum ╪¿╪¬╪º╪╣┘â
++use Illuminate\Database\Eloquent\Model;
++
++class AssessmentLog extends Model
++{
++    // ╪┤┘è┘ä┘å╪º ╪º┘ä┘Ç updated_at ┘ä╪ú┘å ╪º┘ä┘ä┘ê╪¼ ╪¿┘è╪¬╪│╪¼┘ä ┘à╪▒╪⌐ ┘ê╪º╪¡╪»╪⌐ ┘ê┘à╪┤ ╪¿┘è╪¬╪╣╪»┘ä
++    public const UPDATED_AT = null;
++
++    protected $fillable = [
++        'assessment_attempt_id', // ┘à╪▒╪¿┘ê╪╖ ╪¿┘à╪¡╪º┘ê┘ä╪⌐ ╪º┘ä┘à╪▒╪┤╪¡ ╪º┘ä╪¡╪º┘ä┘è╪⌐
++        'event_type',            // ┘å┘ê╪╣ ╪º┘ä╪¡╪»╪½ (FOUCUS_LOSS, TAB_SWITCH...)
++        'metadata',              // ╪ú┘è ╪¬┘ü╪º╪╡┘è┘ä ╪▓┘è╪º╪»╪⌐ (╪▓┘è: ┘ü╪¬╪¡ ╪¬╪º╪¿ ╪º┘è┘ç╪î ╪║╪º╪¿ ┘â╪º┘à ╪½╪º┘å┘è╪⌐)
++        'occurred_at'            // ┘ê┘é╪¬ ╪º┘ä╪¡╪»╪½ ╪¿╪º┘ä┘à┘ä┘ä┘è ╪½╪º┘å┘è╪⌐
++    ];
++
++    protected function casts(): array
++    {
++        return [
++            'event_type' => EventType::class, //[cite: 18]
++            'metadata' => 'array',
++            'occurred_at' => 'datetime',
++        ];
++    }
++
++    public function attempt()
++    {
++        return $this->belongsTo(AssessmentAttempt::class, 'assessment_attempt_id');
++    }
++}
+\ No newline at end of file
+diff --git a/app/Models/Enums/AssessmentStage.php b/app/Models/Enums/AssessmentStage.php
+new file mode 100644
+index 0000000..c2e56e1
+--- /dev/null
++++ b/app/Models/Enums/AssessmentStage.php
+@@ -0,0 +1,9 @@
++<?php
++
++namespace App\Models\Enums;
++
++enum AssessmentStage: string
++{
++    case PRE_INTERVIEW = 'PRE_INTERVIEW';
++    case DURING_INTERVIEW = 'DURING_INTERVIEW';
++}
+\ No newline at end of file
+diff --git a/app/Models/Enums/AttemptStatus.php b/app/Models/Enums/AttemptStatus.php
+new file mode 100644
+index 0000000..9ef4d47
+--- /dev/null
++++ b/app/Models/Enums/AttemptStatus.php
+@@ -0,0 +1,10 @@
++<?php
++
++namespace App\Models\Enums;
++
++enum AttemptStatus: string
++{
++    case IN_PROGRESS = 'IN_PROGRESS';
++    case PASSED = 'PASSED';
++    case FAILED = 'FAILED';
++}
+diff --git a/app/Models/Question.php b/app/Models/Question.php
+new file mode 100644
+index 0000000..33dee06
+--- /dev/null
++++ b/app/Models/Question.php
+@@ -0,0 +1,43 @@
++<?php
++
++namespace App\Models;
++
++use Illuminate\Database\Eloquent\Factories\HasFactory;
++use Illuminate\Database\Eloquent\Model;
++use App\Models\Enums\QuestionCategory;
++use App\Models\Enums\QuestionDifficulty;
++
++class Question extends Model
++{
++    use \Illuminate\Database\Eloquent\Factories\HasFactory;
++
++    use HasFactory;
++
++    protected $fillable = [
++        'question',
++        'description',
++        'category',
++        'recommended_base_answer',
++        'test_cases',
++        'difficulty',
++    ];
++
++    protected function casts(): array
++    {
++        return [
++            'category' => QuestionCategory::class,
++            'difficulty' => QuestionDifficulty::class,
++            'test_cases' => 'json',
++        ];
++    }
++
++    public function base_answer()
++    {
++        return $this->hasOne(BaseAnswer::class);
++    }
++
++    public function test_cases()
++    {
++        return $this->hasMany(TestCase::class);
++    }    
++}
+\ No newline at end of file
+diff --git a/app/Services/AssessmentService.php b/app/Services/AssessmentService.php
+new file mode 100644
+index 0000000..38d56f9
+--- /dev/null
++++ b/app/Services/AssessmentService.php
+@@ -0,0 +1,96 @@
++<?php
++
++namespace App\Services;
++
++use App\Models\Application;
++use App\Models\Assessment;
++use App\Models\AssessmentAttempt;
++use App\Models\Question;
++use App\Models\Enums\AttemptStatus;
++use Illuminate\Support\Facades\DB;
++use Symfony\Component\HttpKernel\Exception\HttpException;
++use Carbon\Carbon;
++
++class AssessmentService
++{
++    /**
++     * Start a new assessment attempt and attach dynamic questions
++     * 
++     * @param Application $application
++     * @param Assessment $assessment
++     * @return AssessmentAttempt
++     */
++    public function startAttempt(Application $application, Assessment $assessment): AssessmentAttempt
++    {
++        // 1. Check for recent failed attempts
++        $previousAttempt = AssessmentAttempt::where('application_id', $application->id)
++            ->where('assessment_id', $assessment->id)
++            // Assuming we only care about FINISHED attempts to calculate cooldown
++            // The exact statuses would depend on Enums, assuming "FAILED" or similar
++            ->orderBy('completed_at', 'desc')
++            ->first();
++
++        $isRetake = false;
++
++        if ($previousAttempt && $previousAttempt->completed_at) {
++            $cooldownHours = $assessment->cooldown_period ?? 0;
++            $cooldownEndTime = Carbon::parse($previousAttempt->completed_at)->addHours($cooldownHours);
++
++            if (now()->lessThan($cooldownEndTime)) {
++                throw new HttpException(403, "Cooldown period active. You cannot retake this assessment until " . $cooldownEndTime->toDateTimeString());
++            }
++
++            $isRetake = true;
++        }
++
++        return DB::transaction(function () use ($application, $assessment, $isRetake) {
++            // Create attempt
++            $attempt = AssessmentAttempt::create([
++                'application_id' => $application->id,
++                'assessment_id' => $assessment->id,
++                'status' => 'IN_PROGRESS', // Or your Enum equivalent like AttemptStatus::IN_PROGRESS
++                'started_at' => now(),
++            ]);
++
++            // Determine distribution
++            $rules = $assessment->distribution_rules ?? []; 
++            // e.g. ["HARD" => 5, "MEDIUM" => 3, "BASIC" => 2]
++
++            // Adjust distribution if it is a retake 
++            // (Shifting 1 HARD to MEDIUM as requested in instructions - adjust logic as strictly needed)
++            if ($isRetake && isset($rules['HARD']) && isset($rules['MEDIUM']) && $rules['HARD'] > 0) {
++                $rules['HARD']--;
++                $rules['MEDIUM']++;
++            }
++
++            $pivotRecords = [];
++
++            // Fetch dynamic random questions based on adjusted rules
++            foreach ($rules as $difficulty => $count) {
++                if ($count <= 0) continue;
++
++                $questions = Question::where('difficulty', $difficulty)
++                    ->inRandomOrder()
++                    ->limit($count)
++                    ->pluck('id');
++                
++                foreach ($questions as $questionId) {
++                    $pivotRecords[$questionId] = [
++                        'candidate_answer' => null,
++                        'is_correct' => null,
++                        'earned_mark' => null,
++                        'created_at' => now(),
++                        'updated_at' => now(),
++                    ];
++                }
++            }
++
++            // Attach batch to pivot (attempt_questions)
++            if (!empty($pivotRecords)) {
++                $attempt->questions()->attach($pivotRecords);
++            }
++
++            return $attempt;
++        });
++    }
++}
+diff --git a/composer.json b/composer.json
+index 39367ba..f9f3fc3 100644
+--- a/composer.json
++++ b/composer.json
+@@ -11,6 +11,7 @@
+         "calebporzio/parental": "^1.6",
+         "dedoc/scramble": "^0.13.22",
+         "laravel/framework": "^13.0",
++        "laravel/sanctum": "^4.0",
+         "laravel/tinker": "^3.0"
+     },
+     "require-dev": {
+diff --git a/composer.lock b/composer.lock
+index f995f32..71f1d77 100644
+--- a/composer.lock
++++ b/composer.lock
+@@ -4,7 +4,7 @@
+         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
+         "This file is @generated automatically"
+     ],
+-    "content-hash": "556d27a1e2b132f457ff22c537a9931e",
++    "content-hash": "39373af1d14f3e0aa70692459758b29a",
+     "packages": [
+         {
+             "name": "barryvdh/laravel-dompdf",
+@@ -1716,6 +1716,69 @@
+             },
+             "time": "2026-04-20T16:07:33+00:00"
+         },
++        {
++            "name": "laravel/sanctum",
++            "version": "v4.3.1",
++            "source": {
++                "type": "git",
++                "url": "https://github.com/laravel/sanctum.git",
++                "reference": "e3b85d6e36ad00e5db2d1dcc27c81ffdf15cbf76"
++            },
++            "dist": {
++                "type": "zip",
++                "url": "https://api.github.com/repos/laravel/sanctum/zipball/e3b85d6e36ad00e5db2d1dcc27c81ffdf15cbf76",
++                "reference": "e3b85d6e36ad00e5db2d1dcc27c81ffdf15cbf76",
++                "shasum": ""
++            },
++            "require": {
++                "ext-json": "*",
++                "illuminate/console": "^11.0|^12.0|^13.0",
++                "illuminate/contracts": "^11.0|^12.0|^13.0",
++                "illuminate/database": "^11.0|^12.0|^13.0",
++                "illuminate/support": "^11.0|^12.0|^13.0",
++                "php": "^8.2",
++                "symfony/console": "^7.0|^8.0"
++            },
++            "require-dev": {
++                "mockery/mockery": "^1.6",
++                "orchestra/testbench": "^9.15|^10.8|^11.0",
++                "phpstan/phpstan": "^1.10"
++            },
++            "type": "library",
++            "extra": {
++                "laravel": {
++                    "providers": [
++                        "Laravel\\Sanctum\\SanctumServiceProvider"
++                    ]
++                }
++            },
++            "autoload": {
++                "psr-4": {
++                    "Laravel\\Sanctum\\": "src/"
++                }
++            },
++            "notification-url": "https://packagist.org/downloads/",
++            "license": [
++                "MIT"
++            ],
++            "authors": [
++                {
++                    "name": "Taylor Otwell",
++                    "email": "taylor@laravel.com"
++                }
++            ],
++            "description": "Laravel Sanctum provides a featherweight authentication system for SPAs and simple APIs.",
++            "keywords": [
++                "auth",
++                "laravel",
++                "sanctum"
++            ],
++            "support": {
++                "issues": "https://github.com/laravel/sanctum/issues",
++                "source": "https://github.com/laravel/sanctum"
++            },
++            "time": "2026-02-07T17:19:31+00:00"
++        },
+         {
+             "name": "laravel/serializable-closure",
+             "version": "v2.0.12",
+diff --git a/config/sanctum.php b/config/sanctum.php
+new file mode 100644
+index 0000000..44527d6
+--- /dev/null
++++ b/config/sanctum.php
+@@ -0,0 +1,84 @@
++<?php
++
++use Laravel\Sanctum\Sanctum;
++
++return [
++
++    /*
++    |--------------------------------------------------------------------------
++    | Stateful Domains
++    |--------------------------------------------------------------------------
++    |
++    | Requests from the following domains / hosts will receive stateful API
++    | authentication cookies. Typically, these should include your local
++    | and production domains which access your API via a frontend SPA.
++    |
++    */
++
++    'stateful' => explode(',', env('SANCTUM_STATEFUL_DOMAINS', sprintf(
++        '%s%s',
++        'localhost,localhost:3000,127.0.0.1,127.0.0.1:8000,::1',
++        Sanctum::currentApplicationUrlWithPort(),
++        // Sanctum::currentRequestHost(),
++    ))),
++
++    /*
++    |--------------------------------------------------------------------------
++    | Sanctum Guards
++    |--------------------------------------------------------------------------
++    |
++    | This array contains the authentication guards that will be checked when
++    | Sanctum is trying to authenticate a request. If none of these guards
++    | are able to authenticate the request, Sanctum will use the bearer
++    | token that's present on an incoming request for authentication.
++    |
++    */
++
++    'guard' => ['web'],
++
++    /*
++    |--------------------------------------------------------------------------
++    | Expiration Minutes
++    |--------------------------------------------------------------------------
++    |
++    | This value controls the number of minutes until an issued token will be
++    | considered expired. This will override any values set in the token's
++    | "expires_at" attribute, but first-party sessions are not affected.
++    |
++    */
++
++    'expiration' => null,
++
++    /*
++    |--------------------------------------------------------------------------
++    | Token Prefix
++    |--------------------------------------------------------------------------
++    |
++    | Sanctum can prefix new tokens in order to take advantage of numerous
++    | security scanning initiatives maintained by open source platforms
++    | that notify developers if they commit tokens into repositories.
++    |
++    | See: https://docs.github.com/en/code-security/secret-scanning/about-secret-scanning
++    |
++    */
++
++    'token_prefix' => env('SANCTUM_TOKEN_PREFIX', ''),
++
++    /*
++    |--------------------------------------------------------------------------
++    | Sanctum Middleware
++    |--------------------------------------------------------------------------
++    |
++    | When authenticating your first-party SPA with Sanctum you may need to
++    | customize some of the middleware Sanctum uses while processing the
++    | request. You may change the middleware listed below as required.
++    |
++    */
++
++    'middleware' => [
++        'authenticate_session' => Laravel\Sanctum\Http\Middleware\AuthenticateSession::class,
++        'encrypt_cookies' => Illuminate\Cookie\Middleware\EncryptCookies::class,
++        'validate_csrf_token' => Illuminate\Foundation\Http\Middleware\ValidateCsrfToken::class,
++    ],
++
++];
+diff --git a/database/factories/ApplicationFactory.php b/database/factories/ApplicationFactory.php
+new file mode 100644
+index 0000000..ac9df5d
+--- /dev/null
++++ b/database/factories/ApplicationFactory.php
+@@ -0,0 +1,23 @@
++<?php
++
++namespace Database\Factories;
++
++use App\Models\Application;
++use App\Models\User;
++use App\Models\JobPost;
++use Illuminate\Database\Eloquent\Factories\Factory;
++
++class ApplicationFactory extends Factory
++{
++    public function definition(): array
++    {
++        return [
++            'candidate_id' => User::factory(),
++            'job_post_id' => 1, // We could make a JobPost factory, but let's assume it exists or isn't strict constraint right now, else we'd use JobPost::factory()
++            'status' => 'PENDING',
++            'created_at' => now(),
++            'updated_at' => now(),
++        ];
++    }
++}
++
+diff --git a/database/factories/AssessmentAttemptFactory.php b/database/factories/AssessmentAttemptFactory.php
+new file mode 100644
+index 0000000..adc7a6e
+--- /dev/null
++++ b/database/factories/AssessmentAttemptFactory.php
+@@ -0,0 +1,22 @@
++<?php
++
++namespace Database\Factories;
++
++use App\Models\AssessmentAttempt;
++use App\Models\Application;
++use App\Models\Assessment;
++use Illuminate\Database\Eloquent\Factories\Factory;
++
++class AssessmentAttemptFactory extends Factory
++{
++    public function definition(): array
++    {
++        return [
++            'application_id' => Application::factory(),
++            'assessment_id' => Assessment::factory(),
++            'status' => 'IN_PROGRESS',
++            'started_at' => now(),
++        ];
++    }
++}
++
+diff --git a/database/factories/AssessmentFactory.php b/database/factories/AssessmentFactory.php
+new file mode 100644
+index 0000000..c1d7b5c
+--- /dev/null
++++ b/database/factories/AssessmentFactory.php
+@@ -0,0 +1,24 @@
++<?php
++
++namespace Database\Factories;
++
++use App\Models\Assessment;
++use Illuminate\Database\Eloquent\Factories\Factory;
++
++class AssessmentFactory extends Factory
++{
++    public function definition(): array
++    {
++        return [
++            'name' => $this->faker->words(3, true),
++            'description' => $this->faker->sentence,
++            'duration_minutes' => 60,
++            'pass_mark' => 50,
++            'total_mark' => 100,
++            'cooldown_period' => 24,
++            'distribution_rules' => ['HARD' => 2, 'MEDIUM' => 3, 'BASIC' => 5],
++            'stage' => 'TECHNICAL',
++        ];
++    }
++}
++
+diff --git a/database/factories/QuestionFactory.php b/database/factories/QuestionFactory.php
+new file mode 100644
+index 0000000..46436ab
+--- /dev/null
++++ b/database/factories/QuestionFactory.php
+@@ -0,0 +1,19 @@
++<?php
++
++namespace Database\Factories;
++
++use App\Models\Question;
++use Illuminate\Database\Eloquent\Factories\Factory;
++
++class QuestionFactory extends Factory
++{
++    public function definition(): array
++    {
++        return [
++            'question' => $this->faker->sentence,
++            'description' => $this->faker->paragraph,
++            'category' => 'PROGRAMMING',
++            'difficulty' => 'MEDIUM',
++        ];
++    }
++}
+diff --git a/database/migrations/2026_05_02_203133_create_applications_table.php b/database/migrations/2026_05_02_203133_create_applications_table.php
+new file mode 100644
+index 0000000..8f9cc58
+--- /dev/null
++++ b/database/migrations/2026_05_02_203133_create_applications_table.php
+@@ -0,0 +1,31 @@
++<?php
++
++use Illuminate\Database\Migrations\Migration;
++use Illuminate\Database\Schema\Blueprint;
++use Illuminate\Support\Facades\Schema;
++
++return new class extends Migration
++{
++    /**
++     * Run the migrations.
++     */
++    public function up(): void
++    {
++        Schema::create('applications', function (Blueprint $table) {
++            $table->id();
++            $table->foreignId('candidate_id')->constrained('users')->onDelete('cascade');
++            $table->foreignId('job_id')->constrained('job_posts')->onDelete('cascade');
++            $table->decimal('ai_match_score', 5, 2)->default(0);
++            $table->string('status');
++            $table->timestamps();
++        });
++    }
++
++    /**
++     * Reverse the migrations.
++     */
++    public function down(): void
++    {
++        Schema::dropIfExists('applications');
++    }
++};
+diff --git a/database/migrations/2026_05_02_203134_create_assessment_attempts_table.php b/database/migrations/2026_05_02_203134_create_assessment_attempts_table.php
+new file mode 100644
+index 0000000..16f91c5
+--- /dev/null
++++ b/database/migrations/2026_05_02_203134_create_assessment_attempts_table.php
+@@ -0,0 +1,35 @@
++<?php
++
++use Illuminate\Database\Migrations\Migration;
++use Illuminate\Database\Schema\Blueprint;
++use Illuminate\Support\Facades\Schema;
++
++return new class extends Migration
++{
++    /**
++     * Run the migrations.
++     */
++    public function up(): void
++    {
++        Schema::create('assessment_attempts', function (Blueprint $table) {
++            $table->id();
++            $table->foreignId('application_id')->constrained('applications')->onDelete('cascade');
++            $table->foreignId('assessment_id')->constrained('assessments')->onDelete('cascade');
++            $table->integer('score')->nullable();
++            $table->string('status');
++            $table->timestamp('started_at')->nullable();
++            $table->timestamp('completed_at')->nullable();
++            $table->integer('plagiarism_score')->nullable();
++            $table->string('moss_report_url')->nullable();
++            $table->timestamps();
++        });
++    }
++
++    /**
++     * Reverse the migrations.
++     */
++    public function down(): void
++    {
++        Schema::dropIfExists('assessment_attempts');
++    }
++};
+diff --git a/database/migrations/2026_05_02_203134_create_assessments_table.php b/database/migrations/2026_05_02_203134_create_assessments_table.php
+new file mode 100644
+index 0000000..b754e97
+--- /dev/null
++++ b/database/migrations/2026_05_02_203134_create_assessments_table.php
+@@ -0,0 +1,39 @@
++<?php
++
++use Illuminate\Database\Migrations\Migration;
++use Illuminate\Database\Schema\Blueprint;
++use Illuminate\Support\Facades\Schema;
++
++return new class extends Migration
++{
++    /**
++     * Run the migrations.
++     */
++    public function up(): void
++    {
++        Schema::create('assessments', function (Blueprint $table) {
++            $table->id();
++            $table->string('name');
++            $table->text('description')->nullable();
++            $table->integer('duration_minutes');
++            $table->integer('pass_mark');
++            $table->integer('total_mark');
++            $table->foreignId('created_by')->constrained('users')->onDelete('cascade');
++            $table->integer('cooldown_period')->default(24); // hours or minutes, let's use hours based on user example (24 hours)
++            $table->json('distribution_rules');
++            $table->string('stage');
++            $table->string('moss_userid')->nullable();
++            $table->string('moss_language')->nullable();
++            $table->integer('moss_sensitivity')->nullable();
++            $table->timestamps();
++        });
++    }
++
++    /**
++     * Reverse the migrations.
++     */
++    public function down(): void
++    {
++        Schema::dropIfExists('assessments');
++    }
++};
+diff --git a/database/migrations/2026_05_02_203134_create_questions_table.php b/database/migrations/2026_05_02_203134_create_questions_table.php
+new file mode 100644
+index 0000000..09ad40c
+--- /dev/null
++++ b/database/migrations/2026_05_02_203134_create_questions_table.php
+@@ -0,0 +1,33 @@
++<?php
++
++use Illuminate\Database\Migrations\Migration;
++use Illuminate\Database\Schema\Blueprint;
++use Illuminate\Support\Facades\Schema;
++
++return new class extends Migration
++{
++    /**
++     * Run the migrations.
++     */
++    public function up(): void
++    {
++        Schema::create('questions', function (Blueprint $table) {
++            $table->id();
++            $table->text('question');
++            $table->text('description')->nullable();
++            $table->string('category');
++            $table->text('recommended_base_answer')->nullable();
++            $table->json('test_cases')->nullable();
++            $table->string('difficulty');
++            $table->timestamps();
++        });
++    }
++
++    /**
++     * Reverse the migrations.
++     */
++    public function down(): void
++    {
++        Schema::dropIfExists('questions');
++    }
++};
+diff --git a/database/migrations/2026_05_02_203135_create_assessment_logs_table.php b/database/migrations/2026_05_02_203135_create_assessment_logs_table.php
+new file mode 100644
+index 0000000..dc182b2
+--- /dev/null
++++ b/database/migrations/2026_05_02_203135_create_assessment_logs_table.php
+@@ -0,0 +1,31 @@
++<?php
++
++use Illuminate\Database\Migrations\Migration;
++use Illuminate\Database\Schema\Blueprint;
++use Illuminate\Support\Facades\Schema;
++
++return new class extends Migration
++{
++    /**
++     * Run the migrations.
++     */
++    public function up(): void
++    {
++        Schema::create('assessment_logs', function (Blueprint $table) {
++            $table->id();
++            $table->foreignId('assessment_attempt_id')->constrained('assessment_attempts')->onDelete('cascade');
++            $table->string('event_type');
++            $table->json('metadata')->nullable();
++            $table->timestamp('occurred_at', 3); // Millisecond precision
++            $table->timestamp('created_at')->nullable(); // Only created_at, no updated_at
++        });
++    }
++
++    /**
++     * Reverse the migrations.
++     */
++    public function down(): void
++    {
++        Schema::dropIfExists('assessment_logs');
++    }
++};
+diff --git a/database/migrations/2026_05_02_203135_create_attempt_questions_table.php b/database/migrations/2026_05_02_203135_create_attempt_questions_table.php
+new file mode 100644
+index 0000000..d56b3da
+--- /dev/null
++++ b/database/migrations/2026_05_02_203135_create_attempt_questions_table.php
+@@ -0,0 +1,32 @@
++<?php
++
++use Illuminate\Database\Migrations\Migration;
++use Illuminate\Database\Schema\Blueprint;
++use Illuminate\Support\Facades\Schema;
++
++return new class extends Migration
++{
++    /**
++     * Run the migrations.
++     */
++    public function up(): void
++    {
++        Schema::create('attempt_questions', function (Blueprint $table) {
++            $table->id();
++            $table->foreignId('assessment_attempt_id')->constrained('assessment_attempts')->onDelete('cascade');
++            $table->foreignId('question_id')->constrained('questions')->onDelete('cascade');
++            $table->text('candidate_answer')->nullable();
++            $table->boolean('is_correct')->nullable();
++            $table->integer('earned_mark')->nullable();
++            $table->timestamps();
++        });
++    }
++
++    /**
++     * Reverse the migrations.
++     */
++    public function down(): void
++    {
++        Schema::dropIfExists('attempt_questions');
++    }
++};
+diff --git a/database/migrations/2026_05_02_223344_create_personal_access_tokens_table.php b/database/migrations/2026_05_02_223344_create_personal_access_tokens_table.php
+new file mode 100644
+index 0000000..40ff706
+--- /dev/null
++++ b/database/migrations/2026_05_02_223344_create_personal_access_tokens_table.php
+@@ -0,0 +1,33 @@
++<?php
++
++use Illuminate\Database\Migrations\Migration;
++use Illuminate\Database\Schema\Blueprint;
++use Illuminate\Support\Facades\Schema;
++
++return new class extends Migration
++{
++    /**
++     * Run the migrations.
++     */
++    public function up(): void
++    {
++        Schema::create('personal_access_tokens', function (Blueprint $table) {
++            $table->id();
++            $table->morphs('tokenable');
++            $table->text('name');
++            $table->string('token', 64)->unique();
++            $table->text('abilities')->nullable();
++            $table->timestamp('last_used_at')->nullable();
++            $table->timestamp('expires_at')->nullable()->index();
++            $table->timestamps();
++        });
++    }
++
++    /**
++     * Reverse the migrations.
++     */
++    public function down(): void
++    {
++        Schema::dropIfExists('personal_access_tokens');
++    }
++};
+diff --git a/phpunit.xml b/phpunit.xml
+index 46dc9f7..6ff77e2 100644
+--- a/phpunit.xml
++++ b/phpunit.xml
+@@ -26,7 +26,7 @@
+         <env name="DB_CONNECTION" value="mysql"/>
+         <env name="DB_HOST" value="127.0.0.1"/>
+         <env name="DB_PORT" value="3306"/>
+-        <env name="DB_DATABASE" value="nexthire_db_test"/>
++        <env name="DB_DATABASE" value="nexthire_db"/>
+         <env name="DB_USERNAME" value="root"/>
+         <env name="DB_PASSWORD" value=""/>
+         <env name="MAIL_MAILER" value="array"/>
+diff --git a/routes/api.php b/routes/api.php
+index 5e6ff15..5566139 100644
+--- a/routes/api.php
++++ b/routes/api.php
+@@ -3,6 +3,9 @@
+ use App\Http\Controllers\AuthController;
+ use Illuminate\Support\Facades\Route;
+ use App\Http\Controllers\JobRequisitionController;
++use App\Http\Controllers\API\AssessmentController;
++use App\Http\Controllers\API\AssessmentLogController;
++use App\Http\Controllers\API\WebhookController;
+ 
+ // Public Routes for Candidates
+ Route::prefix('v1/public/auth')->group(function () {
+@@ -54,3 +57,14 @@
+         ], 200);
+     });
+ });
++
++// Phase 3 & 4: Assessment & Monitoring Endpoints
++Route::prefix('v1/assessments')->group(function () {
++    Route::post('/{assessment_id}/start', [AssessmentController::class, 'startAttempt']);
++    Route::post('/{attempt_id}/logs', [AssessmentLogController::class, 'storeBatch']);
++});
++
++// Phase 4: Webhooks
++Route::prefix('v1/webhooks')->group(function () {
++    Route::post('/moss-results', [WebhookController::class, 'mossResults']);
++});
+diff --git a/swagger.yaml b/swagger.yaml
+index bd1d6df..13f37de 100644
+--- a/swagger.yaml
++++ b/swagger.yaml
+@@ -192,6 +192,141 @@ components:
+ #  Paths
+ # ΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇ
+ paths:
++  /api/v1/jobs:
++    get:
++      summary: Get Jobs
++      description: Returns all jobs for HR Admins, or matched approved jobs for Candidates.
++      tags: [Job Requisitions]
++      security:
++        - bearerAuth: []
++      responses:
++        '200':
++          description: List of jobs
++    post:
++      summary: Create Job Requisition
++      description: HR Admin creates a new job post. Notifies Department Managers.
++      tags: [Job Requisitions]
++      security:
++        - bearerAuth: []
++      requestBody:
++        required: true
++        content:
++          application/json:
++            schema:
++              type: object
++              required: [title, description, department, experience_level]
++              properties:
++                title:
++                  type: string
++                description:
++                  type: string
++                department:
++                  type: string
++                experience_level:
++                  type: integer
++                skills:
++                  type: array
++                  items:
++                    type: string
++      responses:
++        '201':
++          description: Job created
++
++  /api/v1/jobs/{job}:
++    get:
++      summary: Get Job Details
++      tags: [Job Requisitions]
++      security:
++        - bearerAuth: []
++      parameters:
++        - name: job
++          in: path
++          required: true
++          schema:
++            type: integer
++      responses:
++        '200':
++          description: Job details
++
++  /api/v1/jobs/{job}/approve:
++    post:
++      summary: Approve Job
++      description: Department Manager approves a pending job.
++      tags: [Job Requisitions]
++      security:
++        - bearerAuth: []
++      parameters:
++        - name: job
++          in: path
++          required: true
++          schema:
++            type: integer
++      requestBody:
++        required: true
++        content:
++          application/json:
++            schema:
++              type: object
++              required: [reason]
++              properties:
++                reason:
++                  type: string
++      responses:
++        '200':
++          description: Job approved
++
++  /api/v1/jobs/{job}/reject:
++    post:
++      summary: Reject Job
++      description: Department Manager rejects a pending job.
++      tags: [Job Requisitions]
++      security:
++        - bearerAuth: []
++      parameters:
++        - name: job
++          in: path
++          required: true
++          schema:
++            type: integer
++      requestBody:
++        required: true
++        content:
++          application/json:
++            schema:
++              type: object
++              required: [reason]
++              properties:
++                reason:
++                  type: string
++      responses:
++        '200':
++          description: Job rejected
++
++  /api/v1/notifications/unread:
++    get:
++      summary: Get Unread Notifications
++      tags: [Notifications]
++      security:
++        - bearerAuth: []
++      responses:
++        '200':
++          description: List of unread notifications
++
++  /api/v1/notifications/{id}/read:
++    post:
++      summary: Mark Notification as Read
++      tags: [Notifications]
++      security:
++        - bearerAuth: []
++      parameters:
++        - name: id
++          in: path
++          required: true
++          schema:
++            type: string
++      responses:
++        '200':
++          description: Marked as read
+ 
+   # ΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉ
+   #  1. Register Candidate
+@@ -899,3 +1034,85 @@ paths:
+             application/json:
+               schema:
+                 $ref: "#/components/schemas/ErrorResponse"
++
++     / a p i / v 1 / a s s e s s m e n t s / { a s s e s s m e n t _ i d } / s t a r t : 
++         p o s t : 
++             s u m m a r y :   S t a r t   A s s e s s m e n t   A t t e m p t 
++             t a g s :   [ A s s e s s m e n t ] 
++             s e c u r i t y : 
++                 -   B e a r e r A u t h :   [ ] 
++             p a r a m e t e r s : 
++                 -   i n :   p a t h 
++                     n a m e :   a s s e s s m e n t _ i d 
++                     r e q u i r e d :   t r u e 
++                     s c h e m a : 
++                         t y p e :   i n t e g e r 
++             r e q u e s t B o d y : 
++                 r e q u i r e d :   t r u e 
++                 c o n t e n t : 
++                     a p p l i c a t i o n / j s o n : 
++                         s c h e m a : 
++                             t y p e :   o b j e c t 
++                             p r o p e r t i e s : 
++                                 a p p l i c a t i o n _ i d : 
++                                     t y p e :   i n t e g e r 
++             r e s p o n s e s : 
++                 " 2 0 1 " : 
++                     d e s c r i p t i o n :   S t a r t e d   s u c c e s s f u l l y 
++                 " 4 0 3 " : 
++                     d e s c r i p t i o n :   C o o l d o w n   a c t i v e 
++     / a p i / v 1 / a s s e s s m e n t s / { a t t e m p t _ i d } / l o g s : 
++         p o s t : 
++             s u m m a r y :   S t o r e   B a t c h e d   A n t i - C h e a t   L o g s 
++             t a g s :   [ A s s e s s m e n t ] 
++             s e c u r i t y : 
++                 -   B e a r e r A u t h :   [ ] 
++             p a r a m e t e r s : 
++                 -   i n :   p a t h 
++                     n a m e :   a t t e m p t _ i d 
++                     r e q u i r e d :   t r u e 
++                     s c h e m a : 
++                         t y p e :   i n t e g e r 
++             r e q u e s t B o d y : 
++                 r e q u i r e d :   t r u e 
++                 c o n t e n t : 
++                     a p p l i c a t i o n / j s o n : 
++                         s c h e m a : 
++                             t y p e :   o b j e c t 
++                             p r o p e r t i e s : 
++                                 l o g s : 
++                                     t y p e :   a r r a y 
++                                     i t e m s : 
++                                         t y p e :   o b j e c t 
++                                         p r o p e r t i e s : 
++                                             e v e n t _ t y p e : 
++                                                 t y p e :   s t r i n g 
++                                             o c c u r r e d _ a t : 
++                                                 t y p e :   s t r i n g 
++                                             m e t a d a t a : 
++                                                 t y p e :   o b j e c t 
++             r e s p o n s e s : 
++                 " 2 0 1 " : 
++                     d e s c r i p t i o n :   C r e a t e d 
++     / a p i / v 1 / w e b h o o k s / m o s s - r e s u l t s : 
++         p o s t : 
++             s u m m a r y :   R e c e i v e   M O S S   P l a g i a r i s m   r u l e s 
++             t a g s :   [ W e b h o o k s ] 
++             r e q u e s t B o d y : 
++                 r e q u i r e d :   t r u e 
++                 c o n t e n t : 
++                     a p p l i c a t i o n / j s o n : 
++                         s c h e m a : 
++                             t y p e :   o b j e c t 
++                             p r o p e r t i e s : 
++                                 a t t e m p t _ i d : 
++                                     t y p e :   i n t e g e r 
++                                 p l a g i a r i s m _ s c o r e : 
++                                     t y p e :   n u m b e r 
++                                 m o s s _ r e p o r t _ u r l : 
++                                     t y p e :   s t r i n g 
++             r e s p o n s e s : 
++                 " 2 0 0 " : 
++                     d e s c r i p t i o n :   U p d a t e d 
++ 
+ 
++ 
+\ No newline at end of file
+diff --git a/tests/Feature/AssessmentApiTest.php b/tests/Feature/AssessmentApiTest.php
+new file mode 100644
+index 0000000..761e3de
+--- /dev/null
++++ b/tests/Feature/AssessmentApiTest.php
+@@ -0,0 +1,63 @@
++<?php
++
++namespace Tests\Feature;
++
++use Tests\TestCase;
++use App\Models\User;
++use App\Models\Application;
++use App\Models\Assessment;
++use App\Models\AssessmentAttempt;
++use Illuminate\Foundation\Testing\RefreshDatabase;
++
++class AssessmentApiTest extends TestCase
++{
++    use RefreshDatabase;
++
++    public function test_can_start_assessment_attempt()
++    {
++        $application = Application::factory()->create();
++        $assessment = Assessment::factory()->create();
++
++        $response = $this->postJson("/api/v1/assessments/{$assessment->id}/start", [
++            'application_id' => $application->id
++        ]);
++
++        $response->assertStatus(201)
++                 ->assertJsonStructure(['message', 'data']);
++                 
++        $this->assertDatabaseHas('assessment_attempts', [
++            'application_id' => $application->id,
++            'assessment_id' => $assessment->id
++        ]);
++    }
++
++    public function test_can_store_batched_logs()
++    {
++        $attempt = AssessmentAttempt::factory()->create();
++
++        $payload = [
++            'logs' => [
++                [
++                    'event_type' => 'TAB_SWITCH',
++                    'occurred_at' => now()->format('Y-m-d H:i:s.v'),
++                    'metadata' => ['tab' => 'Google']
++                ],
++                [
++                    'event_type' => 'FOCUS_LOSS',
++                    'occurred_at' => now()->format('Y-m-d H:i:s.v'),
++                    'metadata' => null
++                ]
++            ]
++        ];
++
++        $response = $this->postJson("/api/v1/assessments/{$attempt->id}/logs", $payload);
++
++        $response->assertStatus(201)
++                 ->assertJson(['message' => '2 logs recorded successfully.']);
++
++        $this->assertDatabaseHas('assessment_logs', [
++            'assessment_attempt_id' => $attempt->id,
++            'event_type' => 'TAB_SWITCH'
++        ]);
++    }
++}
+diff --git a/tests/Feature/WebhookApiTest.php b/tests/Feature/WebhookApiTest.php
+new file mode 100644
+index 0000000..8696ea3
+--- /dev/null
++++ b/tests/Feature/WebhookApiTest.php
+@@ -0,0 +1,34 @@
++<?php
++
++namespace Tests\Feature;
++
++use Tests\TestCase;
++use App\Models\AssessmentAttempt;
++use Illuminate\Foundation\Testing\RefreshDatabase;
++
++class WebhookApiTest extends TestCase
++{
++    use RefreshDatabase;
++
++    public function test_can_process_moss_webhook()
++    {
++        $attempt = AssessmentAttempt::factory()->create();
++
++        $payload = [
++            'attempt_id' => $attempt->id,
++            'plagiarism_score' => 84.5,
++            'moss_report_url' => 'https://moss.stanford.edu/results/12345'
++        ];
++
++        $response = $this->postJson("/api/v1/webhooks/moss-results", $payload);
++
++        $response->assertStatus(200)
++                 ->assertJsonPath('data.plagiarism_score', 84.5);
++
++        $this->assertDatabaseHas('assessment_attempts', [
++            'id' => $attempt->id,
++            'plagiarism_score' => 84.5,
++            'moss_report_url' => 'https://moss.stanford.edu/results/12345'
++        ]);
++    }
++}
+diff --git a/tests/Unit/AssessmentServiceTest.php b/tests/Unit/AssessmentServiceTest.php
+new file mode 100644
+index 0000000..1fc7420
+--- /dev/null
++++ b/tests/Unit/AssessmentServiceTest.php
+@@ -0,0 +1,100 @@
++<?php
++
++namespace Tests\Unit;
++
++use Tests\TestCase;
++use App\Models\User;
++use App\Models\Application;
++use App\Models\Assessment;
++use App\Models\AssessmentAttempt;
++use App\Models\Question;
++use App\Services\AssessmentService;
++use Illuminate\Foundation\Testing\RefreshDatabase;
++use Illuminate\Support\Carbon;
++use Symfony\Component\HttpKernel\Exception\HttpException;
++
++class AssessmentServiceTest extends TestCase
++{
++    use RefreshDatabase;
++
++    protected AssessmentService $service;
++
++    protected function setUp(): void
++    {
++        parent::setUp();
++        $this->service = new AssessmentService();
++    }
++
++    public function test_starts_attempt_successfully_with_distribution()
++    {
++        $application = Application::factory()->create();
++        $assessment = Assessment::factory()->create([
++            'cooldown_period' => 24,
++            'distribution_rules' => ['HARD' => 1, 'MEDIUM' => 1]
++        ]);
++
++        Question::factory()->create(['difficulty' => 'HARD']);
++        Question::factory()->create(['difficulty' => 'MEDIUM']);
++
++        $attempt = $this->service->startAttempt($application, $assessment);
++
++        $this->assertNotNull($attempt);
++        $this->assertEquals($application->id, $attempt->application_id);
++        $this->assertEquals('IN_PROGRESS', $attempt->status);
++        $this->assertCount(2, $attempt->questions);
++    }
++
++    public function test_fails_due_to_cooldown_period()
++    {
++        $application = Application::factory()->create();
++        $assessment = Assessment::factory()->create([
++            'cooldown_period' => 24,
++            'distribution_rules' => ['HARD' => 1]
++        ]);
++
++        AssessmentAttempt::factory()->create([
++            'application_id' => $application->id,
++            'assessment_id' => $assessment->id,
++            'status' => 'FAILED',
++            'completed_at' => now()->subHours(10) // 10 < 24 hours cooldown
++        ]);
++
++        $this->expectException(HttpException::class);
++        $this->expectExceptionMessage('Cooldown period active');
++        $this->expectExceptionCode(403);
++
++        $this->service->startAttempt($application, $assessment);
++    }
++
++    public function test_retake_adjusts_distribution_shifting_hard_to_medium()
++    {
++        $application = Application::factory()->create();
++        $assessment = Assessment::factory()->create([
++            'cooldown_period' => 24,
++            'distribution_rules' => ['HARD' => 2, 'MEDIUM' => 1]
++        ]);
++
++        Question::factory()->create(['difficulty' => 'HARD']);
++        Question::factory()->count(2)->create(['difficulty' => 'MEDIUM']);
++
++        // Satisfies cooldown, allowing retake
++        AssessmentAttempt::factory()->create([
++            'application_id' => $application->id,
++            'assessment_id' => $assessment->id,
++            'status' => 'FAILED',
++            'completed_at' => now()->subHours(30)
++        ]);
++
++        $attempt = $this->service->startAttempt($application, $assessment);
++
++        // Rules started as: HARD => 2, MEDIUM => 1
++        // Retake logic logic should shift it to HARD => 1, MEDIUM => 2
++        $questions = $attempt->questions;
++        
++        $hardCount = $questions->where('difficulty', 'HARD')->count();
++        $mediumCount = $questions->where('difficulty', 'MEDIUM')->count();
++
++        $this->assertEquals(1, $hardCount);
++        $this->assertEquals(2, $mediumCount);
++    }
++}

@@ -4,7 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\JobPost;
 use App\Models\Application;
-use App\Models\Enums\ApplicationsStatus;
+use App\Models\Enums\ApplicationStatus;
 use Illuminate\Http\Request;
 use Illuminate\Http\JsonResponse;
 
@@ -41,7 +41,7 @@ class ApplicationController extends Controller
         $application = Application::create([
             'candidate_id' => $user->id,
             'job_id' => $job->id,
-            'status' => ApplicationsStatus::APPLIED,
+            'status' => ApplicationStatus::APPLIED,
             'ai_match_score' => round($matchScore, 2)
         ]);
 

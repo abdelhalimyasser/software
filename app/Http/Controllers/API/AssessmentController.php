@@ -42,4 +42,21 @@ class AssessmentController extends Controller
             ], $e->getStatusCode());
         }
     }
+
+    /**
+     * Submit an assessment attempt for grading and MOSS check.
+     */
+    public function submitAttempt(Request $request, int $attemptId): JsonResponse
+    {
+        $attempt = \App\Models\AssessmentAttempt::findOrFail($attemptId);
+        
+        // Optional: calculate score here
+        // $attempt->update(['score' => rand(0, 100)]); 
+
+        \App\Jobs\SubmitToMossJob::dispatch($attempt);
+
+        return response()->json([
+            'message' => 'Assessment submitted. MOSS check is running asynchronously.',
+        ]);
+    }
 }

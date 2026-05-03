@@ -1,0 +1,1991 @@
+﻿
+  [39;41;1m FAIL [39;49;22m[39m Tests\Unit\AssessmentServiceTest[39m
+  [31;1m⨯[39;22m[90m [39m[90mstarts attempt successfully with distribution[39m
+  [31;1m⨯[39;22m[90m [39m[90mfails due to cooldown period[39m
+  [31;1m⨯[39;22m[90m [39m[90mretake adjusts distribution shifting hard to medium[39m
+
+  [39;41;1m FAIL [39;49;22m[39m Tests\Unit\AuthServiceTest[39m
+  [31;1m⨯[39;22m[90m [39m[90mregister candidate creates user and returns token[39m
+  [31;1m⨯[39;22m[90m [39m[90mregister employee creates user and returns token[39m
+  [31;1m⨯[39;22m[90m [39m[90mlogin with correct credentials returns user and token[39m
+  [31;1m⨯[39;22m[90m [39m[90mlogin with wrong credentials throws validation exception[39m
+
+  [39;41;1m FAIL [39;49;22m[39m Tests\Unit\Middleware\CheckRoleMiddlewareTest[39m
+  [31;1m⨯[39;22m[90m [39m[90mallows user with matching role[39m
+  [31;1m⨯[39;22m[90m [39m[90mblocks user with non matching role[39m
+  [31;1m⨯[39;22m[90m [39m[90mallows user with one of multiple roles[39m
+  [31;1m⨯[39;22m[90m [39m[90mreturns 401 for unauthenticated user[39m
+
+  [39;41;1m FAIL [39;49;22m[39m Tests\Unit\Models\CandidateModelTest[39m
+  [31;1m⨯[39;22m[90m [39m[90mcandidate fillable includes candidate specific fields[39m
+  [31;1m⨯[39;22m[90m [39m[90mcandidate fillable includes parent fields[39m
+  [31;1m⨯[39;22m[90m [39m[90mcandidate can be created with all fields[39m
+  [31;1m⨯[39;22m[90m [39m[90mcandidate skills stored and retrieved as array[39m
+
+  [39;41;1m FAIL [39;49;22m[39m Tests\Unit\Models\EmployeeModelTest[39m
+  [31;1m⨯[39;22m[90m [39m[90memployee generates emp id on creation[39m
+  [31;1m⨯[39;22m[90m [39m[90memployee emp id has correct format[39m
+  [31;1m⨯[39;22m[90m [39m[90memployee emp id contains current year[39m
+  [31;1m⨯[39;22m[90m [39m[90memployee emp ids are unique[39m
+  [31;1m⨯[39;22m[90m [39m[90memployee does not overwrite existing emp id on update[39m
+  [31;1m⨯[39;22m[90m [39m[90memployee fillable includes parent fields[39m
+
+  [30;42;1m PASS [39;49;22m[39m Tests\Unit\Models\Enums\JobStatusEnumTest[39m
+  [32;1m✓[39;22m[90m [39m[90mall statuses have correct values[39m[90m                                                                            [39m [90m0.01s[39m  
+  [32;1m✓[39;22m[90m [39m[90mstatus count is four[39m
+  [32;1m✓[39;22m[90m [39m[90mstatus can be created from value[39m
+  [32;1m✓[39;22m[90m [39m[90minvalid status throws value error[39m
+
+  [30;42;1m PASS [39;49;22m[39m Tests\Unit\Models\Enums\UserRoleEnumTest[39m
+  [32;1m✓[39;22m[90m [39m[90mall roles have correct values[39m
+  [32;1m✓[39;22m[90m [39m[90mrole count is six[39m
+  [32;1m✓[39;22m[90m [39m[90mrole can be created from value[39m
+  [32;1m✓[39;22m[90m [39m[90minvalid role throws value error[39m
+
+  [39;41;1m FAIL [39;49;22m[39m Tests\Unit\Models\JobPostModelTest[39m
+  [31;1m⨯[39;22m[90m [39m[90mfillable contains expected attributes[39m
+  [31;1m⨯[39;22m[90m [39m[90mstatus is cast to job status enum[39m
+  [31;1m⨯[39;22m[90m [39m[90mskills is cast to array[39m
+  [31;1m⨯[39;22m[90m [39m[90mcreator relationship returns user[39m
+  [31;1m⨯[39;22m[90m [39m[90mstatus updater relationship returns user[39m
+  [31;1m⨯[39;22m[90m [39m[90mstatus updater is null when not set[39m
+  [31;1m⨯[39;22m[90m [39m[90mcan create job with all fields[39m
+
+  [39;41;1m FAIL [39;49;22m[39m Tests\Unit\Models\UserModelTest[39m
+  [31;1m⨯[39;22m[90m [39m[90muser fillable contains expected attributes[39m
+  [31;1m⨯[39;22m[90m [39m[90muser casts password as hashed[39m
+  [31;1m⨯[39;22m[90m [39m[90muser casts skills as array[39m
+  [31;1m⨯[39;22m[90m [39m[90muser auto computes name from first and last[39m
+  [31;1m⨯[39;22m[90m [39m[90muser preserves explicit name[39m
+  [31;1m⨯[39;22m[90m [39m[90muser child types map all six roles[39m
+  [31;1m⨯[39;22m[90m [39m[90muser resolves to candidate when role is candidate[39m
+  [31;1m⨯[39;22m[90m [39m[90muser resolves to employee when role is employee[39m
+
+  [39;41;1m FAIL [39;49;22m[39m Tests\Unit\Policies\JobPostPolicyTest[39m
+  [31;1m⨯[39;22m[90m [39m[90mview any allows all users[39m
+  [31;1m⨯[39;22m[90m [39m[90mview allows employees to see any job[39m
+  [31;1m⨯[39;22m[90m [39m[90mview allows candidates to see approved jobs[39m
+  [31;1m⨯[39;22m[90m [39m[90mview blocks candidates from pending jobs[39m
+  [31;1m⨯[39;22m[90m [39m[90mview blocks candidates from rejected jobs[39m
+  [31;1m⨯[39;22m[90m [39m[90mcreate allows hr admin[39m
+  [31;1m⨯[39;22m[90m [39m[90mcreate blocks candidate[39m
+  [31;1m⨯[39;22m[90m [39m[90mcreate blocks regular employee[39m
+  [31;1m⨯[39;22m[90m [39m[90mcreate blocks department manager[39m
+  [31;1m⨯[39;22m[90m [39m[90mapprove allows department manager[39m
+  [31;1m⨯[39;22m[90m [39m[90mapprove blocks hr admin[39m
+  [31;1m⨯[39;22m[90m [39m[90mapprove blocks candidate[39m
+  [31;1m⨯[39;22m[90m [39m[90mreject allows department manager[39m
+  [31;1m⨯[39;22m[90m [39m[90mreject blocks regular employee[39m
+
+  [30;43;1m WARN [39;49;22m[39m Tests\Unit\Requests\LoginUserRequestTest[39m
+  [33;1m![39;22m[90m [39m[90mrules require email and password[39m[90m [39m[33m→ file_get_contents(C:\Users\SANMM\OneDrive\Desktop\se\software\.env): Fai[39m[90m…[39m [90m0.02s[39m  
+  [33;1m![39;22m[90m [39m[90memail must exist in users table[39m[90m [39m[33m→ file_get_contents(C:\Users\SANMM\OneDrive\Desktop\se\software\.env): Fail[39m[90m…[39m [90m0.02s[39m  
+  [33;1m![39;22m[90m [39m[90memail must be valid format[39m[90m [39m[33m→ file_get_contents(C:\Users\SANMM\OneDrive\Desktop\se\software\.env): Failed to[39m[90m…[39m [90m0.01s[39m  
+  [33;1m![39;22m[90m [39m[90mpassword is required without emp id[39m[90m [39m[33m→ file_get_contents(C:\Users\SANMM\OneDrive\Desktop\se\software\.env):[39m[90m… [39m [90m0.02s[39m  
+  [33;1m![39;22m[90m [39m[90memp id is required without password[39m[90m [39m[33m→ file_get_contents(C:\Users\SANMM\OneDrive\Desktop\se\software\.env):[39m[90m… [39m [90m0.01s[39m  
+  [33;1m![39;22m[90m [39m[90mcustom error messages are defined[39m[90m [39m[33m→ file_get_contents(C:\Users\SANMM\OneDrive\Desktop\se\software\.env): Fa[39m[90m…[39m [90m0.02s[39m  
+
+  [30;43;1m WARN [39;49;22m[39m Tests\Unit\Requests\RegisterEmployeeRequestTest[39m
+  [33;1m![39;22m[90m [39m[90mrules require employee fields[39m[90m [39m[33m→ file_get_contents(C:\Users\SANMM\OneDrive\Desktop\se\software\.env): Failed[39m[90m…[39m [90m0.02s[39m  
+  [33;1m![39;22m[90m [39m[90mprofile picture is optional[39m[90m [39m[33m→ file_get_contents(C:\Users\SANMM\OneDrive\Desktop\se\software\.env): Failed t[39m[90m…[39m [90m0.01s[39m  
+  [33;1m![39;22m[90m [39m[90memail must be unique[39m[90m [39m[33m→ file_get_contents(C:\Users\SANMM\OneDrive\Desktop\se\software\.env): Failed to open[39m[90m… [39m [90m0.01s[39m  
+
+  [39;41;1m FAIL [39;49;22m[39m Tests\Unit\Requests\RegisterUserRequestTest[39m
+  [31;1m⨯[39;22m[90m [39m[90mrules require all mandatory fields[39m
+  [31;1m⨯[39;22m[90m [39m[90mbirth date requires minimum 18 years[39m
+  [31;1m⨯[39;22m[90m [39m[90memail must be unique[39m
+  [31;1m⨯[39;22m[90m [39m[90mphone number must be unique[39m
+  [31;1m⨯[39;22m[90m [39m[90mskills is optional array[39m
+  [31;1m⨯[39;22m[90m [39m[90mresume accepts pdf doc docx[39m
+  [31;1m⨯[39;22m[90m [39m[90mdocs accepts pdf png jpg zip[39m
+  [31;1m⨯[39;22m[90m [39m[90mprofile picture accepts image types[39m
+
+  [39;41;1m FAIL [39;49;22m[39m Tests\Unit\Services\AuthServiceTest[39m
+  [31;1m⨯[39;22m[90m [39m[90mregister candidate returns user and token[39m
+  [31;1m⨯[39;22m[90m [39m[90mregister candidate fires registered event[39m
+  [31;1m⨯[39;22m[90m [39m[90mregister employee returns user and token[39m
+  [31;1m⨯[39;22m[90m [39m[90mlogin returns user and token for valid credentials[39m
+  [31;1m⨯[39;22m[90m [39m[90mlogin throws validation exception for invalid credentials[39m
+  [31;1m⨯[39;22m[90m [39m[90mlogin throws exception for nonexistent email[39m
+
+  [39;41;1m FAIL [39;49;22m[39m Tests\Feature\AssessmentApiTest[39m
+  [31;1m⨯[39;22m[90m [39m[90mcan start assessment attempt[39m
+  [31;1m⨯[39;22m[90m [39m[90mcan store batched logs[39m
+
+  [39;41;1m FAIL [39;49;22m[39m Tests\Feature\AuthControllerTest[39m
+  [31;1m⨯[39;22m[90m [39m[90mregister candidate endpoint success[39m
+  [31;1m⨯[39;22m[90m [39m[90mregister candidate validation failure missing files[39m
+  [31;1m⨯[39;22m[90m [39m[90mlogin endpoint success and failure[39m
+  [31;1m⨯[39;22m[90m [39m[90mregister employee and update employee endpoints[39m
+
+  [39;41;1m FAIL [39;49;22m[39m Tests\Feature\Auth\AuthControllerTest[39m
+  [31;1m⨯[39;22m[90m [39m[90mcandidate register endpoint returns created user and token[39m
+  [31;1m⨯[39;22m[90m [39m[90mcandidate register without required fields returns 422[39m
+  [31;1m⨯[39;22m[90m [39m[90mcandidate register with duplicate email returns 422[39m
+  [31;1m⨯[39;22m[90m [39m[90mcandidate register with underage birth date returns 422[39m
+  [31;1m⨯[39;22m[90m [39m[90mcandidate register endpoint validates required documents[39m
+  [31;1m⨯[39;22m[90m [39m[90memployee register endpoint returns created employee and token[39m
+  [31;1m⨯[39;22m[90m [39m[90memployee register without required fields returns 422[39m
+  [31;1m⨯[39;22m[90m [39m[90memployee register with duplicate email returns 422[39m
+  [31;1m⨯[39;22m[90m [39m[90mlogin endpoint returns user and token[39m
+  [31;1m⨯[39;22m[90m [39m[90mlogin with invalid credentials returns 401[39m
+  [31;1m⨯[39;22m[90m [39m[90mlogin with nonexistent email returns 422[39m
+  [31;1m⨯[39;22m[90m [39m[90mlogin with wrong password returns 401[39m
+  [31;1m⨯[39;22m[90m [39m[90mupdate employee endpoint updates the employee record[39m
+  [31;1m⨯[39;22m[90m [39m[90mupdate employee returns 404 for nonexistent id[39m
+  [31;1m⨯[39;22m[90m [39m[90mupdate profile endpoint updates authenticated user[39m
+  [31;1m⨯[39;22m[90m [39m[90mupdate profile with partial data[39m
+
+  [39;41;1m FAIL [39;49;22m[39m Tests\Feature\JobPostControllerTest[39m
+  [31;1m⨯[39;22m[90m [39m[90mindex returns all jobs for hr admin[39m
+  [31;1m⨯[39;22m[90m [39m[90mindex returns matched jobs for candidate[39m
+  [31;1m⨯[39;22m[90m [39m[90mstore creates job for hr admin and notifies managers[39m
+  [31;1m⨯[39;22m[90m [39m[90mapprove updates status and notifies hr[39m
+  [31;1m⨯[39;22m[90m [39m[90mreject updates status and notifies hr[39m
+
+  [39;41;1m FAIL [39;49;22m[39m Tests\Feature\WebhookApiTest[39m
+  [31;1m⨯[39;22m[90m [39m[90mcan process moss webhook[39m
+  [31m────────────────────────────────────────────────────────────────────────────────────────────────────────────────────[39m  
+  [41;1m FAILED [49;22m [1mTests\Unit\AssessmentServiceTest[22m [90m>[39m starts attempt successfully with distribution           [41;1m QueryException [49;22m  
+[39;1m  SQLSTATE[42S02]: Base table or view not found: 1146 Table 'nexthire_db_test.migrations' doesn't exist (Connection: mysql, Host: 127.0.0.1, Port: 3306, Database: nexthire_db_test, SQL: select `migration` from `migrations` order by `batch` asc, `migration` asc)[39;22m
+
+  at [32mvendor\laravel\framework\src\Illuminate\Database\Connection.php[39m:[32m841[39m
+    837▕             $exceptionType = ($isUniqueConstraintError = $this->isUniqueConstraintError($e))
+    838▕                 ? UniqueConstraintViolationException::class
+    839▕                 : QueryException::class;
+    840▕ 
+  ➜ 841▕             $exception = new $exceptionType(
+    842▕                 $this->getNameWithReadWriteType(),
+    843▕                 $query,
+    844▕                 $this->prepareBindings($bindings),
+    845▕                 $e,
+
+  [33m1   [39m[39;1mvendor\laravel\framework\src\Illuminate\Database\Connection.php[39;22m:[39;1m841[39;22m
+
+  [33m2   [39m[39;1mvendor\laravel\framework\src\Illuminate\Database\Connection.php[39;22m:[39;1m421[39;22m
+  [90m    NunoMaduro\Collision\Exceptions\TestException::("SQLSTATE[42S02]: Base table or view not found: 1146 Table 'nexthire_db_test.migrations' doesn't exist")[39m
+
+  [31m────────────────────────────────────────────────────────────────────────────────────────────────────────────────────[39m  
+  [41;1m FAILED [49;22m [1mTests\Unit\AssessmentServiceTest[22m [90m>[39m fails due to cooldown period                            [41;1m QueryException [49;22m  
+[39;1m  SQLSTATE[42S02]: Base table or view not found: 1146 Table 'nexthire_db_test.migrations' doesn't exist (Connection: mysql, Host: 127.0.0.1, Port: 3306, Database: nexthire_db_test, SQL: insert into `migrations` (`migration`, `batch`) values (2026_05_01_113729_create_notifications_table, 1))[39;22m
+
+  at [32mvendor\laravel\framework\src\Illuminate\Database\Connection.php[39m:[32m841[39m
+    837▕             $exceptionType = ($isUniqueConstraintError = $this->isUniqueConstraintError($e))
+    838▕                 ? UniqueConstraintViolationException::class
+    839▕                 : QueryException::class;
+    840▕ 
+  ➜ 841▕             $exception = new $exceptionType(
+    842▕                 $this->getNameWithReadWriteType(),
+    843▕                 $query,
+    844▕                 $this->prepareBindings($bindings),
+    845▕                 $e,
+
+  [33m1   [39m[39;1mvendor\laravel\framework\src\Illuminate\Database\Connection.php[39;22m:[39;1m841[39;22m
+
+  [33m2   [39m[39;1mvendor\laravel\framework\src\Illuminate\Database\MySqlConnection.php[39;22m:[39;1m47[39;22m
+  [90m    NunoMaduro\Collision\Exceptions\TestException::("SQLSTATE[42S02]: Base table or view not found: 1146 Table 'nexthire_db_test.migrations' doesn't exist")[39m
+
+  [31m────────────────────────────────────────────────────────────────────────────────────────────────────────────────────[39m  
+  [41;1m FAILED [49;22m [1mTests\Unit\AssessmentServiceTest[22m [90m>[39m retake adjusts distribution shifting hard to medium     [41;1m QueryException [49;22m  
+[39;1m  SQLSTATE[42S02]: Base table or view not found: 1146 Table 'nexthire_db_test.migrations' doesn't exist (Connection: mysql, Host: 127.0.0.1, Port: 3306, Database: nexthire_db_test, SQL: insert into `migrations` (`migration`, `batch`) values (0001_01_01_000001_create_cache_table, 1))[39;22m
+
+  at [32mvendor\laravel\framework\src\Illuminate\Database\Connection.php[39m:[32m841[39m
+    837▕             $exceptionType = ($isUniqueConstraintError = $this->isUniqueConstraintError($e))
+    838▕                 ? UniqueConstraintViolationException::class
+    839▕                 : QueryException::class;
+    840▕ 
+  ➜ 841▕             $exception = new $exceptionType(
+    842▕                 $this->getNameWithReadWriteType(),
+    843▕                 $query,
+    844▕                 $this->prepareBindings($bindings),
+    845▕                 $e,
+
+  [33m1   [39m[39;1mvendor\laravel\framework\src\Illuminate\Database\Connection.php[39;22m:[39;1m841[39;22m
+
+  [33m2   [39m[39;1mvendor\laravel\framework\src\Illuminate\Database\MySqlConnection.php[39;22m:[39;1m47[39;22m
+  [90m    NunoMaduro\Collision\Exceptions\TestException::("SQLSTATE[42S02]: Base table or view not found: 1146 Table 'nexthire_db_test.migrations' doesn't exist")[39m
+
+  [31m────────────────────────────────────────────────────────────────────────────────────────────────────────────────────[39m  
+  [41;1m FAILED [49;22m [1mTests\Unit\AuthServiceTest[22m [90m>[39m register candidate creates user and returns token             [41;1m QueryException [49;22m  
+[39;1m  SQLSTATE[42S01]: Base table or view already exists: 1050 Table 'password_reset_tokens' already exists (Connection: mysql, Host: 127.0.0.1, Port: 3306, Database: nexthire_db_test, SQL: create table `password_reset_tokens` (`email` varchar(255) not null, `token` varchar(255) not null, `created_at` timestamp null, primary key (`email`)) default character set utf8mb4 collate 'utf8mb4_unicode_ci')[39;22m
+
+  at [32mvendor\laravel\framework\src\Illuminate\Database\Connection.php[39m:[32m841[39m
+    837▕             $exceptionType = ($isUniqueConstraintError = $this->isUniqueConstraintError($e))
+    838▕                 ? UniqueConstraintViolationException::class
+    839▕                 : QueryException::class;
+    840▕ 
+  ➜ 841▕             $exception = new $exceptionType(
+    842▕                 $this->getNameWithReadWriteType(),
+    843▕                 $query,
+    844▕                 $this->prepareBindings($bindings),
+    845▕                 $e,
+
+  [33m1   [39m[39;1mvendor\laravel\framework\src\Illuminate\Database\Connection.php[39;22m:[39;1m841[39;22m
+
+  [33m2   [39m[39;1mvendor\laravel\framework\src\Illuminate\Database\Connection.php[39;22m:[39;1m587[39;22m
+  [90m    NunoMaduro\Collision\Exceptions\TestException::("SQLSTATE[42S01]: Base table or view already exists: 1050 Table 'password_reset_tokens' already exists")[39m
+
+  [31m────────────────────────────────────────────────────────────────────────────────────────────────────────────────────[39m  
+  [41;1m FAILED [49;22m [1mTests\Unit\AuthServiceTest[22m [90m>[39m register employee creates user and returns token              [41;1m QueryException [49;22m  
+[39;1m  SQLSTATE[42S02]: Base table or view not found: 1146 Table 'nexthire_db_test.migrations' doesn't exist (Connection: mysql, Host: 127.0.0.1, Port: 3306, Database: nexthire_db_test, SQL: insert into `migrations` (`migration`, `batch`) values (0001_01_01_000000_create_users_table, 1))[39;22m
+
+  at [32mvendor\laravel\framework\src\Illuminate\Database\Connection.php[39m:[32m841[39m
+    837▕             $exceptionType = ($isUniqueConstraintError = $this->isUniqueConstraintError($e))
+    838▕                 ? UniqueConstraintViolationException::class
+    839▕                 : QueryException::class;
+    840▕ 
+  ➜ 841▕             $exception = new $exceptionType(
+    842▕                 $this->getNameWithReadWriteType(),
+    843▕                 $query,
+    844▕                 $this->prepareBindings($bindings),
+    845▕                 $e,
+
+  [33m1   [39m[39;1mvendor\laravel\framework\src\Illuminate\Database\Connection.php[39;22m:[39;1m841[39;22m
+
+  [33m2   [39m[39;1mvendor\laravel\framework\src\Illuminate\Database\MySqlConnection.php[39;22m:[39;1m47[39;22m
+  [90m    NunoMaduro\Collision\Exceptions\TestException::("SQLSTATE[42S02]: Base table or view not found: 1146 Table 'nexthire_db_test.migrations' doesn't exist")[39m
+
+  [31m────────────────────────────────────────────────────────────────────────────────────────────────────────────────────[39m  
+  [41;1m FAILED [49;22m [1mTests\Unit\AuthServiceTest[22m [90m>[39m login with correct credentials returns user and token         [41;1m QueryException [49;22m  
+[39;1m  SQLSTATE[42S01]: Base table or view already exists: 1050 Table 'password_reset_tokens' already exists (Connection: mysql, Host: 127.0.0.1, Port: 3306, Database: nexthire_db_test, SQL: create table `password_reset_tokens` (`email` varchar(255) not null, `token` varchar(255) not null, `created_at` timestamp null, primary key (`email`)) default character set utf8mb4 collate 'utf8mb4_unicode_ci')[39;22m
+
+  at [32mvendor\laravel\framework\src\Illuminate\Database\Connection.php[39m:[32m841[39m
+    837▕             $exceptionType = ($isUniqueConstraintError = $this->isUniqueConstraintError($e))
+    838▕                 ? UniqueConstraintViolationException::class
+    839▕                 : QueryException::class;
+    840▕ 
+  ➜ 841▕             $exception = new $exceptionType(
+    842▕                 $this->getNameWithReadWriteType(),
+    843▕                 $query,
+    844▕                 $this->prepareBindings($bindings),
+    845▕                 $e,
+
+  [33m1   [39m[39;1mvendor\laravel\framework\src\Illuminate\Database\Connection.php[39;22m:[39;1m841[39;22m
+
+  [33m2   [39m[39;1mvendor\laravel\framework\src\Illuminate\Database\Connection.php[39;22m:[39;1m587[39;22m
+  [90m    NunoMaduro\Collision\Exceptions\TestException::("SQLSTATE[42S01]: Base table or view already exists: 1050 Table 'password_reset_tokens' already exists")[39m
+
+  [31m────────────────────────────────────────────────────────────────────────────────────────────────────────────────────[39m  
+  [41;1m FAILED [49;22m [1mTests\Unit\AuthServiceTest[22m [90m>[39m login with wrong credentials throws validation exception      [41;1m QueryException [49;22m  
+[39;1m  SQLSTATE[42S01]: Base table or view already exists: 1050 Table 'jobs' already exists (Connection: mysql, Host: 127.0.0.1, Port: 3306, Database: nexthire_db_test, SQL: create table `jobs` (`id` bigint unsigned not null auto_increment primary key, `queue` varchar(255) not null, `payload` longtext not null, `attempts` smallint unsigned not null, `reserved_at` int unsigned null, `available_at` int unsigned not null, `created_at` int unsigned not null) default character set utf8mb4 collate 'utf8mb4_unicode_ci')[39;22m
+
+  at [32mvendor\laravel\framework\src\Illuminate\Database\Connection.php[39m:[32m841[39m
+    837▕             $exceptionType = ($isUniqueConstraintError = $this->isUniqueConstraintError($e))
+    838▕                 ? UniqueConstraintViolationException::class
+    839▕                 : QueryException::class;
+    840▕ 
+  ➜ 841▕             $exception = new $exceptionType(
+    842▕                 $this->getNameWithReadWriteType(),
+    843▕                 $query,
+    844▕                 $this->prepareBindings($bindings),
+    845▕                 $e,
+
+  [33m1   [39m[39;1mvendor\laravel\framework\src\Illuminate\Database\Connection.php[39;22m:[39;1m841[39;22m
+
+  [33m2   [39m[39;1mvendor\laravel\framework\src\Illuminate\Database\Connection.php[39;22m:[39;1m587[39;22m
+  [90m    NunoMaduro\Collision\Exceptions\TestException::("SQLSTATE[42S01]: Base table or view already exists: 1050 Table 'jobs' already exists")[39m
+
+  [31m────────────────────────────────────────────────────────────────────────────────────────────────────────────────────[39m  
+  [41;1m FAILED [49;22m [1mTests\Unit\Middleware\CheckRoleMiddlewareTest[22m [90m>[39m allows user with matching role             [41;1m QueryException [49;22m  
+[39;1m  SQLSTATE[42S01]: Base table or view already exists: 1050 Table 'users' already exists (Connection: mysql, Host: 127.0.0.1, Port: 3306, Database: nexthire_db_test, SQL: create table `users` (`id` bigint unsigned not null auto_increment primary key, `name` varchar(255) not null, `email` varchar(255) not null, `email_verified_at` timestamp null, `password` varchar(255) not null, `remember_token` varchar(100) null, `created_at` timestamp null, `updated_at` timestamp null) default character set utf8mb4 collate 'utf8mb4_unicode_ci')[39;22m
+
+  at [32mvendor\laravel\framework\src\Illuminate\Database\Connection.php[39m:[32m841[39m
+    837▕             $exceptionType = ($isUniqueConstraintError = $this->isUniqueConstraintError($e))
+    838▕                 ? UniqueConstraintViolationException::class
+    839▕                 : QueryException::class;
+    840▕ 
+  ➜ 841▕             $exception = new $exceptionType(
+    842▕                 $this->getNameWithReadWriteType(),
+    843▕                 $query,
+    844▕                 $this->prepareBindings($bindings),
+    845▕                 $e,
+
+  [33m1   [39m[39;1mvendor\laravel\framework\src\Illuminate\Database\Connection.php[39;22m:[39;1m841[39;22m
+
+  [33m2   [39m[39;1mvendor\laravel\framework\src\Illuminate\Database\Connection.php[39;22m:[39;1m587[39;22m
+  [90m    NunoMaduro\Collision\Exceptions\TestException::("SQLSTATE[42S01]: Base table or view already exists: 1050 Table 'users' already exists")[39m
+
+  [31m────────────────────────────────────────────────────────────────────────────────────────────────────────────────────[39m  
+  [41;1m FAILED [49;22m [1mTests\Unit\Middleware\CheckRoleMiddlewareTest[22m [90m>[39m blocks user with non matching role         [41;1m QueryException [49;22m  
+[39;1m  SQLSTATE[42S01]: Base table or view already exists: 1050 Table 'jobs' already exists (Connection: mysql, Host: 127.0.0.1, Port: 3306, Database: nexthire_db_test, SQL: create table `jobs` (`id` bigint unsigned not null auto_increment primary key, `queue` varchar(255) not null, `payload` longtext not null, `attempts` smallint unsigned not null, `reserved_at` int unsigned null, `available_at` int unsigned not null, `created_at` int unsigned not null) default character set utf8mb4 collate 'utf8mb4_unicode_ci')[39;22m
+
+  at [32mvendor\laravel\framework\src\Illuminate\Database\Connection.php[39m:[32m841[39m
+    837▕             $exceptionType = ($isUniqueConstraintError = $this->isUniqueConstraintError($e))
+    838▕                 ? UniqueConstraintViolationException::class
+    839▕                 : QueryException::class;
+    840▕ 
+  ➜ 841▕             $exception = new $exceptionType(
+    842▕                 $this->getNameWithReadWriteType(),
+    843▕                 $query,
+    844▕                 $this->prepareBindings($bindings),
+    845▕                 $e,
+
+  [33m1   [39m[39;1mvendor\laravel\framework\src\Illuminate\Database\Connection.php[39;22m:[39;1m841[39;22m
+
+  [33m2   [39m[39;1mvendor\laravel\framework\src\Illuminate\Database\Connection.php[39;22m:[39;1m587[39;22m
+  [90m    NunoMaduro\Collision\Exceptions\TestException::("SQLSTATE[42S01]: Base table or view already exists: 1050 Table 'jobs' already exists")[39m
+
+  [31m────────────────────────────────────────────────────────────────────────────────────────────────────────────────────[39m  
+  [41;1m FAILED [49;22m [1mTests\Unit\Middleware\CheckRoleMiddlewareTest[22m [90m>[39m allows user with one of multiple roles     [41;1m QueryException [49;22m  
+[39;1m  SQLSTATE[42S02]: Base table or view not found: 1146 Table 'nexthire_db_test.sessions' doesn't exist (Connection: mysql, Host: 127.0.0.1, Port: 3306, Database: nexthire_db_test, SQL: alter table `sessions` add index `sessions_last_activity_index`(`last_activity`))[39;22m
+
+  at [32mvendor\laravel\framework\src\Illuminate\Database\Connection.php[39m:[32m841[39m
+    837▕             $exceptionType = ($isUniqueConstraintError = $this->isUniqueConstraintError($e))
+    838▕                 ? UniqueConstraintViolationException::class
+    839▕                 : QueryException::class;
+    840▕ 
+  ➜ 841▕             $exception = new $exceptionType(
+    842▕                 $this->getNameWithReadWriteType(),
+    843▕                 $query,
+    844▕                 $this->prepareBindings($bindings),
+    845▕                 $e,
+
+  [33m1   [39m[39;1mvendor\laravel\framework\src\Illuminate\Database\Connection.php[39;22m:[39;1m841[39;22m
+
+  [33m2   [39m[39;1mvendor\laravel\framework\src\Illuminate\Database\Connection.php[39;22m:[39;1m587[39;22m
+  [90m    NunoMaduro\Collision\Exceptions\TestException::("SQLSTATE[42S02]: Base table or view not found: 1146 Table 'nexthire_db_test.sessions' doesn't exist")[39m
+
+  [31m────────────────────────────────────────────────────────────────────────────────────────────────────────────────────[39m  
+  [41;1m FAILED [49;22m [1mTests\Unit\Middleware\CheckRoleMiddlewareTest[22m [90m>[39m returns 401 for unauthenticated user       [41;1m QueryException [49;22m  
+[39;1m  SQLSTATE[42S01]: Base table or view already exists: 1050 Table 'password_reset_tokens' already exists (Connection: mysql, Host: 127.0.0.1, Port: 3306, Database: nexthire_db_test, SQL: create table `password_reset_tokens` (`email` varchar(255) not null, `token` varchar(255) not null, `created_at` timestamp null, primary key (`email`)) default character set utf8mb4 collate 'utf8mb4_unicode_ci')[39;22m
+
+  at [32mvendor\laravel\framework\src\Illuminate\Database\Connection.php[39m:[32m841[39m
+    837▕             $exceptionType = ($isUniqueConstraintError = $this->isUniqueConstraintError($e))
+    838▕                 ? UniqueConstraintViolationException::class
+    839▕                 : QueryException::class;
+    840▕ 
+  ➜ 841▕             $exception = new $exceptionType(
+    842▕                 $this->getNameWithReadWriteType(),
+    843▕                 $query,
+    844▕                 $this->prepareBindings($bindings),
+    845▕                 $e,
+
+  [33m1   [39m[39;1mvendor\laravel\framework\src\Illuminate\Database\Connection.php[39;22m:[39;1m841[39;22m
+
+  [33m2   [39m[39;1mvendor\laravel\framework\src\Illuminate\Database\Connection.php[39;22m:[39;1m587[39;22m
+  [90m    NunoMaduro\Collision\Exceptions\TestException::("SQLSTATE[42S01]: Base table or view already exists: 1050 Table 'password_reset_tokens' already exists")[39m
+
+  [31m────────────────────────────────────────────────────────────────────────────────────────────────────────────────────[39m  
+  [41;1m FAILED [49;22m [1mTests\Unit\Models\CandidateModelTest[22m [90m>[39m candidate fillable includes candidate specific fie… [41;1m QueryException [49;22m  
+[39;1m  SQLSTATE[42S02]: Base table or view not found: 1146 Table 'nexthire_db_test.migrations' doesn't exist (Connection: mysql, Host: 127.0.0.1, Port: 3306, Database: nexthire_db_test, SQL: insert into `migrations` (`migration`, `batch`) values (0001_01_01_000000_create_users_table, 1))[39;22m
+
+  at [32mvendor\laravel\framework\src\Illuminate\Database\Connection.php[39m:[32m841[39m
+    837▕             $exceptionType = ($isUniqueConstraintError = $this->isUniqueConstraintError($e))
+    838▕                 ? UniqueConstraintViolationException::class
+    839▕                 : QueryException::class;
+    840▕ 
+  ➜ 841▕             $exception = new $exceptionType(
+    842▕                 $this->getNameWithReadWriteType(),
+    843▕                 $query,
+    844▕                 $this->prepareBindings($bindings),
+    845▕                 $e,
+
+  [33m1   [39m[39;1mvendor\laravel\framework\src\Illuminate\Database\Connection.php[39;22m:[39;1m841[39;22m
+
+  [33m2   [39m[39;1mvendor\laravel\framework\src\Illuminate\Database\MySqlConnection.php[39;22m:[39;1m47[39;22m
+  [90m    NunoMaduro\Collision\Exceptions\TestException::("SQLSTATE[42S02]: Base table or view not found: 1146 Table 'nexthire_db_test.migrations' doesn't exist")[39m
+
+  [31m────────────────────────────────────────────────────────────────────────────────────────────────────────────────────[39m  
+  [41;1m FAILED [49;22m [1mTests\Unit\Models\CandidateModelTest[22m [90m>[39m candidate fillable includes parent fields           [41;1m QueryException [49;22m  
+[39;1m  SQLSTATE[42S01]: Base table or view already exists: 1050 Table 'password_reset_tokens' already exists (Connection: mysql, Host: 127.0.0.1, Port: 3306, Database: nexthire_db_test, SQL: create table `password_reset_tokens` (`email` varchar(255) not null, `token` varchar(255) not null, `created_at` timestamp null, primary key (`email`)) default character set utf8mb4 collate 'utf8mb4_unicode_ci')[39;22m
+
+  at [32mvendor\laravel\framework\src\Illuminate\Database\Connection.php[39m:[32m841[39m
+    837▕             $exceptionType = ($isUniqueConstraintError = $this->isUniqueConstraintError($e))
+    838▕                 ? UniqueConstraintViolationException::class
+    839▕                 : QueryException::class;
+    840▕ 
+  ➜ 841▕             $exception = new $exceptionType(
+    842▕                 $this->getNameWithReadWriteType(),
+    843▕                 $query,
+    844▕                 $this->prepareBindings($bindings),
+    845▕                 $e,
+
+  [33m1   [39m[39;1mvendor\laravel\framework\src\Illuminate\Database\Connection.php[39;22m:[39;1m841[39;22m
+
+  [33m2   [39m[39;1mvendor\laravel\framework\src\Illuminate\Database\Connection.php[39;22m:[39;1m587[39;22m
+  [90m    NunoMaduro\Collision\Exceptions\TestException::("SQLSTATE[42S01]: Base table or view already exists: 1050 Table 'password_reset_tokens' already exists")[39m
+
+  [31m────────────────────────────────────────────────────────────────────────────────────────────────────────────────────[39m  
+  [41;1m FAILED [49;22m [1mTests\Unit\Models\CandidateModelTest[22m [90m>[39m candidate can be created with all fields            [41;1m QueryException [49;22m  
+[39;1m  SQLSTATE[42S02]: Base table or view not found: 1146 Table 'nexthire_db_test.migrations' doesn't exist (Connection: mysql, Host: 127.0.0.1, Port: 3306, Database: nexthire_db_test, SQL: insert into `migrations` (`migration`, `batch`) values (0001_01_01_000001_create_cache_table, 1))[39;22m
+
+  at [32mvendor\laravel\framework\src\Illuminate\Database\Connection.php[39m:[32m841[39m
+    837▕             $exceptionType = ($isUniqueConstraintError = $this->isUniqueConstraintError($e))
+    838▕                 ? UniqueConstraintViolationException::class
+    839▕                 : QueryException::class;
+    840▕ 
+  ➜ 841▕             $exception = new $exceptionType(
+    842▕                 $this->getNameWithReadWriteType(),
+    843▕                 $query,
+    844▕                 $this->prepareBindings($bindings),
+    845▕                 $e,
+
+  [33m1   [39m[39;1mvendor\laravel\framework\src\Illuminate\Database\Connection.php[39;22m:[39;1m841[39;22m
+
+  [33m2   [39m[39;1mvendor\laravel\framework\src\Illuminate\Database\MySqlConnection.php[39;22m:[39;1m47[39;22m
+  [90m    NunoMaduro\Collision\Exceptions\TestException::("SQLSTATE[42S02]: Base table or view not found: 1146 Table 'nexthire_db_test.migrations' doesn't exist")[39m
+
+  [31m────────────────────────────────────────────────────────────────────────────────────────────────────────────────────[39m  
+  [41;1m FAILED [49;22m [1mTests\Unit\Models\CandidateModelTest[22m [90m>[39m candidate skills stored and retrieved as array      [41;1m QueryException [49;22m  
+[39;1m  SQLSTATE[42S02]: Base table or view not found: 1146 Table 'nexthire_db_test.migrations' doesn't exist (Connection: mysql, Host: 127.0.0.1, Port: 3306, Database: nexthire_db_test, SQL: insert into `migrations` (`migration`, `batch`) values (0001_01_01_000000_create_users_table, 1))[39;22m
+
+  at [32mvendor\laravel\framework\src\Illuminate\Database\Connection.php[39m:[32m841[39m
+    837▕             $exceptionType = ($isUniqueConstraintError = $this->isUniqueConstraintError($e))
+    838▕                 ? UniqueConstraintViolationException::class
+    839▕                 : QueryException::class;
+    840▕ 
+  ➜ 841▕             $exception = new $exceptionType(
+    842▕                 $this->getNameWithReadWriteType(),
+    843▕                 $query,
+    844▕                 $this->prepareBindings($bindings),
+    845▕                 $e,
+
+  [33m1   [39m[39;1mvendor\laravel\framework\src\Illuminate\Database\Connection.php[39;22m:[39;1m841[39;22m
+
+  [33m2   [39m[39;1mvendor\laravel\framework\src\Illuminate\Database\MySqlConnection.php[39;22m:[39;1m47[39;22m
+  [90m    NunoMaduro\Collision\Exceptions\TestException::("SQLSTATE[42S02]: Base table or view not found: 1146 Table 'nexthire_db_test.migrations' doesn't exist")[39m
+
+  [31m────────────────────────────────────────────────────────────────────────────────────────────────────────────────────[39m  
+  [41;1m FAILED [49;22m [1mTests\Unit\Models\EmployeeModelTest[22m [90m>[39m employee generates emp id on creation                [41;1m QueryException [49;22m  
+[39;1m  SQLSTATE[42S02]: Base table or view not found: 1146 Table 'nexthire_db_test.migrations' doesn't exist (Connection: mysql, Host: 127.0.0.1, Port: 3306, Database: nexthire_db_test, SQL: insert into `migrations` (`migration`, `batch`) values (0001_01_01_000000_create_users_table, 1))[39;22m
+
+  at [32mvendor\laravel\framework\src\Illuminate\Database\Connection.php[39m:[32m841[39m
+    837▕             $exceptionType = ($isUniqueConstraintError = $this->isUniqueConstraintError($e))
+    838▕                 ? UniqueConstraintViolationException::class
+    839▕                 : QueryException::class;
+    840▕ 
+  ➜ 841▕             $exception = new $exceptionType(
+    842▕                 $this->getNameWithReadWriteType(),
+    843▕                 $query,
+    844▕                 $this->prepareBindings($bindings),
+    845▕                 $e,
+
+  [33m1   [39m[39;1mvendor\laravel\framework\src\Illuminate\Database\Connection.php[39;22m:[39;1m841[39;22m
+
+  [33m2   [39m[39;1mvendor\laravel\framework\src\Illuminate\Database\MySqlConnection.php[39;22m:[39;1m47[39;22m
+  [90m    NunoMaduro\Collision\Exceptions\TestException::("SQLSTATE[42S02]: Base table or view not found: 1146 Table 'nexthire_db_test.migrations' doesn't exist")[39m
+
+  [31m────────────────────────────────────────────────────────────────────────────────────────────────────────────────────[39m  
+  [41;1m FAILED [49;22m [1mTests\Unit\Models\EmployeeModelTest[22m [90m>[39m employee emp id has correct format                   [41;1m QueryException [49;22m  
+[39;1m  SQLSTATE[42S02]: Base table or view not found: 1146 Table 'nexthire_db_test.migrations' doesn't exist (Connection: mysql, Host: 127.0.0.1, Port: 3306, Database: nexthire_db_test, SQL: insert into `migrations` (`migration`, `batch`) values (0001_01_01_000002_create_jobs_table, 1))[39;22m
+
+  at [32mvendor\laravel\framework\src\Illuminate\Database\Connection.php[39m:[32m841[39m
+    837▕             $exceptionType = ($isUniqueConstraintError = $this->isUniqueConstraintError($e))
+    838▕                 ? UniqueConstraintViolationException::class
+    839▕                 : QueryException::class;
+    840▕ 
+  ➜ 841▕             $exception = new $exceptionType(
+    842▕                 $this->getNameWithReadWriteType(),
+    843▕                 $query,
+    844▕                 $this->prepareBindings($bindings),
+    845▕                 $e,
+
+  [33m1   [39m[39;1mvendor\laravel\framework\src\Illuminate\Database\Connection.php[39;22m:[39;1m841[39;22m
+
+  [33m2   [39m[39;1mvendor\laravel\framework\src\Illuminate\Database\MySqlConnection.php[39;22m:[39;1m47[39;22m
+  [90m    NunoMaduro\Collision\Exceptions\TestException::("SQLSTATE[42S02]: Base table or view not found: 1146 Table 'nexthire_db_test.migrations' doesn't exist")[39m
+
+  [31m────────────────────────────────────────────────────────────────────────────────────────────────────────────────────[39m  
+  [41;1m FAILED [49;22m [1mTests\Unit\Models\EmployeeModelTest[22m [90m>[39m employee emp id contains current year                [41;1m QueryException [49;22m  
+[39;1m  SQLSTATE[42S01]: Base table or view already exists: 1050 Table 'password_reset_tokens' already exists (Connection: mysql, Host: 127.0.0.1, Port: 3306, Database: nexthire_db_test, SQL: create table `password_reset_tokens` (`email` varchar(255) not null, `token` varchar(255) not null, `created_at` timestamp null, primary key (`email`)) default character set utf8mb4 collate 'utf8mb4_unicode_ci')[39;22m
+
+  at [32mvendor\laravel\framework\src\Illuminate\Database\Connection.php[39m:[32m841[39m
+    837▕             $exceptionType = ($isUniqueConstraintError = $this->isUniqueConstraintError($e))
+    838▕                 ? UniqueConstraintViolationException::class
+    839▕                 : QueryException::class;
+    840▕ 
+  ➜ 841▕             $exception = new $exceptionType(
+    842▕                 $this->getNameWithReadWriteType(),
+    843▕                 $query,
+    844▕                 $this->prepareBindings($bindings),
+    845▕                 $e,
+
+  [33m1   [39m[39;1mvendor\laravel\framework\src\Illuminate\Database\Connection.php[39;22m:[39;1m841[39;22m
+
+  [33m2   [39m[39;1mvendor\laravel\framework\src\Illuminate\Database\Connection.php[39;22m:[39;1m587[39;22m
+  [90m    NunoMaduro\Collision\Exceptions\TestException::("SQLSTATE[42S01]: Base table or view already exists: 1050 Table 'password_reset_tokens' already exists")[39m
+
+  [31m────────────────────────────────────────────────────────────────────────────────────────────────────────────────────[39m  
+  [41;1m FAILED [49;22m [1mTests\Unit\Models\EmployeeModelTest[22m [90m>[39m employee emp ids are unique                          [41;1m QueryException [49;22m  
+[39;1m  SQLSTATE[42S02]: Base table or view not found: 1146 Table 'nexthire_db_test.migrations' doesn't exist (Connection: mysql, Host: 127.0.0.1, Port: 3306, Database: nexthire_db_test, SQL: insert into `migrations` (`migration`, `batch`) values (0001_01_01_000002_create_jobs_table, 1))[39;22m
+
+  at [32mvendor\laravel\framework\src\Illuminate\Database\Connection.php[39m:[32m841[39m
+    837▕             $exceptionType = ($isUniqueConstraintError = $this->isUniqueConstraintError($e))
+    838▕                 ? UniqueConstraintViolationException::class
+    839▕                 : QueryException::class;
+    840▕ 
+  ➜ 841▕             $exception = new $exceptionType(
+    842▕                 $this->getNameWithReadWriteType(),
+    843▕                 $query,
+    844▕                 $this->prepareBindings($bindings),
+    845▕                 $e,
+
+  [33m1   [39m[39;1mvendor\laravel\framework\src\Illuminate\Database\Connection.php[39;22m:[39;1m841[39;22m
+
+  [33m2   [39m[39;1mvendor\laravel\framework\src\Illuminate\Database\MySqlConnection.php[39;22m:[39;1m47[39;22m
+  [90m    NunoMaduro\Collision\Exceptions\TestException::("SQLSTATE[42S02]: Base table or view not found: 1146 Table 'nexthire_db_test.migrations' doesn't exist")[39m
+
+  [31m────────────────────────────────────────────────────────────────────────────────────────────────────────────────────[39m  
+  [41;1m FAILED [49;22m [1mTests\Unit\Models\EmployeeModelTest[22m [90m>[39m employee does not overwrite existing emp id on upda… [41;1m QueryException [49;22m  
+[39;1m  SQLSTATE[42S01]: Base table or view already exists: 1050 Table 'cache' already exists (Connection: mysql, Host: 127.0.0.1, Port: 3306, Database: nexthire_db_test, SQL: create table `cache` (`key` varchar(255) not null, `value` mediumtext not null, `expiration` bigint not null, primary key (`key`)) default character set utf8mb4 collate 'utf8mb4_unicode_ci')[39;22m
+
+  at [32mvendor\laravel\framework\src\Illuminate\Database\Connection.php[39m:[32m841[39m
+    837▕             $exceptionType = ($isUniqueConstraintError = $this->isUniqueConstraintError($e))
+    838▕                 ? UniqueConstraintViolationException::class
+    839▕                 : QueryException::class;
+    840▕ 
+  ➜ 841▕             $exception = new $exceptionType(
+    842▕                 $this->getNameWithReadWriteType(),
+    843▕                 $query,
+    844▕                 $this->prepareBindings($bindings),
+    845▕                 $e,
+
+  [33m1   [39m[39;1mvendor\laravel\framework\src\Illuminate\Database\Connection.php[39;22m:[39;1m841[39;22m
+
+  [33m2   [39m[39;1mvendor\laravel\framework\src\Illuminate\Database\Connection.php[39;22m:[39;1m587[39;22m
+  [90m    NunoMaduro\Collision\Exceptions\TestException::("SQLSTATE[42S01]: Base table or view already exists: 1050 Table 'cache' already exists")[39m
+
+  [31m────────────────────────────────────────────────────────────────────────────────────────────────────────────────────[39m  
+  [41;1m FAILED [49;22m [1mTests\Unit\Models\EmployeeModelTest[22m [90m>[39m employee fillable includes parent fields             [41;1m QueryException [49;22m  
+[39;1m  SQLSTATE[42S02]: Base table or view not found: 1146 Table 'nexthire_db_test.migrations' doesn't exist (Connection: mysql, Host: 127.0.0.1, Port: 3306, Database: nexthire_db_test, SQL: insert into `migrations` (`migration`, `batch`) values (0001_01_01_000002_create_jobs_table, 1))[39;22m
+
+  at [32mvendor\laravel\framework\src\Illuminate\Database\Connection.php[39m:[32m841[39m
+    837▕             $exceptionType = ($isUniqueConstraintError = $this->isUniqueConstraintError($e))
+    838▕                 ? UniqueConstraintViolationException::class
+    839▕                 : QueryException::class;
+    840▕ 
+  ➜ 841▕             $exception = new $exceptionType(
+    842▕                 $this->getNameWithReadWriteType(),
+    843▕                 $query,
+    844▕                 $this->prepareBindings($bindings),
+    845▕                 $e,
+
+  [33m1   [39m[39;1mvendor\laravel\framework\src\Illuminate\Database\Connection.php[39;22m:[39;1m841[39;22m
+
+  [33m2   [39m[39;1mvendor\laravel\framework\src\Illuminate\Database\MySqlConnection.php[39;22m:[39;1m47[39;22m
+  [90m    NunoMaduro\Collision\Exceptions\TestException::("SQLSTATE[42S02]: Base table or view not found: 1146 Table 'nexthire_db_test.migrations' doesn't exist")[39m
+
+  [31m────────────────────────────────────────────────────────────────────────────────────────────────────────────────────[39m  
+  [41;1m FAILED [49;22m [1mTests\Unit\Models\JobPostModelTest[22m [90m>[39m fillable contains expected attributes                 [41;1m QueryException [49;22m  
+[39;1m  SQLSTATE[42S02]: Base table or view not found: 1146 Table 'nexthire_db_test.migrations' doesn't exist (Connection: mysql, Host: 127.0.0.1, Port: 3306, Database: nexthire_db_test, SQL: select `migration` from `migrations` order by `batch` asc, `migration` asc)[39;22m
+
+  at [32mvendor\laravel\framework\src\Illuminate\Database\Connection.php[39m:[32m841[39m
+    837▕             $exceptionType = ($isUniqueConstraintError = $this->isUniqueConstraintError($e))
+    838▕                 ? UniqueConstraintViolationException::class
+    839▕                 : QueryException::class;
+    840▕ 
+  ➜ 841▕             $exception = new $exceptionType(
+    842▕                 $this->getNameWithReadWriteType(),
+    843▕                 $query,
+    844▕                 $this->prepareBindings($bindings),
+    845▕                 $e,
+
+  [33m1   [39m[39;1mvendor\laravel\framework\src\Illuminate\Database\Connection.php[39;22m:[39;1m841[39;22m
+
+  [33m2   [39m[39;1mvendor\laravel\framework\src\Illuminate\Database\Connection.php[39;22m:[39;1m421[39;22m
+  [90m    NunoMaduro\Collision\Exceptions\TestException::("SQLSTATE[42S02]: Base table or view not found: 1146 Table 'nexthire_db_test.migrations' doesn't exist")[39m
+
+  [31m────────────────────────────────────────────────────────────────────────────────────────────────────────────────────[39m  
+  [41;1m FAILED [49;22m [1mTests\Unit\Models\JobPostModelTest[22m [90m>[39m status is cast to job status enum                     [41;1m QueryException [49;22m  
+[39;1m  SQLSTATE[42S01]: Base table or view already exists: 1050 Table 'users' already exists (Connection: mysql, Host: 127.0.0.1, Port: 3306, Database: nexthire_db_test, SQL: create table `users` (`id` bigint unsigned not null auto_increment primary key, `name` varchar(255) not null, `email` varchar(255) not null, `email_verified_at` timestamp null, `password` varchar(255) not null, `remember_token` varchar(100) null, `created_at` timestamp null, `updated_at` timestamp null) default character set utf8mb4 collate 'utf8mb4_unicode_ci')[39;22m
+
+  at [32mvendor\laravel\framework\src\Illuminate\Database\Connection.php[39m:[32m841[39m
+    837▕             $exceptionType = ($isUniqueConstraintError = $this->isUniqueConstraintError($e))
+    838▕                 ? UniqueConstraintViolationException::class
+    839▕                 : QueryException::class;
+    840▕ 
+  ➜ 841▕             $exception = new $exceptionType(
+    842▕                 $this->getNameWithReadWriteType(),
+    843▕                 $query,
+    844▕                 $this->prepareBindings($bindings),
+    845▕                 $e,
+
+  [33m1   [39m[39;1mvendor\laravel\framework\src\Illuminate\Database\Connection.php[39;22m:[39;1m841[39;22m
+
+  [33m2   [39m[39;1mvendor\laravel\framework\src\Illuminate\Database\Connection.php[39;22m:[39;1m587[39;22m
+  [90m    NunoMaduro\Collision\Exceptions\TestException::("SQLSTATE[42S01]: Base table or view already exists: 1050 Table 'users' already exists")[39m
+
+  [31m────────────────────────────────────────────────────────────────────────────────────────────────────────────────────[39m  
+  [41;1m FAILED [49;22m [1mTests\Unit\Models\JobPostModelTest[22m [90m>[39m skills is cast to array                               [41;1m QueryException [49;22m  
+[39;1m  SQLSTATE[42S02]: Base table or view not found: 1146 Table 'nexthire_db_test.migrations' doesn't exist (Connection: mysql, Host: 127.0.0.1, Port: 3306, Database: nexthire_db_test, SQL: insert into `migrations` (`migration`, `batch`) values (0001_01_01_000002_create_jobs_table, 1))[39;22m
+
+  at [32mvendor\laravel\framework\src\Illuminate\Database\Connection.php[39m:[32m841[39m
+    837▕             $exceptionType = ($isUniqueConstraintError = $this->isUniqueConstraintError($e))
+    838▕                 ? UniqueConstraintViolationException::class
+    839▕                 : QueryException::class;
+    840▕ 
+  ➜ 841▕             $exception = new $exceptionType(
+    842▕                 $this->getNameWithReadWriteType(),
+    843▕                 $query,
+    844▕                 $this->prepareBindings($bindings),
+    845▕                 $e,
+
+  [33m1   [39m[39;1mvendor\laravel\framework\src\Illuminate\Database\Connection.php[39;22m:[39;1m841[39;22m
+
+  [33m2   [39m[39;1mvendor\laravel\framework\src\Illuminate\Database\MySqlConnection.php[39;22m:[39;1m47[39;22m
+  [90m    NunoMaduro\Collision\Exceptions\TestException::("SQLSTATE[42S02]: Base table or view not found: 1146 Table 'nexthire_db_test.migrations' doesn't exist")[39m
+
+  [31m────────────────────────────────────────────────────────────────────────────────────────────────────────────────────[39m  
+  [41;1m FAILED [49;22m [1mTests\Unit\Models\JobPostModelTest[22m [90m>[39m creator relationship returns user                     [41;1m QueryException [49;22m  
+[39;1m  SQLSTATE[42S01]: Base table or view already exists: 1050 Table 'users' already exists (Connection: mysql, Host: 127.0.0.1, Port: 3306, Database: nexthire_db_test, SQL: create table `users` (`id` bigint unsigned not null auto_increment primary key, `name` varchar(255) not null, `email` varchar(255) not null, `email_verified_at` timestamp null, `password` varchar(255) not null, `remember_token` varchar(100) null, `created_at` timestamp null, `updated_at` timestamp null) default character set utf8mb4 collate 'utf8mb4_unicode_ci')[39;22m
+
+  at [32mvendor\laravel\framework\src\Illuminate\Database\Connection.php[39m:[32m841[39m
+    837▕             $exceptionType = ($isUniqueConstraintError = $this->isUniqueConstraintError($e))
+    838▕                 ? UniqueConstraintViolationException::class
+    839▕                 : QueryException::class;
+    840▕ 
+  ➜ 841▕             $exception = new $exceptionType(
+    842▕                 $this->getNameWithReadWriteType(),
+    843▕                 $query,
+    844▕                 $this->prepareBindings($bindings),
+    845▕                 $e,
+
+  [33m1   [39m[39;1mvendor\laravel\framework\src\Illuminate\Database\Connection.php[39;22m:[39;1m841[39;22m
+
+  [33m2   [39m[39;1mvendor\laravel\framework\src\Illuminate\Database\Connection.php[39;22m:[39;1m587[39;22m
+  [90m    NunoMaduro\Collision\Exceptions\TestException::("SQLSTATE[42S01]: Base table or view already exists: 1050 Table 'users' already exists")[39m
+
+  [31m────────────────────────────────────────────────────────────────────────────────────────────────────────────────────[39m  
+  [41;1m FAILED [49;22m [1mTests\Unit\Models\JobPostModelTest[22m [90m>[39m status updater relationship returns user              [41;1m QueryException [49;22m  
+[39;1m  SQLSTATE[42S02]: Base table or view not found: 1146 Table 'nexthire_db_test.migrations' doesn't exist (Connection: mysql, Host: 127.0.0.1, Port: 3306, Database: nexthire_db_test, SQL: insert into `migrations` (`migration`, `batch`) values (0001_01_01_000002_create_jobs_table, 1))[39;22m
+
+  at [32mvendor\laravel\framework\src\Illuminate\Database\Connection.php[39m:[32m841[39m
+    837▕             $exceptionType = ($isUniqueConstraintError = $this->isUniqueConstraintError($e))
+    838▕                 ? UniqueConstraintViolationException::class
+    839▕                 : QueryException::class;
+    840▕ 
+  ➜ 841▕             $exception = new $exceptionType(
+    842▕                 $this->getNameWithReadWriteType(),
+    843▕                 $query,
+    844▕                 $this->prepareBindings($bindings),
+    845▕                 $e,
+
+  [33m1   [39m[39;1mvendor\laravel\framework\src\Illuminate\Database\Connection.php[39;22m:[39;1m841[39;22m
+
+  [33m2   [39m[39;1mvendor\laravel\framework\src\Illuminate\Database\MySqlConnection.php[39;22m:[39;1m47[39;22m
+  [90m    NunoMaduro\Collision\Exceptions\TestException::("SQLSTATE[42S02]: Base table or view not found: 1146 Table 'nexthire_db_test.migrations' doesn't exist")[39m
+
+  [31m────────────────────────────────────────────────────────────────────────────────────────────────────────────────────[39m  
+  [41;1m FAILED [49;22m [1mTests\Unit\Models\JobPostModelTest[22m [90m>[39m status updater is null when not set                   [41;1m QueryException [49;22m  
+[39;1m  SQLSTATE[42S01]: Base table or view already exists: 1050 Table 'users' already exists (Connection: mysql, Host: 127.0.0.1, Port: 3306, Database: nexthire_db_test, SQL: create table `users` (`id` bigint unsigned not null auto_increment primary key, `name` varchar(255) not null, `email` varchar(255) not null, `email_verified_at` timestamp null, `password` varchar(255) not null, `remember_token` varchar(100) null, `created_at` timestamp null, `updated_at` timestamp null) default character set utf8mb4 collate 'utf8mb4_unicode_ci')[39;22m
+
+  at [32mvendor\laravel\framework\src\Illuminate\Database\Connection.php[39m:[32m841[39m
+    837▕             $exceptionType = ($isUniqueConstraintError = $this->isUniqueConstraintError($e))
+    838▕                 ? UniqueConstraintViolationException::class
+    839▕                 : QueryException::class;
+    840▕ 
+  ➜ 841▕             $exception = new $exceptionType(
+    842▕                 $this->getNameWithReadWriteType(),
+    843▕                 $query,
+    844▕                 $this->prepareBindings($bindings),
+    845▕                 $e,
+
+  [33m1   [39m[39;1mvendor\laravel\framework\src\Illuminate\Database\Connection.php[39;22m:[39;1m841[39;22m
+
+  [33m2   [39m[39;1mvendor\laravel\framework\src\Illuminate\Database\Connection.php[39;22m:[39;1m587[39;22m
+  [90m    NunoMaduro\Collision\Exceptions\TestException::("SQLSTATE[42S01]: Base table or view already exists: 1050 Table 'users' already exists")[39m
+
+  [31m────────────────────────────────────────────────────────────────────────────────────────────────────────────────────[39m  
+  [41;1m FAILED [49;22m [1mTests\Unit\Models\JobPostModelTest[22m [90m>[39m can create job with all fields                        [41;1m QueryException [49;22m  
+[39;1m  SQLSTATE[42S02]: Base table or view not found: 1146 Table 'nexthire_db_test.migrations' doesn't exist (Connection: mysql, Host: 127.0.0.1, Port: 3306, Database: nexthire_db_test, SQL: insert into `migrations` (`migration`, `batch`) values (0001_01_01_000000_create_users_table, 1))[39;22m
+
+  at [32mvendor\laravel\framework\src\Illuminate\Database\Connection.php[39m:[32m841[39m
+    837▕             $exceptionType = ($isUniqueConstraintError = $this->isUniqueConstraintError($e))
+    838▕                 ? UniqueConstraintViolationException::class
+    839▕                 : QueryException::class;
+    840▕ 
+  ➜ 841▕             $exception = new $exceptionType(
+    842▕                 $this->getNameWithReadWriteType(),
+    843▕                 $query,
+    844▕                 $this->prepareBindings($bindings),
+    845▕                 $e,
+
+  [33m1   [39m[39;1mvendor\laravel\framework\src\Illuminate\Database\Connection.php[39;22m:[39;1m841[39;22m
+
+  [33m2   [39m[39;1mvendor\laravel\framework\src\Illuminate\Database\MySqlConnection.php[39;22m:[39;1m47[39;22m
+  [90m    NunoMaduro\Collision\Exceptions\TestException::("SQLSTATE[42S02]: Base table or view not found: 1146 Table 'nexthire_db_test.migrations' doesn't exist")[39m
+
+  [31m────────────────────────────────────────────────────────────────────────────────────────────────────────────────────[39m  
+  [41;1m FAILED [49;22m [1mTests\Unit\Models\UserModelTest[22m [90m>[39m user fillable contains expected attributes               [41;1m QueryException [49;22m  
+[39;1m  SQLSTATE[42S02]: Base table or view not found: 1146 Table 'nexthire_db_test.migrations' doesn't exist (Connection: mysql, Host: 127.0.0.1, Port: 3306, Database: nexthire_db_test, SQL: insert into `migrations` (`migration`, `batch`) values (0001_01_01_000001_create_cache_table, 1))[39;22m
+
+  at [32mvendor\laravel\framework\src\Illuminate\Database\Connection.php[39m:[32m841[39m
+    837▕             $exceptionType = ($isUniqueConstraintError = $this->isUniqueConstraintError($e))
+    838▕                 ? UniqueConstraintViolationException::class
+    839▕                 : QueryException::class;
+    840▕ 
+  ➜ 841▕             $exception = new $exceptionType(
+    842▕                 $this->getNameWithReadWriteType(),
+    843▕                 $query,
+    844▕                 $this->prepareBindings($bindings),
+    845▕                 $e,
+
+  [33m1   [39m[39;1mvendor\laravel\framework\src\Illuminate\Database\Connection.php[39;22m:[39;1m841[39;22m
+
+  [33m2   [39m[39;1mvendor\laravel\framework\src\Illuminate\Database\MySqlConnection.php[39;22m:[39;1m47[39;22m
+  [90m    NunoMaduro\Collision\Exceptions\TestException::("SQLSTATE[42S02]: Base table or view not found: 1146 Table 'nexthire_db_test.migrations' doesn't exist")[39m
+
+  [31m────────────────────────────────────────────────────────────────────────────────────────────────────────────────────[39m  
+  [41;1m FAILED [49;22m [1mTests\Unit\Models\UserModelTest[22m [90m>[39m user casts password as hashed                            [41;1m QueryException [49;22m  
+[39;1m  SQLSTATE[42S01]: Base table or view already exists: 1050 Table 'password_reset_tokens' already exists (Connection: mysql, Host: 127.0.0.1, Port: 3306, Database: nexthire_db_test, SQL: create table `password_reset_tokens` (`email` varchar(255) not null, `token` varchar(255) not null, `created_at` timestamp null, primary key (`email`)) default character set utf8mb4 collate 'utf8mb4_unicode_ci')[39;22m
+
+  at [32mvendor\laravel\framework\src\Illuminate\Database\Connection.php[39m:[32m841[39m
+    837▕             $exceptionType = ($isUniqueConstraintError = $this->isUniqueConstraintError($e))
+    838▕                 ? UniqueConstraintViolationException::class
+    839▕                 : QueryException::class;
+    840▕ 
+  ➜ 841▕             $exception = new $exceptionType(
+    842▕                 $this->getNameWithReadWriteType(),
+    843▕                 $query,
+    844▕                 $this->prepareBindings($bindings),
+    845▕                 $e,
+
+  [33m1   [39m[39;1mvendor\laravel\framework\src\Illuminate\Database\Connection.php[39;22m:[39;1m841[39;22m
+
+  [33m2   [39m[39;1mvendor\laravel\framework\src\Illuminate\Database\Connection.php[39;22m:[39;1m587[39;22m
+  [90m    NunoMaduro\Collision\Exceptions\TestException::("SQLSTATE[42S01]: Base table or view already exists: 1050 Table 'password_reset_tokens' already exists")[39m
+
+  [31m────────────────────────────────────────────────────────────────────────────────────────────────────────────────────[39m  
+  [41;1m FAILED [49;22m [1mTests\Unit\Models\UserModelTest[22m [90m>[39m user casts skills as array                               [41;1m QueryException [49;22m  
+[39;1m  SQLSTATE[42S02]: Base table or view not found: 1146 Table 'nexthire_db_test.migrations' doesn't exist (Connection: mysql, Host: 127.0.0.1, Port: 3306, Database: nexthire_db_test, SQL: insert into `migrations` (`migration`, `batch`) values (0001_01_01_000000_create_users_table, 1))[39;22m
+
+  at [32mvendor\laravel\framework\src\Illuminate\Database\Connection.php[39m:[32m841[39m
+    837▕             $exceptionType = ($isUniqueConstraintError = $this->isUniqueConstraintError($e))
+    838▕                 ? UniqueConstraintViolationException::class
+    839▕                 : QueryException::class;
+    840▕ 
+  ➜ 841▕             $exception = new $exceptionType(
+    842▕                 $this->getNameWithReadWriteType(),
+    843▕                 $query,
+    844▕                 $this->prepareBindings($bindings),
+    845▕                 $e,
+
+  [33m1   [39m[39;1mvendor\laravel\framework\src\Illuminate\Database\Connection.php[39;22m:[39;1m841[39;22m
+
+  [33m2   [39m[39;1mvendor\laravel\framework\src\Illuminate\Database\MySqlConnection.php[39;22m:[39;1m47[39;22m
+  [90m    NunoMaduro\Collision\Exceptions\TestException::("SQLSTATE[42S02]: Base table or view not found: 1146 Table 'nexthire_db_test.migrations' doesn't exist")[39m
+
+  [31m────────────────────────────────────────────────────────────────────────────────────────────────────────────────────[39m  
+  [41;1m FAILED [49;22m [1mTests\Unit\Models\UserModelTest[22m [90m>[39m user auto computes name from first and last              [41;1m QueryException [49;22m  
+[39;1m  SQLSTATE[42S01]: Base table or view already exists: 1050 Table 'users' already exists (Connection: mysql, Host: 127.0.0.1, Port: 3306, Database: nexthire_db_test, SQL: create table `users` (`id` bigint unsigned not null auto_increment primary key, `name` varchar(255) not null, `email` varchar(255) not null, `email_verified_at` timestamp null, `password` varchar(255) not null, `remember_token` varchar(100) null, `created_at` timestamp null, `updated_at` timestamp null) default character set utf8mb4 collate 'utf8mb4_unicode_ci')[39;22m
+
+  at [32mvendor\laravel\framework\src\Illuminate\Database\Connection.php[39m:[32m841[39m
+    837▕             $exceptionType = ($isUniqueConstraintError = $this->isUniqueConstraintError($e))
+    838▕                 ? UniqueConstraintViolationException::class
+    839▕                 : QueryException::class;
+    840▕ 
+  ➜ 841▕             $exception = new $exceptionType(
+    842▕                 $this->getNameWithReadWriteType(),
+    843▕                 $query,
+    844▕                 $this->prepareBindings($bindings),
+    845▕                 $e,
+
+  [33m1   [39m[39;1mvendor\laravel\framework\src\Illuminate\Database\Connection.php[39;22m:[39;1m841[39;22m
+
+  [33m2   [39m[39;1mvendor\laravel\framework\src\Illuminate\Database\Connection.php[39;22m:[39;1m587[39;22m
+  [90m    NunoMaduro\Collision\Exceptions\TestException::("SQLSTATE[42S01]: Base table or view already exists: 1050 Table 'users' already exists")[39m
+
+  [31m────────────────────────────────────────────────────────────────────────────────────────────────────────────────────[39m  
+  [41;1m FAILED [49;22m [1mTests\Unit\Models\UserModelTest[22m [90m>[39m user preserves explicit name                             [41;1m QueryException [49;22m  
+[39;1m  SQLSTATE[42S02]: Base table or view not found: 1146 Table 'nexthire_db_test.migrations' doesn't exist (Connection: mysql, Host: 127.0.0.1, Port: 3306, Database: nexthire_db_test, SQL: insert into `migrations` (`migration`, `batch`) values (0001_01_01_000001_create_cache_table, 1))[39;22m
+
+  at [32mvendor\laravel\framework\src\Illuminate\Database\Connection.php[39m:[32m841[39m
+    837▕             $exceptionType = ($isUniqueConstraintError = $this->isUniqueConstraintError($e))
+    838▕                 ? UniqueConstraintViolationException::class
+    839▕                 : QueryException::class;
+    840▕ 
+  ➜ 841▕             $exception = new $exceptionType(
+    842▕                 $this->getNameWithReadWriteType(),
+    843▕                 $query,
+    844▕                 $this->prepareBindings($bindings),
+    845▕                 $e,
+
+  [33m1   [39m[39;1mvendor\laravel\framework\src\Illuminate\Database\Connection.php[39;22m:[39;1m841[39;22m
+
+  [33m2   [39m[39;1mvendor\laravel\framework\src\Illuminate\Database\MySqlConnection.php[39;22m:[39;1m47[39;22m
+  [90m    NunoMaduro\Collision\Exceptions\TestException::("SQLSTATE[42S02]: Base table or view not found: 1146 Table 'nexthire_db_test.migrations' doesn't exist")[39m
+
+  [31m────────────────────────────────────────────────────────────────────────────────────────────────────────────────────[39m  
+  [41;1m FAILED [49;22m [1mTests\Unit\Models\UserModelTest[22m [90m>[39m user child types map all six roles                       [41;1m QueryException [49;22m  
+[39;1m  SQLSTATE[42S01]: Base table or view already exists: 1050 Table 'users' already exists (Connection: mysql, Host: 127.0.0.1, Port: 3306, Database: nexthire_db_test, SQL: create table `users` (`id` bigint unsigned not null auto_increment primary key, `name` varchar(255) not null, `email` varchar(255) not null, `email_verified_at` timestamp null, `password` varchar(255) not null, `remember_token` varchar(100) null, `created_at` timestamp null, `updated_at` timestamp null) default character set utf8mb4 collate 'utf8mb4_unicode_ci')[39;22m
+
+  at [32mvendor\laravel\framework\src\Illuminate\Database\Connection.php[39m:[32m841[39m
+    837▕             $exceptionType = ($isUniqueConstraintError = $this->isUniqueConstraintError($e))
+    838▕                 ? UniqueConstraintViolationException::class
+    839▕                 : QueryException::class;
+    840▕ 
+  ➜ 841▕             $exception = new $exceptionType(
+    842▕                 $this->getNameWithReadWriteType(),
+    843▕                 $query,
+    844▕                 $this->prepareBindings($bindings),
+    845▕                 $e,
+
+  [33m1   [39m[39;1mvendor\laravel\framework\src\Illuminate\Database\Connection.php[39;22m:[39;1m841[39;22m
+
+  [33m2   [39m[39;1mvendor\laravel\framework\src\Illuminate\Database\Connection.php[39;22m:[39;1m587[39;22m
+  [90m    NunoMaduro\Collision\Exceptions\TestException::("SQLSTATE[42S01]: Base table or view already exists: 1050 Table 'users' already exists")[39m
+
+  [31m────────────────────────────────────────────────────────────────────────────────────────────────────────────────────[39m  
+  [41;1m FAILED [49;22m [1mTests\Unit\Models\UserModelTest[22m [90m>[39m user resolves to candidate when role is candidate        [41;1m QueryException [49;22m  
+[39;1m  SQLSTATE[42S02]: Base table or view not found: 1146 Table 'nexthire_db_test.migrations' doesn't exist (Connection: mysql, Host: 127.0.0.1, Port: 3306, Database: nexthire_db_test, SQL: insert into `migrations` (`migration`, `batch`) values (0001_01_01_000001_create_cache_table, 1))[39;22m
+
+  at [32mvendor\laravel\framework\src\Illuminate\Database\Connection.php[39m:[32m841[39m
+    837▕             $exceptionType = ($isUniqueConstraintError = $this->isUniqueConstraintError($e))
+    838▕                 ? UniqueConstraintViolationException::class
+    839▕                 : QueryException::class;
+    840▕ 
+  ➜ 841▕             $exception = new $exceptionType(
+    842▕                 $this->getNameWithReadWriteType(),
+    843▕                 $query,
+    844▕                 $this->prepareBindings($bindings),
+    845▕                 $e,
+
+  [33m1   [39m[39;1mvendor\laravel\framework\src\Illuminate\Database\Connection.php[39;22m:[39;1m841[39;22m
+
+  [33m2   [39m[39;1mvendor\laravel\framework\src\Illuminate\Database\MySqlConnection.php[39;22m:[39;1m47[39;22m
+  [90m    NunoMaduro\Collision\Exceptions\TestException::("SQLSTATE[42S02]: Base table or view not found: 1146 Table 'nexthire_db_test.migrations' doesn't exist")[39m
+
+  [31m────────────────────────────────────────────────────────────────────────────────────────────────────────────────────[39m  
+  [41;1m FAILED [49;22m [1mTests\Unit\Models\UserModelTest[22m [90m>[39m user resolves to employee when role is employee          [41;1m QueryException [49;22m  
+[39;1m  SQLSTATE[42S01]: Base table or view already exists: 1050 Table 'cache' already exists (Connection: mysql, Host: 127.0.0.1, Port: 3306, Database: nexthire_db_test, SQL: create table `cache` (`key` varchar(255) not null, `value` mediumtext not null, `expiration` bigint not null, primary key (`key`)) default character set utf8mb4 collate 'utf8mb4_unicode_ci')[39;22m
+
+  at [32mvendor\laravel\framework\src\Illuminate\Database\Connection.php[39m:[32m841[39m
+    837▕             $exceptionType = ($isUniqueConstraintError = $this->isUniqueConstraintError($e))
+    838▕                 ? UniqueConstraintViolationException::class
+    839▕                 : QueryException::class;
+    840▕ 
+  ➜ 841▕             $exception = new $exceptionType(
+    842▕                 $this->getNameWithReadWriteType(),
+    843▕                 $query,
+    844▕                 $this->prepareBindings($bindings),
+    845▕                 $e,
+
+  [33m1   [39m[39;1mvendor\laravel\framework\src\Illuminate\Database\Connection.php[39;22m:[39;1m841[39;22m
+
+  [33m2   [39m[39;1mvendor\laravel\framework\src\Illuminate\Database\Connection.php[39;22m:[39;1m587[39;22m
+  [90m    NunoMaduro\Collision\Exceptions\TestException::("SQLSTATE[42S01]: Base table or view already exists: 1050 Table 'cache' already exists")[39m
+
+  [31m────────────────────────────────────────────────────────────────────────────────────────────────────────────────────[39m  
+  [41;1m FAILED [49;22m [1mTests\Unit\Policies\JobPostPolicyTest[22m [90m>[39m view any allows all users                          [41;1m QueryException [49;22m  
+[39;1m  SQLSTATE[42S02]: Base table or view not found: 1146 Table 'nexthire_db_test.migrations' doesn't exist (Connection: mysql, Host: 127.0.0.1, Port: 3306, Database: nexthire_db_test, SQL: insert into `migrations` (`migration`, `batch`) values (0001_01_01_000002_create_jobs_table, 1))[39;22m
+
+  at [32mvendor\laravel\framework\src\Illuminate\Database\Connection.php[39m:[32m841[39m
+    837▕             $exceptionType = ($isUniqueConstraintError = $this->isUniqueConstraintError($e))
+    838▕                 ? UniqueConstraintViolationException::class
+    839▕                 : QueryException::class;
+    840▕ 
+  ➜ 841▕             $exception = new $exceptionType(
+    842▕                 $this->getNameWithReadWriteType(),
+    843▕                 $query,
+    844▕                 $this->prepareBindings($bindings),
+    845▕                 $e,
+
+  [33m1   [39m[39;1mvendor\laravel\framework\src\Illuminate\Database\Connection.php[39;22m:[39;1m841[39;22m
+
+  [33m2   [39m[39;1mvendor\laravel\framework\src\Illuminate\Database\MySqlConnection.php[39;22m:[39;1m47[39;22m
+  [90m    NunoMaduro\Collision\Exceptions\TestException::("SQLSTATE[42S02]: Base table or view not found: 1146 Table 'nexthire_db_test.migrations' doesn't exist")[39m
+
+  [31m────────────────────────────────────────────────────────────────────────────────────────────────────────────────────[39m  
+  [41;1m FAILED [49;22m [1mTests\Unit\Policies\JobPostPolicyTest[22m [90m>[39m view allows employees to see any job               [41;1m QueryException [49;22m  
+[39;1m  SQLSTATE[42S01]: Base table or view already exists: 1050 Table 'cache' already exists (Connection: mysql, Host: 127.0.0.1, Port: 3306, Database: nexthire_db_test, SQL: create table `cache` (`key` varchar(255) not null, `value` mediumtext not null, `expiration` bigint not null, primary key (`key`)) default character set utf8mb4 collate 'utf8mb4_unicode_ci')[39;22m
+
+  at [32mvendor\laravel\framework\src\Illuminate\Database\Connection.php[39m:[32m841[39m
+    837▕             $exceptionType = ($isUniqueConstraintError = $this->isUniqueConstraintError($e))
+    838▕                 ? UniqueConstraintViolationException::class
+    839▕                 : QueryException::class;
+    840▕ 
+  ➜ 841▕             $exception = new $exceptionType(
+    842▕                 $this->getNameWithReadWriteType(),
+    843▕                 $query,
+    844▕                 $this->prepareBindings($bindings),
+    845▕                 $e,
+
+  [33m1   [39m[39;1mvendor\laravel\framework\src\Illuminate\Database\Connection.php[39;22m:[39;1m841[39;22m
+
+  [33m2   [39m[39;1mvendor\laravel\framework\src\Illuminate\Database\Connection.php[39;22m:[39;1m587[39;22m
+  [90m    NunoMaduro\Collision\Exceptions\TestException::("SQLSTATE[42S01]: Base table or view already exists: 1050 Table 'cache' already exists")[39m
+
+  [31m────────────────────────────────────────────────────────────────────────────────────────────────────────────────────[39m  
+  [41;1m FAILED [49;22m [1mTests\Unit\Policies\JobPostPolicyTest[22m [90m>[39m view allows candidates to see approved jobs        [41;1m QueryException [49;22m  
+[39;1m  SQLSTATE[42S02]: Base table or view not found: 1146 Table 'nexthire_db_test.migrations' doesn't exist (Connection: mysql, Host: 127.0.0.1, Port: 3306, Database: nexthire_db_test, SQL: select `migration` from `migrations` order by `batch` asc, `migration` asc)[39;22m
+
+  at [32mvendor\laravel\framework\src\Illuminate\Database\Connection.php[39m:[32m841[39m
+    837▕             $exceptionType = ($isUniqueConstraintError = $this->isUniqueConstraintError($e))
+    838▕                 ? UniqueConstraintViolationException::class
+    839▕                 : QueryException::class;
+    840▕ 
+  ➜ 841▕             $exception = new $exceptionType(
+    842▕                 $this->getNameWithReadWriteType(),
+    843▕                 $query,
+    844▕                 $this->prepareBindings($bindings),
+    845▕                 $e,
+
+  [33m1   [39m[39;1mvendor\laravel\framework\src\Illuminate\Database\Connection.php[39;22m:[39;1m841[39;22m
+
+  [33m2   [39m[39;1mvendor\laravel\framework\src\Illuminate\Database\Connection.php[39;22m:[39;1m421[39;22m
+  [90m    NunoMaduro\Collision\Exceptions\TestException::("SQLSTATE[42S02]: Base table or view not found: 1146 Table 'nexthire_db_test.migrations' doesn't exist")[39m
+
+  [31m────────────────────────────────────────────────────────────────────────────────────────────────────────────────────[39m  
+  [41;1m FAILED [49;22m [1mTests\Unit\Policies\JobPostPolicyTest[22m [90m>[39m view blocks candidates from pending jobs           [41;1m QueryException [49;22m  
+[39;1m  SQLSTATE[42S01]: Base table or view already exists: 1050 Table 'password_reset_tokens' already exists (Connection: mysql, Host: 127.0.0.1, Port: 3306, Database: nexthire_db_test, SQL: create table `password_reset_tokens` (`email` varchar(255) not null, `token` varchar(255) not null, `created_at` timestamp null, primary key (`email`)) default character set utf8mb4 collate 'utf8mb4_unicode_ci')[39;22m
+
+  at [32mvendor\laravel\framework\src\Illuminate\Database\Connection.php[39m:[32m841[39m
+    837▕             $exceptionType = ($isUniqueConstraintError = $this->isUniqueConstraintError($e))
+    838▕                 ? UniqueConstraintViolationException::class
+    839▕                 : QueryException::class;
+    840▕ 
+  ➜ 841▕             $exception = new $exceptionType(
+    842▕                 $this->getNameWithReadWriteType(),
+    843▕                 $query,
+    844▕                 $this->prepareBindings($bindings),
+    845▕                 $e,
+
+  [33m1   [39m[39;1mvendor\laravel\framework\src\Illuminate\Database\Connection.php[39;22m:[39;1m841[39;22m
+
+  [33m2   [39m[39;1mvendor\laravel\framework\src\Illuminate\Database\Connection.php[39;22m:[39;1m587[39;22m
+  [90m    NunoMaduro\Collision\Exceptions\TestException::("SQLSTATE[42S01]: Base table or view already exists: 1050 Table 'password_reset_tokens' already exists")[39m
+
+  [31m────────────────────────────────────────────────────────────────────────────────────────────────────────────────────[39m  
+  [41;1m FAILED [49;22m [1mTests\Unit\Policies\JobPostPolicyTest[22m [90m>[39m view blocks candidates from rejected jobs          [41;1m QueryException [49;22m  
+[39;1m  SQLSTATE[42S01]: Base table or view already exists: 1050 Table 'users' already exists (Connection: mysql, Host: 127.0.0.1, Port: 3306, Database: nexthire_db_test, SQL: create table `users` (`id` bigint unsigned not null auto_increment primary key, `name` varchar(255) not null, `email` varchar(255) not null, `email_verified_at` timestamp null, `password` varchar(255) not null, `remember_token` varchar(100) null, `created_at` timestamp null, `updated_at` timestamp null) default character set utf8mb4 collate 'utf8mb4_unicode_ci')[39;22m
+
+  at [32mvendor\laravel\framework\src\Illuminate\Database\Connection.php[39m:[32m841[39m
+    837▕             $exceptionType = ($isUniqueConstraintError = $this->isUniqueConstraintError($e))
+    838▕                 ? UniqueConstraintViolationException::class
+    839▕                 : QueryException::class;
+    840▕ 
+  ➜ 841▕             $exception = new $exceptionType(
+    842▕                 $this->getNameWithReadWriteType(),
+    843▕                 $query,
+    844▕                 $this->prepareBindings($bindings),
+    845▕                 $e,
+
+  [33m1   [39m[39;1mvendor\laravel\framework\src\Illuminate\Database\Connection.php[39;22m:[39;1m841[39;22m
+
+  [33m2   [39m[39;1mvendor\laravel\framework\src\Illuminate\Database\Connection.php[39;22m:[39;1m587[39;22m
+  [90m    NunoMaduro\Collision\Exceptions\TestException::("SQLSTATE[42S01]: Base table or view already exists: 1050 Table 'users' already exists")[39m
+
+  [31m────────────────────────────────────────────────────────────────────────────────────────────────────────────────────[39m  
+  [41;1m FAILED [49;22m [1mTests\Unit\Policies\JobPostPolicyTest[22m [90m>[39m create allows hr admin                             [41;1m QueryException [49;22m  
+[39;1m  SQLSTATE[42S02]: Base table or view not found: 1146 Table 'nexthire_db_test.migrations' doesn't exist (Connection: mysql, Host: 127.0.0.1, Port: 3306, Database: nexthire_db_test, SQL: insert into `migrations` (`migration`, `batch`) values (0001_01_01_000000_create_users_table, 1))[39;22m
+
+  at [32mvendor\laravel\framework\src\Illuminate\Database\Connection.php[39m:[32m841[39m
+    837▕             $exceptionType = ($isUniqueConstraintError = $this->isUniqueConstraintError($e))
+    838▕                 ? UniqueConstraintViolationException::class
+    839▕                 : QueryException::class;
+    840▕ 
+  ➜ 841▕             $exception = new $exceptionType(
+    842▕                 $this->getNameWithReadWriteType(),
+    843▕                 $query,
+    844▕                 $this->prepareBindings($bindings),
+    845▕                 $e,
+
+  [33m1   [39m[39;1mvendor\laravel\framework\src\Illuminate\Database\Connection.php[39;22m:[39;1m841[39;22m
+
+  [33m2   [39m[39;1mvendor\laravel\framework\src\Illuminate\Database\MySqlConnection.php[39;22m:[39;1m47[39;22m
+  [90m    NunoMaduro\Collision\Exceptions\TestException::("SQLSTATE[42S02]: Base table or view not found: 1146 Table 'nexthire_db_test.migrations' doesn't exist")[39m
+
+  [31m────────────────────────────────────────────────────────────────────────────────────────────────────────────────────[39m  
+  [41;1m FAILED [49;22m [1mTests\Unit\Policies\JobPostPolicyTest[22m [90m>[39m create blocks candidate                            [41;1m QueryException [49;22m  
+[39;1m  SQLSTATE[42S01]: Base table or view already exists: 1050 Table 'cache' already exists (Connection: mysql, Host: 127.0.0.1, Port: 3306, Database: nexthire_db_test, SQL: create table `cache` (`key` varchar(255) not null, `value` mediumtext not null, `expiration` bigint not null, primary key (`key`)) default character set utf8mb4 collate 'utf8mb4_unicode_ci')[39;22m
+
+  at [32mvendor\laravel\framework\src\Illuminate\Database\Connection.php[39m:[32m841[39m
+    837▕             $exceptionType = ($isUniqueConstraintError = $this->isUniqueConstraintError($e))
+    838▕                 ? UniqueConstraintViolationException::class
+    839▕                 : QueryException::class;
+    840▕ 
+  ➜ 841▕             $exception = new $exceptionType(
+    842▕                 $this->getNameWithReadWriteType(),
+    843▕                 $query,
+    844▕                 $this->prepareBindings($bindings),
+    845▕                 $e,
+
+  [33m1   [39m[39;1mvendor\laravel\framework\src\Illuminate\Database\Connection.php[39;22m:[39;1m841[39;22m
+
+  [33m2   [39m[39;1mvendor\laravel\framework\src\Illuminate\Database\Connection.php[39;22m:[39;1m587[39;22m
+  [90m    NunoMaduro\Collision\Exceptions\TestException::("SQLSTATE[42S01]: Base table or view already exists: 1050 Table 'cache' already exists")[39m
+
+  [31m────────────────────────────────────────────────────────────────────────────────────────────────────────────────────[39m  
+  [41;1m FAILED [49;22m [1mTests\Unit\Policies\JobPostPolicyTest[22m [90m>[39m create blocks regular employee                     [41;1m QueryException [49;22m  
+[39;1m  SQLSTATE[42S02]: Base table or view not found: 1146 Table 'nexthire_db_test.sessions' doesn't exist (Connection: mysql, Host: 127.0.0.1, Port: 3306, Database: nexthire_db_test, SQL: alter table `sessions` add index `sessions_last_activity_index`(`last_activity`))[39;22m
+
+  at [32mvendor\laravel\framework\src\Illuminate\Database\Connection.php[39m:[32m841[39m
+    837▕             $exceptionType = ($isUniqueConstraintError = $this->isUniqueConstraintError($e))
+    838▕                 ? UniqueConstraintViolationException::class
+    839▕                 : QueryException::class;
+    840▕ 
+  ➜ 841▕             $exception = new $exceptionType(
+    842▕                 $this->getNameWithReadWriteType(),
+    843▕                 $query,
+    844▕                 $this->prepareBindings($bindings),
+    845▕                 $e,
+
+  [33m1   [39m[39;1mvendor\laravel\framework\src\Illuminate\Database\Connection.php[39;22m:[39;1m841[39;22m
+
+  [33m2   [39m[39;1mvendor\laravel\framework\src\Illuminate\Database\Connection.php[39;22m:[39;1m587[39;22m
+  [90m    NunoMaduro\Collision\Exceptions\TestException::("SQLSTATE[42S02]: Base table or view not found: 1146 Table 'nexthire_db_test.sessions' doesn't exist")[39m
+
+  [31m────────────────────────────────────────────────────────────────────────────────────────────────────────────────────[39m  
+  [41;1m FAILED [49;22m [1mTests\Unit\Policies\JobPostPolicyTest[22m [90m>[39m create blocks department manager                   [41;1m QueryException [49;22m  
+[39;1m  SQLSTATE[42S02]: Base table or view not found: 1146 Table 'nexthire_db_test.migrations' doesn't exist (Connection: mysql, Host: 127.0.0.1, Port: 3306, Database: nexthire_db_test, SQL: insert into `migrations` (`migration`, `batch`) values (0001_01_01_000002_create_jobs_table, 1))[39;22m
+
+  at [32mvendor\laravel\framework\src\Illuminate\Database\Connection.php[39m:[32m841[39m
+    837▕             $exceptionType = ($isUniqueConstraintError = $this->isUniqueConstraintError($e))
+    838▕                 ? UniqueConstraintViolationException::class
+    839▕                 : QueryException::class;
+    840▕ 
+  ➜ 841▕             $exception = new $exceptionType(
+    842▕                 $this->getNameWithReadWriteType(),
+    843▕                 $query,
+    844▕                 $this->prepareBindings($bindings),
+    845▕                 $e,
+
+  [33m1   [39m[39;1mvendor\laravel\framework\src\Illuminate\Database\Connection.php[39;22m:[39;1m841[39;22m
+
+  [33m2   [39m[39;1mvendor\laravel\framework\src\Illuminate\Database\MySqlConnection.php[39;22m:[39;1m47[39;22m
+  [90m    NunoMaduro\Collision\Exceptions\TestException::("SQLSTATE[42S02]: Base table or view not found: 1146 Table 'nexthire_db_test.migrations' doesn't exist")[39m
+
+  [31m────────────────────────────────────────────────────────────────────────────────────────────────────────────────────[39m  
+  [41;1m FAILED [49;22m [1mTests\Unit\Policies\JobPostPolicyTest[22m [90m>[39m approve allows department manager                  [41;1m QueryException [49;22m  
+[39;1m  SQLSTATE[42S02]: Base table or view not found: 1146 Table 'nexthire_db_test.migrations' doesn't exist (Connection: mysql, Host: 127.0.0.1, Port: 3306, Database: nexthire_db_test, SQL: insert into `migrations` (`migration`, `batch`) values (0001_01_01_000002_create_jobs_table, 1))[39;22m
+
+  at [32mvendor\laravel\framework\src\Illuminate\Database\Connection.php[39m:[32m841[39m
+    837▕             $exceptionType = ($isUniqueConstraintError = $this->isUniqueConstraintError($e))
+    838▕                 ? UniqueConstraintViolationException::class
+    839▕                 : QueryException::class;
+    840▕ 
+  ➜ 841▕             $exception = new $exceptionType(
+    842▕                 $this->getNameWithReadWriteType(),
+    843▕                 $query,
+    844▕                 $this->prepareBindings($bindings),
+    845▕                 $e,
+
+  [33m1   [39m[39;1mvendor\laravel\framework\src\Illuminate\Database\Connection.php[39;22m:[39;1m841[39;22m
+
+  [33m2   [39m[39;1mvendor\laravel\framework\src\Illuminate\Database\MySqlConnection.php[39;22m:[39;1m47[39;22m
+  [90m    NunoMaduro\Collision\Exceptions\TestException::("SQLSTATE[42S02]: Base table or view not found: 1146 Table 'nexthire_db_test.migrations' doesn't exist")[39m
+
+  [31m────────────────────────────────────────────────────────────────────────────────────────────────────────────────────[39m  
+  [41;1m FAILED [49;22m [1mTests\Unit\Policies\JobPostPolicyTest[22m [90m>[39m approve blocks hr admin                            [41;1m QueryException [49;22m  
+[39;1m  SQLSTATE[42S01]: Base table or view already exists: 1050 Table 'password_reset_tokens' already exists (Connection: mysql, Host: 127.0.0.1, Port: 3306, Database: nexthire_db_test, SQL: create table `password_reset_tokens` (`email` varchar(255) not null, `token` varchar(255) not null, `created_at` timestamp null, primary key (`email`)) default character set utf8mb4 collate 'utf8mb4_unicode_ci')[39;22m
+
+  at [32mvendor\laravel\framework\src\Illuminate\Database\Connection.php[39m:[32m841[39m
+    837▕             $exceptionType = ($isUniqueConstraintError = $this->isUniqueConstraintError($e))
+    838▕                 ? UniqueConstraintViolationException::class
+    839▕                 : QueryException::class;
+    840▕ 
+  ➜ 841▕             $exception = new $exceptionType(
+    842▕                 $this->getNameWithReadWriteType(),
+    843▕                 $query,
+    844▕                 $this->prepareBindings($bindings),
+    845▕                 $e,
+
+  [33m1   [39m[39;1mvendor\laravel\framework\src\Illuminate\Database\Connection.php[39;22m:[39;1m841[39;22m
+
+  [33m2   [39m[39;1mvendor\laravel\framework\src\Illuminate\Database\Connection.php[39;22m:[39;1m587[39;22m
+  [90m    NunoMaduro\Collision\Exceptions\TestException::("SQLSTATE[42S01]: Base table or view already exists: 1050 Table 'password_reset_tokens' already exists")[39m
+
+  [31m────────────────────────────────────────────────────────────────────────────────────────────────────────────────────[39m  
+  [41;1m FAILED [49;22m [1mTests\Unit\Policies\JobPostPolicyTest[22m [90m>[39m approve blocks candidate                           [41;1m QueryException [49;22m  
+[39;1m  SQLSTATE[42S02]: Base table or view not found: 1146 Table 'nexthire_db_test.migrations' doesn't exist (Connection: mysql, Host: 127.0.0.1, Port: 3306, Database: nexthire_db_test, SQL: insert into `migrations` (`migration`, `batch`) values (0001_01_01_000000_create_users_table, 1))[39;22m
+
+  at [32mvendor\laravel\framework\src\Illuminate\Database\Connection.php[39m:[32m841[39m
+    837▕             $exceptionType = ($isUniqueConstraintError = $this->isUniqueConstraintError($e))
+    838▕                 ? UniqueConstraintViolationException::class
+    839▕                 : QueryException::class;
+    840▕ 
+  ➜ 841▕             $exception = new $exceptionType(
+    842▕                 $this->getNameWithReadWriteType(),
+    843▕                 $query,
+    844▕                 $this->prepareBindings($bindings),
+    845▕                 $e,
+
+  [33m1   [39m[39;1mvendor\laravel\framework\src\Illuminate\Database\Connection.php[39;22m:[39;1m841[39;22m
+
+  [33m2   [39m[39;1mvendor\laravel\framework\src\Illuminate\Database\MySqlConnection.php[39;22m:[39;1m47[39;22m
+  [90m    NunoMaduro\Collision\Exceptions\TestException::("SQLSTATE[42S02]: Base table or view not found: 1146 Table 'nexthire_db_test.migrations' doesn't exist")[39m
+
+  [31m────────────────────────────────────────────────────────────────────────────────────────────────────────────────────[39m  
+  [41;1m FAILED [49;22m [1mTests\Unit\Policies\JobPostPolicyTest[22m [90m>[39m reject allows department manager                   [41;1m QueryException [49;22m  
+[39;1m  SQLSTATE[42S01]: Base table or view already exists: 1050 Table 'password_reset_tokens' already exists (Connection: mysql, Host: 127.0.0.1, Port: 3306, Database: nexthire_db_test, SQL: create table `password_reset_tokens` (`email` varchar(255) not null, `token` varchar(255) not null, `created_at` timestamp null, primary key (`email`)) default character set utf8mb4 collate 'utf8mb4_unicode_ci')[39;22m
+
+  at [32mvendor\laravel\framework\src\Illuminate\Database\Connection.php[39m:[32m841[39m
+    837▕             $exceptionType = ($isUniqueConstraintError = $this->isUniqueConstraintError($e))
+    838▕                 ? UniqueConstraintViolationException::class
+    839▕                 : QueryException::class;
+    840▕ 
+  ➜ 841▕             $exception = new $exceptionType(
+    842▕                 $this->getNameWithReadWriteType(),
+    843▕                 $query,
+    844▕                 $this->prepareBindings($bindings),
+    845▕                 $e,
+
+  [33m1   [39m[39;1mvendor\laravel\framework\src\Illuminate\Database\Connection.php[39;22m:[39;1m841[39;22m
+
+  [33m2   [39m[39;1mvendor\laravel\framework\src\Illuminate\Database\Connection.php[39;22m:[39;1m587[39;22m
+  [90m    NunoMaduro\Collision\Exceptions\TestException::("SQLSTATE[42S01]: Base table or view already exists: 1050 Table 'password_reset_tokens' already exists")[39m
+
+  [31m────────────────────────────────────────────────────────────────────────────────────────────────────────────────────[39m  
+  [41;1m FAILED [49;22m [1mTests\Unit\Policies\JobPostPolicyTest[22m [90m>[39m reject blocks regular employee                     [41;1m QueryException [49;22m  
+[39;1m  SQLSTATE[42S02]: Base table or view not found: 1146 Table 'nexthire_db_test.migrations' doesn't exist (Connection: mysql, Host: 127.0.0.1, Port: 3306, Database: nexthire_db_test, SQL: select `migration` from `migrations` order by `batch` asc, `migration` asc)[39;22m
+
+  at [32mvendor\laravel\framework\src\Illuminate\Database\Connection.php[39m:[32m841[39m
+    837▕             $exceptionType = ($isUniqueConstraintError = $this->isUniqueConstraintError($e))
+    838▕                 ? UniqueConstraintViolationException::class
+    839▕                 : QueryException::class;
+    840▕ 
+  ➜ 841▕             $exception = new $exceptionType(
+    842▕                 $this->getNameWithReadWriteType(),
+    843▕                 $query,
+    844▕                 $this->prepareBindings($bindings),
+    845▕                 $e,
+
+  [33m1   [39m[39;1mvendor\laravel\framework\src\Illuminate\Database\Connection.php[39;22m:[39;1m841[39;22m
+
+  [33m2   [39m[39;1mvendor\laravel\framework\src\Illuminate\Database\Connection.php[39;22m:[39;1m421[39;22m
+  [90m    NunoMaduro\Collision\Exceptions\TestException::("SQLSTATE[42S02]: Base table or view not found: 1146 Table 'nexthire_db_test.migrations' doesn't exist")[39m
+
+  [31m────────────────────────────────────────────────────────────────────────────────────────────────────────────────────[39m  
+  [41;1m FAILED [49;22m [1mTests\Unit\Requests\RegisterUserRequestTest[22m [90m>[39m rules require all mandatory fields           [41;1m QueryException [49;22m  
+[39;1m  SQLSTATE[HY000]: General error: 1005 Can't create table `nexthire_db_test`.`assessment_attempts` (errno: 150 "Foreign key constraint is incorrectly formed") (Connection: mysql, Host: 127.0.0.1, Port: 3306, Database: nexthire_db_test, SQL: alter table `assessment_attempts` add constraint `assessment_attempts_assessment_id_foreign` foreign key (`assessment_id`) references `assessments` (`id`) on delete cascade)[39;22m
+
+  at [32mvendor\laravel\framework\src\Illuminate\Database\Connection.php[39m:[32m841[39m
+    837▕             $exceptionType = ($isUniqueConstraintError = $this->isUniqueConstraintError($e))
+    838▕                 ? UniqueConstraintViolationException::class
+    839▕                 : QueryException::class;
+    840▕ 
+  ➜ 841▕             $exception = new $exceptionType(
+    842▕                 $this->getNameWithReadWriteType(),
+    843▕                 $query,
+    844▕                 $this->prepareBindings($bindings),
+    845▕                 $e,
+
+  [33m1   [39m[39;1mvendor\laravel\framework\src\Illuminate\Database\Connection.php[39;22m:[39;1m841[39;22m
+
+  [33m2   [39m[39;1mvendor\laravel\framework\src\Illuminate\Database\Connection.php[39;22m:[39;1m587[39;22m
+  [90m    NunoMaduro\Collision\Exceptions\TestException::("SQLSTATE[HY000]: General error: 1005 Can't create table `nexthire_db_test`.`assessment_attempts` (errno: 150 "Foreign key constraint is incorrectly formed")")[39m
+
+  [31m────────────────────────────────────────────────────────────────────────────────────────────────────────────────────[39m  
+  [41;1m FAILED [49;22m [1mTests\Unit\Requests\RegisterUserRequestTest[22m [90m>[39m birth date requires minimum 18 years         [41;1m QueryException [49;22m  
+[39;1m  SQLSTATE[HY000]: General error: 1005 Can't create table `nexthire_db_test`.`assessment_attempts` (errno: 150 "Foreign key constraint is incorrectly formed") (Connection: mysql, Host: 127.0.0.1, Port: 3306, Database: nexthire_db_test, SQL: alter table `assessment_attempts` add constraint `assessment_attempts_assessment_id_foreign` foreign key (`assessment_id`) references `assessments` (`id`) on delete cascade)[39;22m
+
+  at [32mvendor\laravel\framework\src\Illuminate\Database\Connection.php[39m:[32m841[39m
+    837▕             $exceptionType = ($isUniqueConstraintError = $this->isUniqueConstraintError($e))
+    838▕                 ? UniqueConstraintViolationException::class
+    839▕                 : QueryException::class;
+    840▕ 
+  ➜ 841▕             $exception = new $exceptionType(
+    842▕                 $this->getNameWithReadWriteType(),
+    843▕                 $query,
+    844▕                 $this->prepareBindings($bindings),
+    845▕                 $e,
+
+  [33m1   [39m[39;1mvendor\laravel\framework\src\Illuminate\Database\Connection.php[39;22m:[39;1m841[39;22m
+
+  [33m2   [39m[39;1mvendor\laravel\framework\src\Illuminate\Database\Connection.php[39;22m:[39;1m587[39;22m
+  [90m    NunoMaduro\Collision\Exceptions\TestException::("SQLSTATE[HY000]: General error: 1005 Can't create table `nexthire_db_test`.`assessment_attempts` (errno: 150 "Foreign key constraint is incorrectly formed")")[39m
+
+  [31m────────────────────────────────────────────────────────────────────────────────────────────────────────────────────[39m  
+  [41;1m FAILED [49;22m [1mTests\Unit\Requests\RegisterUserRequestTest[22m [90m>[39m email must be unique                         [41;1m QueryException [49;22m  
+[39;1m  SQLSTATE[HY000]: General error: 1005 Can't create table `nexthire_db_test`.`assessment_attempts` (errno: 150 "Foreign key constraint is incorrectly formed") (Connection: mysql, Host: 127.0.0.1, Port: 3306, Database: nexthire_db_test, SQL: alter table `assessment_attempts` add constraint `assessment_attempts_assessment_id_foreign` foreign key (`assessment_id`) references `assessments` (`id`) on delete cascade)[39;22m
+
+  at [32mvendor\laravel\framework\src\Illuminate\Database\Connection.php[39m:[32m841[39m
+    837▕             $exceptionType = ($isUniqueConstraintError = $this->isUniqueConstraintError($e))
+    838▕                 ? UniqueConstraintViolationException::class
+    839▕                 : QueryException::class;
+    840▕ 
+  ➜ 841▕             $exception = new $exceptionType(
+    842▕                 $this->getNameWithReadWriteType(),
+    843▕                 $query,
+    844▕                 $this->prepareBindings($bindings),
+    845▕                 $e,
+
+  [33m1   [39m[39;1mvendor\laravel\framework\src\Illuminate\Database\Connection.php[39;22m:[39;1m841[39;22m
+
+  [33m2   [39m[39;1mvendor\laravel\framework\src\Illuminate\Database\Connection.php[39;22m:[39;1m587[39;22m
+  [90m    NunoMaduro\Collision\Exceptions\TestException::("SQLSTATE[HY000]: General error: 1005 Can't create table `nexthire_db_test`.`assessment_attempts` (errno: 150 "Foreign key constraint is incorrectly formed")")[39m
+
+  [31m────────────────────────────────────────────────────────────────────────────────────────────────────────────────────[39m  
+  [41;1m FAILED [49;22m [1mTests\Unit\Requests\RegisterUserRequestTest[22m [90m>[39m phone number must be unique                  [41;1m QueryException [49;22m  
+[39;1m  SQLSTATE[HY000]: General error: 1005 Can't create table `nexthire_db_test`.`assessment_attempts` (errno: 150 "Foreign key constraint is incorrectly formed") (Connection: mysql, Host: 127.0.0.1, Port: 3306, Database: nexthire_db_test, SQL: alter table `assessment_attempts` add constraint `assessment_attempts_assessment_id_foreign` foreign key (`assessment_id`) references `assessments` (`id`) on delete cascade)[39;22m
+
+  at [32mvendor\laravel\framework\src\Illuminate\Database\Connection.php[39m:[32m841[39m
+    837▕             $exceptionType = ($isUniqueConstraintError = $this->isUniqueConstraintError($e))
+    838▕                 ? UniqueConstraintViolationException::class
+    839▕                 : QueryException::class;
+    840▕ 
+  ➜ 841▕             $exception = new $exceptionType(
+    842▕                 $this->getNameWithReadWriteType(),
+    843▕                 $query,
+    844▕                 $this->prepareBindings($bindings),
+    845▕                 $e,
+
+  [33m1   [39m[39;1mvendor\laravel\framework\src\Illuminate\Database\Connection.php[39;22m:[39;1m841[39;22m
+
+  [33m2   [39m[39;1mvendor\laravel\framework\src\Illuminate\Database\Connection.php[39;22m:[39;1m587[39;22m
+  [90m    NunoMaduro\Collision\Exceptions\TestException::("SQLSTATE[HY000]: General error: 1005 Can't create table `nexthire_db_test`.`assessment_attempts` (errno: 150 "Foreign key constraint is incorrectly formed")")[39m
+
+  [31m────────────────────────────────────────────────────────────────────────────────────────────────────────────────────[39m  
+  [41;1m FAILED [49;22m [1mTests\Unit\Requests\RegisterUserRequestTest[22m [90m>[39m skills is optional array                     [41;1m QueryException [49;22m  
+[39;1m  SQLSTATE[HY000]: General error: 1005 Can't create table `nexthire_db_test`.`assessment_attempts` (errno: 150 "Foreign key constraint is incorrectly formed") (Connection: mysql, Host: 127.0.0.1, Port: 3306, Database: nexthire_db_test, SQL: alter table `assessment_attempts` add constraint `assessment_attempts_assessment_id_foreign` foreign key (`assessment_id`) references `assessments` (`id`) on delete cascade)[39;22m
+
+  at [32mvendor\laravel\framework\src\Illuminate\Database\Connection.php[39m:[32m841[39m
+    837▕             $exceptionType = ($isUniqueConstraintError = $this->isUniqueConstraintError($e))
+    838▕                 ? UniqueConstraintViolationException::class
+    839▕                 : QueryException::class;
+    840▕ 
+  ➜ 841▕             $exception = new $exceptionType(
+    842▕                 $this->getNameWithReadWriteType(),
+    843▕                 $query,
+    844▕                 $this->prepareBindings($bindings),
+    845▕                 $e,
+
+  [33m1   [39m[39;1mvendor\laravel\framework\src\Illuminate\Database\Connection.php[39;22m:[39;1m841[39;22m
+
+  [33m2   [39m[39;1mvendor\laravel\framework\src\Illuminate\Database\Connection.php[39;22m:[39;1m587[39;22m
+  [90m    NunoMaduro\Collision\Exceptions\TestException::("SQLSTATE[HY000]: General error: 1005 Can't create table `nexthire_db_test`.`assessment_attempts` (errno: 150 "Foreign key constraint is incorrectly formed")")[39m
+
+  [31m────────────────────────────────────────────────────────────────────────────────────────────────────────────────────[39m  
+  [41;1m FAILED [49;22m [1mTests\Unit\Requests\RegisterUserRequestTest[22m [90m>[39m resume accepts pdf doc docx                  [41;1m QueryException [49;22m  
+[39;1m  SQLSTATE[HY000]: General error: 1005 Can't create table `nexthire_db_test`.`assessment_attempts` (errno: 150 "Foreign key constraint is incorrectly formed") (Connection: mysql, Host: 127.0.0.1, Port: 3306, Database: nexthire_db_test, SQL: alter table `assessment_attempts` add constraint `assessment_attempts_assessment_id_foreign` foreign key (`assessment_id`) references `assessments` (`id`) on delete cascade)[39;22m
+
+  at [32mvendor\laravel\framework\src\Illuminate\Database\Connection.php[39m:[32m841[39m
+    837▕             $exceptionType = ($isUniqueConstraintError = $this->isUniqueConstraintError($e))
+    838▕                 ? UniqueConstraintViolationException::class
+    839▕                 : QueryException::class;
+    840▕ 
+  ➜ 841▕             $exception = new $exceptionType(
+    842▕                 $this->getNameWithReadWriteType(),
+    843▕                 $query,
+    844▕                 $this->prepareBindings($bindings),
+    845▕                 $e,
+
+  [33m1   [39m[39;1mvendor\laravel\framework\src\Illuminate\Database\Connection.php[39;22m:[39;1m841[39;22m
+
+  [33m2   [39m[39;1mvendor\laravel\framework\src\Illuminate\Database\Connection.php[39;22m:[39;1m587[39;22m
+  [90m    NunoMaduro\Collision\Exceptions\TestException::("SQLSTATE[HY000]: General error: 1005 Can't create table `nexthire_db_test`.`assessment_attempts` (errno: 150 "Foreign key constraint is incorrectly formed")")[39m
+
+  [31m────────────────────────────────────────────────────────────────────────────────────────────────────────────────────[39m  
+  [41;1m FAILED [49;22m [1mTests\Unit\Requests\RegisterUserRequestTest[22m [90m>[39m docs accepts pdf png jpg zip                 [41;1m QueryException [49;22m  
+[39;1m  SQLSTATE[HY000]: General error: 1005 Can't create table `nexthire_db_test`.`assessment_attempts` (errno: 150 "Foreign key constraint is incorrectly formed") (Connection: mysql, Host: 127.0.0.1, Port: 3306, Database: nexthire_db_test, SQL: alter table `assessment_attempts` add constraint `assessment_attempts_assessment_id_foreign` foreign key (`assessment_id`) references `assessments` (`id`) on delete cascade)[39;22m
+
+  at [32mvendor\laravel\framework\src\Illuminate\Database\Connection.php[39m:[32m841[39m
+    837▕             $exceptionType = ($isUniqueConstraintError = $this->isUniqueConstraintError($e))
+    838▕                 ? UniqueConstraintViolationException::class
+    839▕                 : QueryException::class;
+    840▕ 
+  ➜ 841▕             $exception = new $exceptionType(
+    842▕                 $this->getNameWithReadWriteType(),
+    843▕                 $query,
+    844▕                 $this->prepareBindings($bindings),
+    845▕                 $e,
+
+  [33m1   [39m[39;1mvendor\laravel\framework\src\Illuminate\Database\Connection.php[39;22m:[39;1m841[39;22m
+
+  [33m2   [39m[39;1mvendor\laravel\framework\src\Illuminate\Database\Connection.php[39;22m:[39;1m587[39;22m
+  [90m    NunoMaduro\Collision\Exceptions\TestException::("SQLSTATE[HY000]: General error: 1005 Can't create table `nexthire_db_test`.`assessment_attempts` (errno: 150 "Foreign key constraint is incorrectly formed")")[39m
+
+  [31m────────────────────────────────────────────────────────────────────────────────────────────────────────────────────[39m  
+  [41;1m FAILED [49;22m [1mTests\Unit\Requests\RegisterUserRequestTest[22m [90m>[39m profile picture accepts image types          [41;1m QueryException [49;22m  
+[39;1m  SQLSTATE[HY000]: General error: 1005 Can't create table `nexthire_db_test`.`assessment_attempts` (errno: 150 "Foreign key constraint is incorrectly formed") (Connection: mysql, Host: 127.0.0.1, Port: 3306, Database: nexthire_db_test, SQL: alter table `assessment_attempts` add constraint `assessment_attempts_assessment_id_foreign` foreign key (`assessment_id`) references `assessments` (`id`) on delete cascade)[39;22m
+
+  at [32mvendor\laravel\framework\src\Illuminate\Database\Connection.php[39m:[32m841[39m
+    837▕             $exceptionType = ($isUniqueConstraintError = $this->isUniqueConstraintError($e))
+    838▕                 ? UniqueConstraintViolationException::class
+    839▕                 : QueryException::class;
+    840▕ 
+  ➜ 841▕             $exception = new $exceptionType(
+    842▕                 $this->getNameWithReadWriteType(),
+    843▕                 $query,
+    844▕                 $this->prepareBindings($bindings),
+    845▕                 $e,
+
+  [33m1   [39m[39;1mvendor\laravel\framework\src\Illuminate\Database\Connection.php[39;22m:[39;1m841[39;22m
+
+  [33m2   [39m[39;1mvendor\laravel\framework\src\Illuminate\Database\Connection.php[39;22m:[39;1m587[39;22m
+  [90m    NunoMaduro\Collision\Exceptions\TestException::("SQLSTATE[HY000]: General error: 1005 Can't create table `nexthire_db_test`.`assessment_attempts` (errno: 150 "Foreign key constraint is incorrectly formed")")[39m
+
+  [31m────────────────────────────────────────────────────────────────────────────────────────────────────────────────────[39m  
+  [41;1m FAILED [49;22m [1mTests\Unit\Services\AuthServiceTest[22m [90m>[39m register candidate returns user and token            [41;1m QueryException [49;22m  
+[39;1m  SQLSTATE[HY000]: General error: 1005 Can't create table `nexthire_db_test`.`assessment_attempts` (errno: 150 "Foreign key constraint is incorrectly formed") (Connection: mysql, Host: 127.0.0.1, Port: 3306, Database: nexthire_db_test, SQL: alter table `assessment_attempts` add constraint `assessment_attempts_assessment_id_foreign` foreign key (`assessment_id`) references `assessments` (`id`) on delete cascade)[39;22m
+
+  at [32mvendor\laravel\framework\src\Illuminate\Database\Connection.php[39m:[32m841[39m
+    837▕             $exceptionType = ($isUniqueConstraintError = $this->isUniqueConstraintError($e))
+    838▕                 ? UniqueConstraintViolationException::class
+    839▕                 : QueryException::class;
+    840▕ 
+  ➜ 841▕             $exception = new $exceptionType(
+    842▕                 $this->getNameWithReadWriteType(),
+    843▕                 $query,
+    844▕                 $this->prepareBindings($bindings),
+    845▕                 $e,
+
+  [33m1   [39m[39;1mvendor\laravel\framework\src\Illuminate\Database\Connection.php[39;22m:[39;1m841[39;22m
+
+  [33m2   [39m[39;1mvendor\laravel\framework\src\Illuminate\Database\Connection.php[39;22m:[39;1m587[39;22m
+  [90m    NunoMaduro\Collision\Exceptions\TestException::("SQLSTATE[HY000]: General error: 1005 Can't create table `nexthire_db_test`.`assessment_attempts` (errno: 150 "Foreign key constraint is incorrectly formed")")[39m
+
+  [31m────────────────────────────────────────────────────────────────────────────────────────────────────────────────────[39m  
+  [41;1m FAILED [49;22m [1mTests\Unit\Services\AuthServiceTest[22m [90m>[39m register candidate fires registered event            [41;1m QueryException [49;22m  
+[39;1m  SQLSTATE[HY000]: General error: 1005 Can't create table `nexthire_db_test`.`assessment_attempts` (errno: 150 "Foreign key constraint is incorrectly formed") (Connection: mysql, Host: 127.0.0.1, Port: 3306, Database: nexthire_db_test, SQL: alter table `assessment_attempts` add constraint `assessment_attempts_assessment_id_foreign` foreign key (`assessment_id`) references `assessments` (`id`) on delete cascade)[39;22m
+
+  at [32mvendor\laravel\framework\src\Illuminate\Database\Connection.php[39m:[32m841[39m
+    837▕             $exceptionType = ($isUniqueConstraintError = $this->isUniqueConstraintError($e))
+    838▕                 ? UniqueConstraintViolationException::class
+    839▕                 : QueryException::class;
+    840▕ 
+  ➜ 841▕             $exception = new $exceptionType(
+    842▕                 $this->getNameWithReadWriteType(),
+    843▕                 $query,
+    844▕                 $this->prepareBindings($bindings),
+    845▕                 $e,
+
+  [33m1   [39m[39;1mvendor\laravel\framework\src\Illuminate\Database\Connection.php[39;22m:[39;1m841[39;22m
+
+  [33m2   [39m[39;1mvendor\laravel\framework\src\Illuminate\Database\Connection.php[39;22m:[39;1m587[39;22m
+  [90m    NunoMaduro\Collision\Exceptions\TestException::("SQLSTATE[HY000]: General error: 1005 Can't create table `nexthire_db_test`.`assessment_attempts` (errno: 150 "Foreign key constraint is incorrectly formed")")[39m
+
+  [31m────────────────────────────────────────────────────────────────────────────────────────────────────────────────────[39m  
+  [41;1m FAILED [49;22m [1mTests\Unit\Services\AuthServiceTest[22m [90m>[39m register employee returns user and token             [41;1m QueryException [49;22m  
+[39;1m  SQLSTATE[HY000]: General error: 1005 Can't create table `nexthire_db_test`.`assessment_attempts` (errno: 150 "Foreign key constraint is incorrectly formed") (Connection: mysql, Host: 127.0.0.1, Port: 3306, Database: nexthire_db_test, SQL: alter table `assessment_attempts` add constraint `assessment_attempts_assessment_id_foreign` foreign key (`assessment_id`) references `assessments` (`id`) on delete cascade)[39;22m
+
+  at [32mvendor\laravel\framework\src\Illuminate\Database\Connection.php[39m:[32m841[39m
+    837▕             $exceptionType = ($isUniqueConstraintError = $this->isUniqueConstraintError($e))
+    838▕                 ? UniqueConstraintViolationException::class
+    839▕                 : QueryException::class;
+    840▕ 
+  ➜ 841▕             $exception = new $exceptionType(
+    842▕                 $this->getNameWithReadWriteType(),
+    843▕                 $query,
+    844▕                 $this->prepareBindings($bindings),
+    845▕                 $e,
+
+  [33m1   [39m[39;1mvendor\laravel\framework\src\Illuminate\Database\Connection.php[39;22m:[39;1m841[39;22m
+
+  [33m2   [39m[39;1mvendor\laravel\framework\src\Illuminate\Database\Connection.php[39;22m:[39;1m587[39;22m
+  [90m    NunoMaduro\Collision\Exceptions\TestException::("SQLSTATE[HY000]: General error: 1005 Can't create table `nexthire_db_test`.`assessment_attempts` (errno: 150 "Foreign key constraint is incorrectly formed")")[39m
+
+  [31m────────────────────────────────────────────────────────────────────────────────────────────────────────────────────[39m  
+  [41;1m FAILED [49;22m [1mTests\Unit\Services\AuthServiceTest[22m [90m>[39m login returns user and token for valid credentials   [41;1m QueryException [49;22m  
+[39;1m  SQLSTATE[HY000]: General error: 1005 Can't create table `nexthire_db_test`.`assessment_attempts` (errno: 150 "Foreign key constraint is incorrectly formed") (Connection: mysql, Host: 127.0.0.1, Port: 3306, Database: nexthire_db_test, SQL: alter table `assessment_attempts` add constraint `assessment_attempts_assessment_id_foreign` foreign key (`assessment_id`) references `assessments` (`id`) on delete cascade)[39;22m
+
+  at [32mvendor\laravel\framework\src\Illuminate\Database\Connection.php[39m:[32m841[39m
+    837▕             $exceptionType = ($isUniqueConstraintError = $this->isUniqueConstraintError($e))
+    838▕                 ? UniqueConstraintViolationException::class
+    839▕                 : QueryException::class;
+    840▕ 
+  ➜ 841▕             $exception = new $exceptionType(
+    842▕                 $this->getNameWithReadWriteType(),
+    843▕                 $query,
+    844▕                 $this->prepareBindings($bindings),
+    845▕                 $e,
+
+  [33m1   [39m[39;1mvendor\laravel\framework\src\Illuminate\Database\Connection.php[39;22m:[39;1m841[39;22m
+
+  [33m2   [39m[39;1mvendor\laravel\framework\src\Illuminate\Database\Connection.php[39;22m:[39;1m587[39;22m
+  [90m    NunoMaduro\Collision\Exceptions\TestException::("SQLSTATE[HY000]: General error: 1005 Can't create table `nexthire_db_test`.`assessment_attempts` (errno: 150 "Foreign key constraint is incorrectly formed")")[39m
+
+  [31m────────────────────────────────────────────────────────────────────────────────────────────────────────────────────[39m  
+  [41;1m FAILED [49;22m [1mTests\Unit\Services\AuthServiceTest[22m [90m>[39m login throws validation exception for invalid crede… [41;1m QueryException [49;22m  
+[39;1m  SQLSTATE[HY000]: General error: 1005 Can't create table `nexthire_db_test`.`assessment_attempts` (errno: 150 "Foreign key constraint is incorrectly formed") (Connection: mysql, Host: 127.0.0.1, Port: 3306, Database: nexthire_db_test, SQL: alter table `assessment_attempts` add constraint `assessment_attempts_assessment_id_foreign` foreign key (`assessment_id`) references `assessments` (`id`) on delete cascade)[39;22m
+
+  at [32mvendor\laravel\framework\src\Illuminate\Database\Connection.php[39m:[32m841[39m
+    837▕             $exceptionType = ($isUniqueConstraintError = $this->isUniqueConstraintError($e))
+    838▕                 ? UniqueConstraintViolationException::class
+    839▕                 : QueryException::class;
+    840▕ 
+  ➜ 841▕             $exception = new $exceptionType(
+    842▕                 $this->getNameWithReadWriteType(),
+    843▕                 $query,
+    844▕                 $this->prepareBindings($bindings),
+    845▕                 $e,
+
+  [33m1   [39m[39;1mvendor\laravel\framework\src\Illuminate\Database\Connection.php[39;22m:[39;1m841[39;22m
+
+  [33m2   [39m[39;1mvendor\laravel\framework\src\Illuminate\Database\Connection.php[39;22m:[39;1m587[39;22m
+  [90m    NunoMaduro\Collision\Exceptions\TestException::("SQLSTATE[HY000]: General error: 1005 Can't create table `nexthire_db_test`.`assessment_attempts` (errno: 150 "Foreign key constraint is incorrectly formed")")[39m
+
+  [31m────────────────────────────────────────────────────────────────────────────────────────────────────────────────────[39m  
+  [41;1m FAILED [49;22m [1mTests\Unit\Services\AuthServiceTest[22m [90m>[39m login throws exception for nonexistent email         [41;1m QueryException [49;22m  
+[39;1m  SQLSTATE[HY000]: General error: 1005 Can't create table `nexthire_db_test`.`assessment_attempts` (errno: 150 "Foreign key constraint is incorrectly formed") (Connection: mysql, Host: 127.0.0.1, Port: 3306, Database: nexthire_db_test, SQL: alter table `assessment_attempts` add constraint `assessment_attempts_assessment_id_foreign` foreign key (`assessment_id`) references `assessments` (`id`) on delete cascade)[39;22m
+
+  at [32mvendor\laravel\framework\src\Illuminate\Database\Connection.php[39m:[32m841[39m
+    837▕             $exceptionType = ($isUniqueConstraintError = $this->isUniqueConstraintError($e))
+    838▕                 ? UniqueConstraintViolationException::class
+    839▕                 : QueryException::class;
+    840▕ 
+  ➜ 841▕             $exception = new $exceptionType(
+    842▕                 $this->getNameWithReadWriteType(),
+    843▕                 $query,
+    844▕                 $this->prepareBindings($bindings),
+    845▕                 $e,
+
+  [33m1   [39m[39;1mvendor\laravel\framework\src\Illuminate\Database\Connection.php[39;22m:[39;1m841[39;22m
+
+  [33m2   [39m[39;1mvendor\laravel\framework\src\Illuminate\Database\Connection.php[39;22m:[39;1m587[39;22m
+  [90m    NunoMaduro\Collision\Exceptions\TestException::("SQLSTATE[HY000]: General error: 1005 Can't create table `nexthire_db_test`.`assessment_attempts` (errno: 150 "Foreign key constraint is incorrectly formed")")[39m
+
+  [31m────────────────────────────────────────────────────────────────────────────────────────────────────────────────────[39m  
+  [41;1m FAILED [49;22m [1mTests\Feature\AssessmentApiTest[22m [90m>[39m can start assessment attempt                             [41;1m QueryException [49;22m  
+[39;1m  SQLSTATE[HY000]: General error: 1005 Can't create table `nexthire_db_test`.`assessment_attempts` (errno: 150 "Foreign key constraint is incorrectly formed") (Connection: mysql, Host: 127.0.0.1, Port: 3306, Database: nexthire_db_test, SQL: alter table `assessment_attempts` add constraint `assessment_attempts_assessment_id_foreign` foreign key (`assessment_id`) references `assessments` (`id`) on delete cascade)[39;22m
+
+  at [32mvendor\laravel\framework\src\Illuminate\Database\Connection.php[39m:[32m841[39m
+    837▕             $exceptionType = ($isUniqueConstraintError = $this->isUniqueConstraintError($e))
+    838▕                 ? UniqueConstraintViolationException::class
+    839▕                 : QueryException::class;
+    840▕ 
+  ➜ 841▕             $exception = new $exceptionType(
+    842▕                 $this->getNameWithReadWriteType(),
+    843▕                 $query,
+    844▕                 $this->prepareBindings($bindings),
+    845▕                 $e,
+
+  [33m1   [39m[39;1mvendor\laravel\framework\src\Illuminate\Database\Connection.php[39;22m:[39;1m841[39;22m
+
+  [33m2   [39m[39;1mvendor\laravel\framework\src\Illuminate\Database\Connection.php[39;22m:[39;1m587[39;22m
+  [90m    NunoMaduro\Collision\Exceptions\TestException::("SQLSTATE[HY000]: General error: 1005 Can't create table `nexthire_db_test`.`assessment_attempts` (errno: 150 "Foreign key constraint is incorrectly formed")")[39m
+
+  [31m────────────────────────────────────────────────────────────────────────────────────────────────────────────────────[39m  
+  [41;1m FAILED [49;22m [1mTests\Feature\AssessmentApiTest[22m [90m>[39m can store batched logs                                   [41;1m QueryException [49;22m  
+[39;1m  SQLSTATE[HY000]: General error: 1005 Can't create table `nexthire_db_test`.`assessment_attempts` (errno: 150 "Foreign key constraint is incorrectly formed") (Connection: mysql, Host: 127.0.0.1, Port: 3306, Database: nexthire_db_test, SQL: alter table `assessment_attempts` add constraint `assessment_attempts_assessment_id_foreign` foreign key (`assessment_id`) references `assessments` (`id`) on delete cascade)[39;22m
+
+  at [32mvendor\laravel\framework\src\Illuminate\Database\Connection.php[39m:[32m841[39m
+    837▕             $exceptionType = ($isUniqueConstraintError = $this->isUniqueConstraintError($e))
+    838▕                 ? UniqueConstraintViolationException::class
+    839▕                 : QueryException::class;
+    840▕ 
+  ➜ 841▕             $exception = new $exceptionType(
+    842▕                 $this->getNameWithReadWriteType(),
+    843▕                 $query,
+    844▕                 $this->prepareBindings($bindings),
+    845▕                 $e,
+
+  [33m1   [39m[39;1mvendor\laravel\framework\src\Illuminate\Database\Connection.php[39;22m:[39;1m841[39;22m
+
+  [33m2   [39m[39;1mvendor\laravel\framework\src\Illuminate\Database\Connection.php[39;22m:[39;1m587[39;22m
+  [90m    NunoMaduro\Collision\Exceptions\TestException::("SQLSTATE[HY000]: General error: 1005 Can't create table `nexthire_db_test`.`assessment_attempts` (errno: 150 "Foreign key constraint is incorrectly formed")")[39m
+
+  [31m────────────────────────────────────────────────────────────────────────────────────────────────────────────────────[39m  
+  [41;1m FAILED [49;22m [1mTests\Feature\AuthControllerTest[22m [90m>[39m register candidate endpoint success                     [41;1m QueryException [49;22m  
+[39;1m  SQLSTATE[HY000]: General error: 1005 Can't create table `nexthire_db_test`.`assessment_attempts` (errno: 150 "Foreign key constraint is incorrectly formed") (Connection: mysql, Host: 127.0.0.1, Port: 3306, Database: nexthire_db_test, SQL: alter table `assessment_attempts` add constraint `assessment_attempts_assessment_id_foreign` foreign key (`assessment_id`) references `assessments` (`id`) on delete cascade)[39;22m
+
+  at [32mvendor\laravel\framework\src\Illuminate\Database\Connection.php[39m:[32m841[39m
+    837▕             $exceptionType = ($isUniqueConstraintError = $this->isUniqueConstraintError($e))
+    838▕                 ? UniqueConstraintViolationException::class
+    839▕                 : QueryException::class;
+    840▕ 
+  ➜ 841▕             $exception = new $exceptionType(
+    842▕                 $this->getNameWithReadWriteType(),
+    843▕                 $query,
+    844▕                 $this->prepareBindings($bindings),
+    845▕                 $e,
+
+  [33m1   [39m[39;1mvendor\laravel\framework\src\Illuminate\Database\Connection.php[39;22m:[39;1m841[39;22m
+
+  [33m2   [39m[39;1mvendor\laravel\framework\src\Illuminate\Database\Connection.php[39;22m:[39;1m587[39;22m
+  [90m    NunoMaduro\Collision\Exceptions\TestException::("SQLSTATE[HY000]: General error: 1005 Can't create table `nexthire_db_test`.`assessment_attempts` (errno: 150 "Foreign key constraint is incorrectly formed")")[39m
+
+  [31m────────────────────────────────────────────────────────────────────────────────────────────────────────────────────[39m  
+  [41;1m FAILED [49;22m [1mTests\Feature\AuthControllerTest[22m [90m>[39m register candidate validation failure missing files     [41;1m QueryException [49;22m  
+[39;1m  SQLSTATE[HY000]: General error: 1005 Can't create table `nexthire_db_test`.`assessment_attempts` (errno: 150 "Foreign key constraint is incorrectly formed") (Connection: mysql, Host: 127.0.0.1, Port: 3306, Database: nexthire_db_test, SQL: alter table `assessment_attempts` add constraint `assessment_attempts_assessment_id_foreign` foreign key (`assessment_id`) references `assessments` (`id`) on delete cascade)[39;22m
+
+  at [32mvendor\laravel\framework\src\Illuminate\Database\Connection.php[39m:[32m841[39m
+    837▕             $exceptionType = ($isUniqueConstraintError = $this->isUniqueConstraintError($e))
+    838▕                 ? UniqueConstraintViolationException::class
+    839▕                 : QueryException::class;
+    840▕ 
+  ➜ 841▕             $exception = new $exceptionType(
+    842▕                 $this->getNameWithReadWriteType(),
+    843▕                 $query,
+    844▕                 $this->prepareBindings($bindings),
+    845▕                 $e,
+
+  [33m1   [39m[39;1mvendor\laravel\framework\src\Illuminate\Database\Connection.php[39;22m:[39;1m841[39;22m
+
+  [33m2   [39m[39;1mvendor\laravel\framework\src\Illuminate\Database\Connection.php[39;22m:[39;1m587[39;22m
+  [90m    NunoMaduro\Collision\Exceptions\TestException::("SQLSTATE[HY000]: General error: 1005 Can't create table `nexthire_db_test`.`assessment_attempts` (errno: 150 "Foreign key constraint is incorrectly formed")")[39m
+
+  [31m────────────────────────────────────────────────────────────────────────────────────────────────────────────────────[39m  
+  [41;1m FAILED [49;22m [1mTests\Feature\AuthControllerTest[22m [90m>[39m login endpoint success and failure                      [41;1m QueryException [49;22m  
+[39;1m  SQLSTATE[HY000]: General error: 1005 Can't create table `nexthire_db_test`.`assessment_attempts` (errno: 150 "Foreign key constraint is incorrectly formed") (Connection: mysql, Host: 127.0.0.1, Port: 3306, Database: nexthire_db_test, SQL: alter table `assessment_attempts` add constraint `assessment_attempts_assessment_id_foreign` foreign key (`assessment_id`) references `assessments` (`id`) on delete cascade)[39;22m
+
+  at [32mvendor\laravel\framework\src\Illuminate\Database\Connection.php[39m:[32m841[39m
+    837▕             $exceptionType = ($isUniqueConstraintError = $this->isUniqueConstraintError($e))
+    838▕                 ? UniqueConstraintViolationException::class
+    839▕                 : QueryException::class;
+    840▕ 
+  ➜ 841▕             $exception = new $exceptionType(
+    842▕                 $this->getNameWithReadWriteType(),
+    843▕                 $query,
+    844▕                 $this->prepareBindings($bindings),
+    845▕                 $e,
+
+  [33m1   [39m[39;1mvendor\laravel\framework\src\Illuminate\Database\Connection.php[39;22m:[39;1m841[39;22m
+
+  [33m2   [39m[39;1mvendor\laravel\framework\src\Illuminate\Database\Connection.php[39;22m:[39;1m587[39;22m
+  [90m    NunoMaduro\Collision\Exceptions\TestException::("SQLSTATE[HY000]: General error: 1005 Can't create table `nexthire_db_test`.`assessment_attempts` (errno: 150 "Foreign key constraint is incorrectly formed")")[39m
+
+  [31m────────────────────────────────────────────────────────────────────────────────────────────────────────────────────[39m  
+  [41;1m FAILED [49;22m [1mTests\Feature\AuthControllerTest[22m [90m>[39m register employee and update employee endpoints         [41;1m QueryException [49;22m  
+[39;1m  SQLSTATE[HY000]: General error: 1005 Can't create table `nexthire_db_test`.`assessment_attempts` (errno: 150 "Foreign key constraint is incorrectly formed") (Connection: mysql, Host: 127.0.0.1, Port: 3306, Database: nexthire_db_test, SQL: alter table `assessment_attempts` add constraint `assessment_attempts_assessment_id_foreign` foreign key (`assessment_id`) references `assessments` (`id`) on delete cascade)[39;22m
+
+  at [32mvendor\laravel\framework\src\Illuminate\Database\Connection.php[39m:[32m841[39m
+    837▕             $exceptionType = ($isUniqueConstraintError = $this->isUniqueConstraintError($e))
+    838▕                 ? UniqueConstraintViolationException::class
+    839▕                 : QueryException::class;
+    840▕ 
+  ➜ 841▕             $exception = new $exceptionType(
+    842▕                 $this->getNameWithReadWriteType(),
+    843▕                 $query,
+    844▕                 $this->prepareBindings($bindings),
+    845▕                 $e,
+
+  [33m1   [39m[39;1mvendor\laravel\framework\src\Illuminate\Database\Connection.php[39;22m:[39;1m841[39;22m
+
+  [33m2   [39m[39;1mvendor\laravel\framework\src\Illuminate\Database\Connection.php[39;22m:[39;1m587[39;22m
+  [90m    NunoMaduro\Collision\Exceptions\TestException::("SQLSTATE[HY000]: General error: 1005 Can't create table `nexthire_db_test`.`assessment_attempts` (errno: 150 "Foreign key constraint is incorrectly formed")")[39m
+
+  [31m────────────────────────────────────────────────────────────────────────────────────────────────────────────────────[39m  
+  [41;1m FAILED [49;22m [1mTests\Feature\Auth\AuthControllerTest[22m [90m>[39m candidate register endpoint returns created user…  [41;1m QueryException [49;22m  
+[39;1m  SQLSTATE[HY000]: General error: 1005 Can't create table `nexthire_db_test`.`assessment_attempts` (errno: 150 "Foreign key constraint is incorrectly formed") (Connection: mysql, Host: 127.0.0.1, Port: 3306, Database: nexthire_db_test, SQL: alter table `assessment_attempts` add constraint `assessment_attempts_assessment_id_foreign` foreign key (`assessment_id`) references `assessments` (`id`) on delete cascade)[39;22m
+
+  at [32mvendor\laravel\framework\src\Illuminate\Database\Connection.php[39m:[32m841[39m
+    837▕             $exceptionType = ($isUniqueConstraintError = $this->isUniqueConstraintError($e))
+    838▕                 ? UniqueConstraintViolationException::class
+    839▕                 : QueryException::class;
+    840▕ 
+  ➜ 841▕             $exception = new $exceptionType(
+    842▕                 $this->getNameWithReadWriteType(),
+    843▕                 $query,
+    844▕                 $this->prepareBindings($bindings),
+    845▕                 $e,
+
+  [33m1   [39m[39;1mvendor\laravel\framework\src\Illuminate\Database\Connection.php[39;22m:[39;1m841[39;22m
+
+  [33m2   [39m[39;1mvendor\laravel\framework\src\Illuminate\Database\Connection.php[39;22m:[39;1m587[39;22m
+  [90m    NunoMaduro\Collision\Exceptions\TestException::("SQLSTATE[HY000]: General error: 1005 Can't create table `nexthire_db_test`.`assessment_attempts` (errno: 150 "Foreign key constraint is incorrectly formed")")[39m
+
+  [31m────────────────────────────────────────────────────────────────────────────────────────────────────────────────────[39m  
+  [41;1m FAILED [49;22m [1mTests\Feature\Auth\AuthControllerTest[22m [90m>[39m candidate register without required fields return… [41;1m QueryException [49;22m  
+[39;1m  SQLSTATE[HY000]: General error: 1005 Can't create table `nexthire_db_test`.`assessment_attempts` (errno: 150 "Foreign key constraint is incorrectly formed") (Connection: mysql, Host: 127.0.0.1, Port: 3306, Database: nexthire_db_test, SQL: alter table `assessment_attempts` add constraint `assessment_attempts_assessment_id_foreign` foreign key (`assessment_id`) references `assessments` (`id`) on delete cascade)[39;22m
+
+  at [32mvendor\laravel\framework\src\Illuminate\Database\Connection.php[39m:[32m841[39m
+    837▕             $exceptionType = ($isUniqueConstraintError = $this->isUniqueConstraintError($e))
+    838▕                 ? UniqueConstraintViolationException::class
+    839▕                 : QueryException::class;
+    840▕ 
+  ➜ 841▕             $exception = new $exceptionType(
+    842▕                 $this->getNameWithReadWriteType(),
+    843▕                 $query,
+    844▕                 $this->prepareBindings($bindings),
+    845▕                 $e,
+
+  [33m1   [39m[39;1mvendor\laravel\framework\src\Illuminate\Database\Connection.php[39;22m:[39;1m841[39;22m
+
+  [33m2   [39m[39;1mvendor\laravel\framework\src\Illuminate\Database\Connection.php[39;22m:[39;1m587[39;22m
+  [90m    NunoMaduro\Collision\Exceptions\TestException::("SQLSTATE[HY000]: General error: 1005 Can't create table `nexthire_db_test`.`assessment_attempts` (errno: 150 "Foreign key constraint is incorrectly formed")")[39m
+
+  [31m────────────────────────────────────────────────────────────────────────────────────────────────────────────────────[39m  
+  [41;1m FAILED [49;22m [1mTests\Feature\Auth\AuthControllerTest[22m [90m>[39m candidate register with duplicate email returns 4… [41;1m QueryException [49;22m  
+[39;1m  SQLSTATE[HY000]: General error: 1005 Can't create table `nexthire_db_test`.`assessment_attempts` (errno: 150 "Foreign key constraint is incorrectly formed") (Connection: mysql, Host: 127.0.0.1, Port: 3306, Database: nexthire_db_test, SQL: alter table `assessment_attempts` add constraint `assessment_attempts_assessment_id_foreign` foreign key (`assessment_id`) references `assessments` (`id`) on delete cascade)[39;22m
+
+  at [32mvendor\laravel\framework\src\Illuminate\Database\Connection.php[39m:[32m841[39m
+    837▕             $exceptionType = ($isUniqueConstraintError = $this->isUniqueConstraintError($e))
+    838▕                 ? UniqueConstraintViolationException::class
+    839▕                 : QueryException::class;
+    840▕ 
+  ➜ 841▕             $exception = new $exceptionType(
+    842▕                 $this->getNameWithReadWriteType(),
+    843▕                 $query,
+    844▕                 $this->prepareBindings($bindings),
+    845▕                 $e,
+
+  [33m1   [39m[39;1mvendor\laravel\framework\src\Illuminate\Database\Connection.php[39;22m:[39;1m841[39;22m
+
+  [33m2   [39m[39;1mvendor\laravel\framework\src\Illuminate\Database\Connection.php[39;22m:[39;1m587[39;22m
+  [90m    NunoMaduro\Collision\Exceptions\TestException::("SQLSTATE[HY000]: General error: 1005 Can't create table `nexthire_db_test`.`assessment_attempts` (errno: 150 "Foreign key constraint is incorrectly formed")")[39m
+
+  [31m────────────────────────────────────────────────────────────────────────────────────────────────────────────────────[39m  
+  [41;1m FAILED [49;22m [1mTests\Feature\Auth\AuthControllerTest[22m [90m>[39m candidate register with underage birth date retur… [41;1m QueryException [49;22m  
+[39;1m  SQLSTATE[HY000]: General error: 1005 Can't create table `nexthire_db_test`.`assessment_attempts` (errno: 150 "Foreign key constraint is incorrectly formed") (Connection: mysql, Host: 127.0.0.1, Port: 3306, Database: nexthire_db_test, SQL: alter table `assessment_attempts` add constraint `assessment_attempts_assessment_id_foreign` foreign key (`assessment_id`) references `assessments` (`id`) on delete cascade)[39;22m
+
+  at [32mvendor\laravel\framework\src\Illuminate\Database\Connection.php[39m:[32m841[39m
+    837▕             $exceptionType = ($isUniqueConstraintError = $this->isUniqueConstraintError($e))
+    838▕                 ? UniqueConstraintViolationException::class
+    839▕                 : QueryException::class;
+    840▕ 
+  ➜ 841▕             $exception = new $exceptionType(
+    842▕                 $this->getNameWithReadWriteType(),
+    843▕                 $query,
+    844▕                 $this->prepareBindings($bindings),
+    845▕                 $e,
+
+  [33m1   [39m[39;1mvendor\laravel\framework\src\Illuminate\Database\Connection.php[39;22m:[39;1m841[39;22m
+
+  [33m2   [39m[39;1mvendor\laravel\framework\src\Illuminate\Database\Connection.php[39;22m:[39;1m587[39;22m
+  [90m    NunoMaduro\Collision\Exceptions\TestException::("SQLSTATE[HY000]: General error: 1005 Can't create table `nexthire_db_test`.`assessment_attempts` (errno: 150 "Foreign key constraint is incorrectly formed")")[39m
+
+  [31m────────────────────────────────────────────────────────────────────────────────────────────────────────────────────[39m  
+  [41;1m FAILED [49;22m [1mTests\Feature\Auth\AuthControllerTest[22m [90m>[39m candidate register endpoint validates required do… [41;1m QueryException [49;22m  
+[39;1m  SQLSTATE[HY000]: General error: 1005 Can't create table `nexthire_db_test`.`assessment_attempts` (errno: 150 "Foreign key constraint is incorrectly formed") (Connection: mysql, Host: 127.0.0.1, Port: 3306, Database: nexthire_db_test, SQL: alter table `assessment_attempts` add constraint `assessment_attempts_assessment_id_foreign` foreign key (`assessment_id`) references `assessments` (`id`) on delete cascade)[39;22m
+
+  at [32mvendor\laravel\framework\src\Illuminate\Database\Connection.php[39m:[32m841[39m
+    837▕             $exceptionType = ($isUniqueConstraintError = $this->isUniqueConstraintError($e))
+    838▕                 ? UniqueConstraintViolationException::class
+    839▕                 : QueryException::class;
+    840▕ 
+  ➜ 841▕             $exception = new $exceptionType(
+    842▕                 $this->getNameWithReadWriteType(),
+    843▕                 $query,
+    844▕                 $this->prepareBindings($bindings),
+    845▕                 $e,
+
+  [33m1   [39m[39;1mvendor\laravel\framework\src\Illuminate\Database\Connection.php[39;22m:[39;1m841[39;22m
+
+  [33m2   [39m[39;1mvendor\laravel\framework\src\Illuminate\Database\Connection.php[39;22m:[39;1m587[39;22m
+  [90m    NunoMaduro\Collision\Exceptions\TestException::("SQLSTATE[HY000]: General error: 1005 Can't create table `nexthire_db_test`.`assessment_attempts` (errno: 150 "Foreign key constraint is incorrectly formed")")[39m
+
+  [31m────────────────────────────────────────────────────────────────────────────────────────────────────────────────────[39m  
+  [41;1m FAILED [49;22m [1mTests\Feature\Auth\AuthControllerTest[22m [90m>[39m employee register endpoint returns created employ… [41;1m QueryException [49;22m  
+[39;1m  SQLSTATE[HY000]: General error: 1005 Can't create table `nexthire_db_test`.`assessment_attempts` (errno: 150 "Foreign key constraint is incorrectly formed") (Connection: mysql, Host: 127.0.0.1, Port: 3306, Database: nexthire_db_test, SQL: alter table `assessment_attempts` add constraint `assessment_attempts_assessment_id_foreign` foreign key (`assessment_id`) references `assessments` (`id`) on delete cascade)[39;22m
+
+  at [32mvendor\laravel\framework\src\Illuminate\Database\Connection.php[39m:[32m841[39m
+    837▕             $exceptionType = ($isUniqueConstraintError = $this->isUniqueConstraintError($e))
+    838▕                 ? UniqueConstraintViolationException::class
+    839▕                 : QueryException::class;
+    840▕ 
+  ➜ 841▕             $exception = new $exceptionType(
+    842▕                 $this->getNameWithReadWriteType(),
+    843▕                 $query,
+    844▕                 $this->prepareBindings($bindings),
+    845▕                 $e,
+
+  [33m1   [39m[39;1mvendor\laravel\framework\src\Illuminate\Database\Connection.php[39;22m:[39;1m841[39;22m
+
+  [33m2   [39m[39;1mvendor\laravel\framework\src\Illuminate\Database\Connection.php[39;22m:[39;1m587[39;22m
+  [90m    NunoMaduro\Collision\Exceptions\TestException::("SQLSTATE[HY000]: General error: 1005 Can't create table `nexthire_db_test`.`assessment_attempts` (errno: 150 "Foreign key constraint is incorrectly formed")")[39m
+
+  [31m────────────────────────────────────────────────────────────────────────────────────────────────────────────────────[39m  
+  [41;1m FAILED [49;22m [1mTests\Feature\Auth\AuthControllerTest[22m [90m>[39m employee register without required fields returns… [41;1m QueryException [49;22m  
+[39;1m  SQLSTATE[HY000]: General error: 1005 Can't create table `nexthire_db_test`.`assessment_attempts` (errno: 150 "Foreign key constraint is incorrectly formed") (Connection: mysql, Host: 127.0.0.1, Port: 3306, Database: nexthire_db_test, SQL: alter table `assessment_attempts` add constraint `assessment_attempts_assessment_id_foreign` foreign key (`assessment_id`) references `assessments` (`id`) on delete cascade)[39;22m
+
+  at [32mvendor\laravel\framework\src\Illuminate\Database\Connection.php[39m:[32m841[39m
+    837▕             $exceptionType = ($isUniqueConstraintError = $this->isUniqueConstraintError($e))
+    838▕                 ? UniqueConstraintViolationException::class
+    839▕                 : QueryException::class;
+    840▕ 
+  ➜ 841▕             $exception = new $exceptionType(
+    842▕                 $this->getNameWithReadWriteType(),
+    843▕                 $query,
+    844▕                 $this->prepareBindings($bindings),
+    845▕                 $e,
+
+  [33m1   [39m[39;1mvendor\laravel\framework\src\Illuminate\Database\Connection.php[39;22m:[39;1m841[39;22m
+
+  [33m2   [39m[39;1mvendor\laravel\framework\src\Illuminate\Database\Connection.php[39;22m:[39;1m587[39;22m
+  [90m    NunoMaduro\Collision\Exceptions\TestException::("SQLSTATE[HY000]: General error: 1005 Can't create table `nexthire_db_test`.`assessment_attempts` (errno: 150 "Foreign key constraint is incorrectly formed")")[39m
+
+  [31m────────────────────────────────────────────────────────────────────────────────────────────────────────────────────[39m  
+  [41;1m FAILED [49;22m [1mTests\Feature\Auth\AuthControllerTest[22m [90m>[39m employee register with duplicate email returns 42… [41;1m QueryException [49;22m  
+[39;1m  SQLSTATE[HY000]: General error: 1005 Can't create table `nexthire_db_test`.`assessment_attempts` (errno: 150 "Foreign key constraint is incorrectly formed") (Connection: mysql, Host: 127.0.0.1, Port: 3306, Database: nexthire_db_test, SQL: alter table `assessment_attempts` add constraint `assessment_attempts_assessment_id_foreign` foreign key (`assessment_id`) references `assessments` (`id`) on delete cascade)[39;22m
+
+  at [32mvendor\laravel\framework\src\Illuminate\Database\Connection.php[39m:[32m841[39m
+    837▕             $exceptionType = ($isUniqueConstraintError = $this->isUniqueConstraintError($e))
+    838▕                 ? UniqueConstraintViolationException::class
+    839▕                 : QueryException::class;
+    840▕ 
+  ➜ 841▕             $exception = new $exceptionType(
+    842▕                 $this->getNameWithReadWriteType(),
+    843▕                 $query,
+    844▕                 $this->prepareBindings($bindings),
+    845▕                 $e,
+
+  [33m1   [39m[39;1mvendor\laravel\framework\src\Illuminate\Database\Connection.php[39;22m:[39;1m841[39;22m
+
+  [33m2   [39m[39;1mvendor\laravel\framework\src\Illuminate\Database\Connection.php[39;22m:[39;1m587[39;22m
+  [90m    NunoMaduro\Collision\Exceptions\TestException::("SQLSTATE[HY000]: General error: 1005 Can't create table `nexthire_db_test`.`assessment_attempts` (errno: 150 "Foreign key constraint is incorrectly formed")")[39m
+
+  [31m────────────────────────────────────────────────────────────────────────────────────────────────────────────────────[39m  
+  [41;1m FAILED [49;22m [1mTests\Feature\Auth\AuthControllerTest[22m [90m>[39m login endpoint returns user and token              [41;1m QueryException [49;22m  
+[39;1m  SQLSTATE[HY000]: General error: 1005 Can't create table `nexthire_db_test`.`assessment_attempts` (errno: 150 "Foreign key constraint is incorrectly formed") (Connection: mysql, Host: 127.0.0.1, Port: 3306, Database: nexthire_db_test, SQL: alter table `assessment_attempts` add constraint `assessment_attempts_assessment_id_foreign` foreign key (`assessment_id`) references `assessments` (`id`) on delete cascade)[39;22m
+
+  at [32mvendor\laravel\framework\src\Illuminate\Database\Connection.php[39m:[32m841[39m
+    837▕             $exceptionType = ($isUniqueConstraintError = $this->isUniqueConstraintError($e))
+    838▕                 ? UniqueConstraintViolationException::class
+    839▕                 : QueryException::class;
+    840▕ 
+  ➜ 841▕             $exception = new $exceptionType(
+    842▕                 $this->getNameWithReadWriteType(),
+    843▕                 $query,
+    844▕                 $this->prepareBindings($bindings),
+    845▕                 $e,
+
+  [33m1   [39m[39;1mvendor\laravel\framework\src\Illuminate\Database\Connection.php[39;22m:[39;1m841[39;22m
+
+  [33m2   [39m[39;1mvendor\laravel\framework\src\Illuminate\Database\Connection.php[39;22m:[39;1m587[39;22m
+  [90m    NunoMaduro\Collision\Exceptions\TestException::("SQLSTATE[HY000]: General error: 1005 Can't create table `nexthire_db_test`.`assessment_attempts` (errno: 150 "Foreign key constraint is incorrectly formed")")[39m
+
+  [31m────────────────────────────────────────────────────────────────────────────────────────────────────────────────────[39m  
+  [41;1m FAILED [49;22m [1mTests\Feature\Auth\AuthControllerTest[22m [90m>[39m login with invalid credentials returns 401         [41;1m QueryException [49;22m  
+[39;1m  SQLSTATE[HY000]: General error: 1005 Can't create table `nexthire_db_test`.`assessment_attempts` (errno: 150 "Foreign key constraint is incorrectly formed") (Connection: mysql, Host: 127.0.0.1, Port: 3306, Database: nexthire_db_test, SQL: alter table `assessment_attempts` add constraint `assessment_attempts_assessment_id_foreign` foreign key (`assessment_id`) references `assessments` (`id`) on delete cascade)[39;22m
+
+  at [32mvendor\laravel\framework\src\Illuminate\Database\Connection.php[39m:[32m841[39m
+    837▕             $exceptionType = ($isUniqueConstraintError = $this->isUniqueConstraintError($e))
+    838▕                 ? UniqueConstraintViolationException::class
+    839▕                 : QueryException::class;
+    840▕ 
+  ➜ 841▕             $exception = new $exceptionType(
+    842▕                 $this->getNameWithReadWriteType(),
+    843▕                 $query,
+    844▕                 $this->prepareBindings($bindings),
+    845▕                 $e,
+
+  [33m1   [39m[39;1mvendor\laravel\framework\src\Illuminate\Database\Connection.php[39;22m:[39;1m841[39;22m
+
+  [33m2   [39m[39;1mvendor\laravel\framework\src\Illuminate\Database\Connection.php[39;22m:[39;1m587[39;22m
+  [90m    NunoMaduro\Collision\Exceptions\TestException::("SQLSTATE[HY000]: General error: 1005 Can't create table `nexthire_db_test`.`assessment_attempts` (errno: 150 "Foreign key constraint is incorrectly formed")")[39m
+
+  [31m────────────────────────────────────────────────────────────────────────────────────────────────────────────────────[39m  
+  [41;1m FAILED [49;22m [1mTests\Feature\Auth\AuthControllerTest[22m [90m>[39m login with nonexistent email returns 422           [41;1m QueryException [49;22m  
+[39;1m  SQLSTATE[HY000]: General error: 1005 Can't create table `nexthire_db_test`.`assessment_attempts` (errno: 150 "Foreign key constraint is incorrectly formed") (Connection: mysql, Host: 127.0.0.1, Port: 3306, Database: nexthire_db_test, SQL: alter table `assessment_attempts` add constraint `assessment_attempts_assessment_id_foreign` foreign key (`assessment_id`) references `assessments` (`id`) on delete cascade)[39;22m
+
+  at [32mvendor\laravel\framework\src\Illuminate\Database\Connection.php[39m:[32m841[39m
+    837▕             $exceptionType = ($isUniqueConstraintError = $this->isUniqueConstraintError($e))
+    838▕                 ? UniqueConstraintViolationException::class
+    839▕                 : QueryException::class;
+    840▕ 
+  ➜ 841▕             $exception = new $exceptionType(
+    842▕                 $this->getNameWithReadWriteType(),
+    843▕                 $query,
+    844▕                 $this->prepareBindings($bindings),
+    845▕                 $e,
+
+  [33m1   [39m[39;1mvendor\laravel\framework\src\Illuminate\Database\Connection.php[39;22m:[39;1m841[39;22m
+
+  [33m2   [39m[39;1mvendor\laravel\framework\src\Illuminate\Database\Connection.php[39;22m:[39;1m587[39;22m
+  [90m    NunoMaduro\Collision\Exceptions\TestException::("SQLSTATE[HY000]: General error: 1005 Can't create table `nexthire_db_test`.`assessment_attempts` (errno: 150 "Foreign key constraint is incorrectly formed")")[39m
+
+  [31m────────────────────────────────────────────────────────────────────────────────────────────────────────────────────[39m  
+  [41;1m FAILED [49;22m [1mTests\Feature\Auth\AuthControllerTest[22m [90m>[39m login with wrong password returns 401              [41;1m QueryException [49;22m  
+[39;1m  SQLSTATE[HY000]: General error: 1005 Can't create table `nexthire_db_test`.`assessment_attempts` (errno: 150 "Foreign key constraint is incorrectly formed") (Connection: mysql, Host: 127.0.0.1, Port: 3306, Database: nexthire_db_test, SQL: alter table `assessment_attempts` add constraint `assessment_attempts_assessment_id_foreign` foreign key (`assessment_id`) references `assessments` (`id`) on delete cascade)[39;22m
+
+  at [32mvendor\laravel\framework\src\Illuminate\Database\Connection.php[39m:[32m841[39m
+    837▕             $exceptionType = ($isUniqueConstraintError = $this->isUniqueConstraintError($e))
+    838▕                 ? UniqueConstraintViolationException::class
+    839▕                 : QueryException::class;
+    840▕ 
+  ➜ 841▕             $exception = new $exceptionType(
+    842▕                 $this->getNameWithReadWriteType(),
+    843▕                 $query,
+    844▕                 $this->prepareBindings($bindings),
+    845▕                 $e,
+
+  [33m1   [39m[39;1mvendor\laravel\framework\src\Illuminate\Database\Connection.php[39;22m:[39;1m841[39;22m
+
+  [33m2   [39m[39;1mvendor\laravel\framework\src\Illuminate\Database\Connection.php[39;22m:[39;1m587[39;22m
+  [90m    NunoMaduro\Collision\Exceptions\TestException::("SQLSTATE[HY000]: General error: 1005 Can't create table `nexthire_db_test`.`assessment_attempts` (errno: 150 "Foreign key constraint is incorrectly formed")")[39m
+
+  [31m────────────────────────────────────────────────────────────────────────────────────────────────────────────────────[39m  
+  [41;1m FAILED [49;22m [1mTests\Feature\Auth\AuthControllerTest[22m [90m>[39m update employee endpoint updates the employee rec… [41;1m QueryException [49;22m  
+[39;1m  SQLSTATE[HY000]: General error: 1005 Can't create table `nexthire_db_test`.`assessment_attempts` (errno: 150 "Foreign key constraint is incorrectly formed") (Connection: mysql, Host: 127.0.0.1, Port: 3306, Database: nexthire_db_test, SQL: alter table `assessment_attempts` add constraint `assessment_attempts_assessment_id_foreign` foreign key (`assessment_id`) references `assessments` (`id`) on delete cascade)[39;22m
+
+  at [32mvendor\laravel\framework\src\Illuminate\Database\Connection.php[39m:[32m841[39m
+    837▕             $exceptionType = ($isUniqueConstraintError = $this->isUniqueConstraintError($e))
+    838▕                 ? UniqueConstraintViolationException::class
+    839▕                 : QueryException::class;
+    840▕ 
+  ➜ 841▕             $exception = new $exceptionType(
+    842▕                 $this->getNameWithReadWriteType(),
+    843▕                 $query,
+    844▕                 $this->prepareBindings($bindings),
+    845▕                 $e,
+
+  [33m1   [39m[39;1mvendor\laravel\framework\src\Illuminate\Database\Connection.php[39;22m:[39;1m841[39;22m
+
+  [33m2   [39m[39;1mvendor\laravel\framework\src\Illuminate\Database\Connection.php[39;22m:[39;1m587[39;22m
+  [90m    NunoMaduro\Collision\Exceptions\TestException::("SQLSTATE[HY000]: General error: 1005 Can't create table `nexthire_db_test`.`assessment_attempts` (errno: 150 "Foreign key constraint is incorrectly formed")")[39m
+
+  [31m────────────────────────────────────────────────────────────────────────────────────────────────────────────────────[39m  
+  [41;1m FAILED [49;22m [1mTests\Feature\Auth\AuthControllerTest[22m [90m>[39m update employee returns 404 for nonexistent id     [41;1m QueryException [49;22m  
+[39;1m  SQLSTATE[HY000]: General error: 1005 Can't create table `nexthire_db_test`.`assessment_attempts` (errno: 150 "Foreign key constraint is incorrectly formed") (Connection: mysql, Host: 127.0.0.1, Port: 3306, Database: nexthire_db_test, SQL: alter table `assessment_attempts` add constraint `assessment_attempts_assessment_id_foreign` foreign key (`assessment_id`) references `assessments` (`id`) on delete cascade)[39;22m
+
+  at [32mvendor\laravel\framework\src\Illuminate\Database\Connection.php[39m:[32m841[39m
+    837▕             $exceptionType = ($isUniqueConstraintError = $this->isUniqueConstraintError($e))
+    838▕                 ? UniqueConstraintViolationException::class
+    839▕                 : QueryException::class;
+    840▕ 
+  ➜ 841▕             $exception = new $exceptionType(
+    842▕                 $this->getNameWithReadWriteType(),
+    843▕                 $query,
+    844▕                 $this->prepareBindings($bindings),
+    845▕                 $e,
+
+  [33m1   [39m[39;1mvendor\laravel\framework\src\Illuminate\Database\Connection.php[39;22m:[39;1m841[39;22m
+
+  [33m2   [39m[39;1mvendor\laravel\framework\src\Illuminate\Database\Connection.php[39;22m:[39;1m587[39;22m
+  [90m    NunoMaduro\Collision\Exceptions\TestException::("SQLSTATE[HY000]: General error: 1005 Can't create table `nexthire_db_test`.`assessment_attempts` (errno: 150 "Foreign key constraint is incorrectly formed")")[39m
+
+  [31m────────────────────────────────────────────────────────────────────────────────────────────────────────────────────[39m  
+  [41;1m FAILED [49;22m [1mTests\Feature\Auth\AuthControllerTest[22m [90m>[39m update profile endpoint updates authenticated use… [41;1m QueryException [49;22m  
+[39;1m  SQLSTATE[HY000]: General error: 1005 Can't create table `nexthire_db_test`.`assessment_attempts` (errno: 150 "Foreign key constraint is incorrectly formed") (Connection: mysql, Host: 127.0.0.1, Port: 3306, Database: nexthire_db_test, SQL: alter table `assessment_attempts` add constraint `assessment_attempts_assessment_id_foreign` foreign key (`assessment_id`) references `assessments` (`id`) on delete cascade)[39;22m
+
+  at [32mvendor\laravel\framework\src\Illuminate\Database\Connection.php[39m:[32m841[39m
+    837▕             $exceptionType = ($isUniqueConstraintError = $this->isUniqueConstraintError($e))
+    838▕                 ? UniqueConstraintViolationException::class
+    839▕                 : QueryException::class;
+    840▕ 
+  ➜ 841▕             $exception = new $exceptionType(
+    842▕                 $this->getNameWithReadWriteType(),
+    843▕                 $query,
+    844▕                 $this->prepareBindings($bindings),
+    845▕                 $e,
+
+  [33m1   [39m[39;1mvendor\laravel\framework\src\Illuminate\Database\Connection.php[39;22m:[39;1m841[39;22m
+
+  [33m2   [39m[39;1mvendor\laravel\framework\src\Illuminate\Database\Connection.php[39;22m:[39;1m587[39;22m
+  [90m    NunoMaduro\Collision\Exceptions\TestException::("SQLSTATE[HY000]: General error: 1005 Can't create table `nexthire_db_test`.`assessment_attempts` (errno: 150 "Foreign key constraint is incorrectly formed")")[39m
+
+  [31m────────────────────────────────────────────────────────────────────────────────────────────────────────────────────[39m  
+  [41;1m FAILED [49;22m [1mTests\Feature\Auth\AuthControllerTest[22m [90m>[39m update profile with partial data                   [41;1m QueryException [49;22m  
+[39;1m  SQLSTATE[HY000]: General error: 1005 Can't create table `nexthire_db_test`.`assessment_attempts` (errno: 150 "Foreign key constraint is incorrectly formed") (Connection: mysql, Host: 127.0.0.1, Port: 3306, Database: nexthire_db_test, SQL: alter table `assessment_attempts` add constraint `assessment_attempts_assessment_id_foreign` foreign key (`assessment_id`) references `assessments` (`id`) on delete cascade)[39;22m
+
+  at [32mvendor\laravel\framework\src\Illuminate\Database\Connection.php[39m:[32m841[39m
+    837▕             $exceptionType = ($isUniqueConstraintError = $this->isUniqueConstraintError($e))
+    838▕                 ? UniqueConstraintViolationException::class
+    839▕                 : QueryException::class;
+    840▕ 
+  ➜ 841▕             $exception = new $exceptionType(
+    842▕                 $this->getNameWithReadWriteType(),
+    843▕                 $query,
+    844▕                 $this->prepareBindings($bindings),
+    845▕                 $e,
+
+  [33m1   [39m[39;1mvendor\laravel\framework\src\Illuminate\Database\Connection.php[39;22m:[39;1m841[39;22m
+
+  [33m2   [39m[39;1mvendor\laravel\framework\src\Illuminate\Database\Connection.php[39;22m:[39;1m587[39;22m
+  [90m    NunoMaduro\Collision\Exceptions\TestException::("SQLSTATE[HY000]: General error: 1005 Can't create table `nexthire_db_test`.`assessment_attempts` (errno: 150 "Foreign key constraint is incorrectly formed")")[39m
+
+  [31m────────────────────────────────────────────────────────────────────────────────────────────────────────────────────[39m  
+  [41;1m FAILED [49;22m [1mTests\Feature\JobPostControllerTest[22m [90m>[39m index returns all jobs for hr admin                  [41;1m QueryException [49;22m  
+[39;1m  SQLSTATE[HY000]: General error: 1005 Can't create table `nexthire_db_test`.`assessment_attempts` (errno: 150 "Foreign key constraint is incorrectly formed") (Connection: mysql, Host: 127.0.0.1, Port: 3306, Database: nexthire_db_test, SQL: alter table `assessment_attempts` add constraint `assessment_attempts_assessment_id_foreign` foreign key (`assessment_id`) references `assessments` (`id`) on delete cascade)[39;22m
+
+  at [32mvendor\laravel\framework\src\Illuminate\Database\Connection.php[39m:[32m841[39m
+    837▕             $exceptionType = ($isUniqueConstraintError = $this->isUniqueConstraintError($e))
+    838▕                 ? UniqueConstraintViolationException::class
+    839▕                 : QueryException::class;
+    840▕ 
+  ➜ 841▕             $exception = new $exceptionType(
+    842▕                 $this->getNameWithReadWriteType(),
+    843▕                 $query,
+    844▕                 $this->prepareBindings($bindings),
+    845▕                 $e,
+
+  [33m1   [39m[39;1mvendor\laravel\framework\src\Illuminate\Database\Connection.php[39;22m:[39;1m841[39;22m
+
+  [33m2   [39m[39;1mvendor\laravel\framework\src\Illuminate\Database\Connection.php[39;22m:[39;1m587[39;22m
+  [90m    NunoMaduro\Collision\Exceptions\TestException::("SQLSTATE[HY000]: General error: 1005 Can't create table `nexthire_db_test`.`assessment_attempts` (errno: 150 "Foreign key constraint is incorrectly formed")")[39m
+
+  [31m────────────────────────────────────────────────────────────────────────────────────────────────────────────────────[39m  
+  [41;1m FAILED [49;22m [1mTests\Feature\JobPostControllerTest[22m [90m>[39m index returns matched jobs for candidate             [41;1m QueryException [49;22m  
+[39;1m  SQLSTATE[HY000]: General error: 1005 Can't create table `nexthire_db_test`.`assessment_attempts` (errno: 150 "Foreign key constraint is incorrectly formed") (Connection: mysql, Host: 127.0.0.1, Port: 3306, Database: nexthire_db_test, SQL: alter table `assessment_attempts` add constraint `assessment_attempts_assessment_id_foreign` foreign key (`assessment_id`) references `assessments` (`id`) on delete cascade)[39;22m
+
+  at [32mvendor\laravel\framework\src\Illuminate\Database\Connection.php[39m:[32m841[39m
+    837▕             $exceptionType = ($isUniqueConstraintError = $this->isUniqueConstraintError($e))
+    838▕                 ? UniqueConstraintViolationException::class
+    839▕                 : QueryException::class;
+    840▕ 
+  ➜ 841▕             $exception = new $exceptionType(
+    842▕                 $this->getNameWithReadWriteType(),
+    843▕                 $query,
+    844▕                 $this->prepareBindings($bindings),
+    845▕                 $e,
+
+  [33m1   [39m[39;1mvendor\laravel\framework\src\Illuminate\Database\Connection.php[39;22m:[39;1m841[39;22m
+
+  [33m2   [39m[39;1mvendor\laravel\framework\src\Illuminate\Database\Connection.php[39;22m:[39;1m587[39;22m
+  [90m    NunoMaduro\Collision\Exceptions\TestException::("SQLSTATE[HY000]: General error: 1005 Can't create table `nexthire_db_test`.`assessment_attempts` (errno: 150 "Foreign key constraint is incorrectly formed")")[39m
+
+  [31m────────────────────────────────────────────────────────────────────────────────────────────────────────────────────[39m  
+  [41;1m FAILED [49;22m [1mTests\Feature\JobPostControllerTest[22m [90m>[39m store creates job for hr admin and notifies manager… [41;1m QueryException [49;22m  
+[39;1m  SQLSTATE[HY000]: General error: 1005 Can't create table `nexthire_db_test`.`assessment_attempts` (errno: 150 "Foreign key constraint is incorrectly formed") (Connection: mysql, Host: 127.0.0.1, Port: 3306, Database: nexthire_db_test, SQL: alter table `assessment_attempts` add constraint `assessment_attempts_assessment_id_foreign` foreign key (`assessment_id`) references `assessments` (`id`) on delete cascade)[39;22m
+
+  at [32mvendor\laravel\framework\src\Illuminate\Database\Connection.php[39m:[32m841[39m
+    837▕             $exceptionType = ($isUniqueConstraintError = $this->isUniqueConstraintError($e))
+    838▕                 ? UniqueConstraintViolationException::class
+    839▕                 : QueryException::class;
+    840▕ 
+  ➜ 841▕             $exception = new $exceptionType(
+    842▕                 $this->getNameWithReadWriteType(),
+    843▕                 $query,
+    844▕                 $this->prepareBindings($bindings),
+    845▕                 $e,
+
+  [33m1   [39m[39;1mvendor\laravel\framework\src\Illuminate\Database\Connection.php[39;22m:[39;1m841[39;22m
+
+  [33m2   [39m[39;1mvendor\laravel\framework\src\Illuminate\Database\Connection.php[39;22m:[39;1m587[39;22m
+  [90m    NunoMaduro\Collision\Exceptions\TestException::("SQLSTATE[HY000]: General error: 1005 Can't create table `nexthire_db_test`.`assessment_attempts` (errno: 150 "Foreign key constraint is incorrectly formed")")[39m
+
+  [31m────────────────────────────────────────────────────────────────────────────────────────────────────────────────────[39m  
+  [41;1m FAILED [49;22m [1mTests\Feature\JobPostControllerTest[22m [90m>[39m approve updates status and notifies hr               [41;1m QueryException [49;22m  
+[39;1m  SQLSTATE[HY000]: General error: 1005 Can't create table `nexthire_db_test`.`assessment_attempts` (errno: 150 "Foreign key constraint is incorrectly formed") (Connection: mysql, Host: 127.0.0.1, Port: 3306, Database: nexthire_db_test, SQL: alter table `assessment_attempts` add constraint `assessment_attempts_assessment_id_foreign` foreign key (`assessment_id`) references `assessments` (`id`) on delete cascade)[39;22m
+
+  at [32mvendor\laravel\framework\src\Illuminate\Database\Connection.php[39m:[32m841[39m
+    837▕             $exceptionType = ($isUniqueConstraintError = $this->isUniqueConstraintError($e))
+    838▕                 ? UniqueConstraintViolationException::class
+    839▕                 : QueryException::class;
+    840▕ 
+  ➜ 841▕             $exception = new $exceptionType(
+    842▕                 $this->getNameWithReadWriteType(),
+    843▕                 $query,
+    844▕                 $this->prepareBindings($bindings),
+    845▕                 $e,
+
+  [33m1   [39m[39;1mvendor\laravel\framework\src\Illuminate\Database\Connection.php[39;22m:[39;1m841[39;22m
+
+  [33m2   [39m[39;1mvendor\laravel\framework\src\Illuminate\Database\Connection.php[39;22m:[39;1m587[39;22m
+  [90m    NunoMaduro\Collision\Exceptions\TestException::("SQLSTATE[HY000]: General error: 1005 Can't create table `nexthire_db_test`.`assessment_attempts` (errno: 150 "Foreign key constraint is incorrectly formed")")[39m
+
+  [31m────────────────────────────────────────────────────────────────────────────────────────────────────────────────────[39m  
+  [41;1m FAILED [49;22m [1mTests\Feature\JobPostControllerTest[22m [90m>[39m reject updates status and notifies hr                [41;1m QueryException [49;22m  
+[39;1m  SQLSTATE[HY000]: General error: 1005 Can't create table `nexthire_db_test`.`assessment_attempts` (errno: 150 "Foreign key constraint is incorrectly formed") (Connection: mysql, Host: 127.0.0.1, Port: 3306, Database: nexthire_db_test, SQL: alter table `assessment_attempts` add constraint `assessment_attempts_assessment_id_foreign` foreign key (`assessment_id`) references `assessments` (`id`) on delete cascade)[39;22m
+
+  at [32mvendor\laravel\framework\src\Illuminate\Database\Connection.php[39m:[32m841[39m
+    837▕             $exceptionType = ($isUniqueConstraintError = $this->isUniqueConstraintError($e))
+    838▕                 ? UniqueConstraintViolationException::class
+    839▕                 : QueryException::class;
+    840▕ 
+  ➜ 841▕             $exception = new $exceptionType(
+    842▕                 $this->getNameWithReadWriteType(),
+    843▕                 $query,
+    844▕                 $this->prepareBindings($bindings),
+    845▕                 $e,
+
+  [33m1   [39m[39;1mvendor\laravel\framework\src\Illuminate\Database\Connection.php[39;22m:[39;1m841[39;22m
+
+  [33m2   [39m[39;1mvendor\laravel\framework\src\Illuminate\Database\Connection.php[39;22m:[39;1m587[39;22m
+  [90m    NunoMaduro\Collision\Exceptions\TestException::("SQLSTATE[HY000]: General error: 1005 Can't create table `nexthire_db_test`.`assessment_attempts` (errno: 150 "Foreign key constraint is incorrectly formed")")[39m
+
+  [31m────────────────────────────────────────────────────────────────────────────────────────────────────────────────────[39m  
+  [41;1m FAILED [49;22m [1mTests\Feature\WebhookApiTest[22m [90m>[39m can process moss webhook                                    [41;1m QueryException [49;22m  
+[39;1m  SQLSTATE[HY000]: General error: 1005 Can't create table `nexthire_db_test`.`assessment_attempts` (errno: 150 "Foreign key constraint is incorrectly formed") (Connection: mysql, Host: 127.0.0.1, Port: 3306, Database: nexthire_db_test, SQL: alter table `assessment_attempts` add constraint `assessment_attempts_assessment_id_foreign` foreign key (`assessment_id`) references `assessments` (`id`) on delete cascade)[39;22m
+
+  at [32mvendor\laravel\framework\src\Illuminate\Database\Connection.php[39m:[32m841[39m
+    837▕             $exceptionType = ($isUniqueConstraintError = $this->isUniqueConstraintError($e))
+    838▕                 ? UniqueConstraintViolationException::class
+    839▕                 : QueryException::class;
+    840▕ 
+  ➜ 841▕             $exception = new $exceptionType(
+    842▕                 $this->getNameWithReadWriteType(),
+    843▕                 $query,
+    844▕                 $this->prepareBindings($bindings),
+    845▕                 $e,
+
+  [33m1   [39m[39;1mvendor\laravel\framework\src\Illuminate\Database\Connection.php[39;22m:[39;1m841[39;22m
+
+  [33m2   [39m[39;1mvendor\laravel\framework\src\Illuminate\Database\Connection.php[39;22m:[39;1m587[39;22m
+  [90m    NunoMaduro\Collision\Exceptions\TestException::("SQLSTATE[HY000]: General error: 1005 Can't create table `nexthire_db_test`.`assessment_attempts` (errno: 150 "Foreign key constraint is incorrectly formed")")[39m
+
+
+  [90mTests:[39m    [31;1m92 failed[39;22m[90m,[39m[39m [39m[33;1m9 warnings[39;22m[90m,[39m[39m [39m[32;1m8 passed[39;22m[90m (40 assertions)[39m
+  [90mDuration:[39m [39m48.66s[39m
+

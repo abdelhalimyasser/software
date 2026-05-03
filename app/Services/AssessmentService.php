@@ -52,15 +52,24 @@ class AssessmentService
                 'started_at' => now(),
             ]);
 
-            // Determine distribution
             $rules = $assessment->distribution_rules ?? []; 
-            // e.g. ["HARD" => 5, "MEDIUM" => 3, "BASIC" => 2]
 
-            // Adjust distribution if it is a retake 
-            // (Shifting 1 HARD to MEDIUM as requested in instructions - adjust logic as strictly needed)
-            if ($isRetake && isset($rules['HARD']) && isset($rules['MEDIUM']) && $rules['HARD'] > 0) {
-                $rules['HARD']--;
-                $rules['MEDIUM']++;
+            if ($isRetake && $previousAttempt->score !== null) {
+                $score = $previousAttempt->score;
+                // If they scored very poorly, reduce hard and medium questions
+                if ($score < 40) {
+                    if (isset($rules['HARD']) && $rules['HARD'] > 0) {
+                        $rules['HARD']--;
+                        $rules['BASIC'] = ($rules['BASIC'] ?? 0) + 1;
+                    }
+                } 
+                // If they scored okay but still failed, reduce hard, increase medium
+                elseif ($score < $assessment->pass_mark) {
+                    if (isset($rules['HARD']) && $rules['HARD'] > 0) {
+                        $rules['HARD']--;
+                        $rules['MEDIUM'] = ($rules['MEDIUM'] ?? 0) + 1;
+                    }
+                }
             }
 
             $pivotRecords = [];
@@ -69,7 +78,7 @@ class AssessmentService
             foreach ($rules as $difficulty => $count) {
                 if ($count <= 0) continue;
 
-                $questions = Question::where('difficulty', $difficulty)
+                $questions = Question::where('difficulty_level', $difficulty)
                     ->inRandomOrder()
                     ->limit($count)
                     ->pluck('id');

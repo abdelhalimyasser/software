@@ -17,27 +17,17 @@ class Question extends Model
         'question',
         'description',
         'category',
-        'recommended_base_answer',
+        'recommended_answer',
         'test_cases',
-        'difficulty',
+        'difficulty_level',
     ];
 
     protected function casts(): array
     {
         return [
             'category' => QuestionCategory::class,
-            'difficulty' => QuestionDifficulty::class,
+            'difficulty_level' => QuestionDifficulty::class,
             'test_cases' => 'json',
         ];
     }
-
-    public function base_answer()
-    {
-        return $this->hasOne(BaseAnswer::class);
-    }
-
-    public function test_cases()
-    {
-        return $this->hasMany(TestCase::class);
-    }    
 }
