@@ -24,6 +24,13 @@
    - [Reset Password](#6-reset-password)
    - [Register Employee](#7-register-employee)
    - [Update Employee](#8-update-employee)
+   - [Get Jobs](#9-get-jobs)
+   - [Create Job](#10-create-job)
+   - [Get Job Details](#11-get-job-details)
+   - [Approve Job](#12-approve-job)
+   - [Reject Job](#13-reject-job)
+   - [Get Unread Notifications](#14-get-unread-notifications)
+   - [Mark Notification as Read](#15-mark-notification-as-read)
 6. [Endpoint Summary](#endpoint-summary)
 7. [Data Models](#data-models)
 8. [File Upload Specifications](#file-upload-specifications)
@@ -488,6 +495,137 @@ Updates an existing employee's data by ID. All fields are optional.
 
 ---
 
+
+---
+
+### 9. Get Jobs
+Retrieve a list of jobs. For `HR_ADMIN`, it returns all jobs. For `CANDIDATE`, it returns only approved jobs that match their experience and skills (minimum 80% skill match).
+- **Endpoint:** `GET /v1/jobs`
+- **Auth Required:** Yes (Bearer Token)
+- **Roles Allowed:** `HR_ADMIN`, `CANDIDATE`
+- **Response (200 OK):**
+  ```json
+  {
+      "jobs": {
+          "data": [
+              {
+                  "id": 1,
+                  "title": "Software Engineer",
+                  "department": "Engineering",
+                  "status": "APPROVED",
+                  "experience_level": 3,
+                  "skills": ["PHP", "Laravel"]
+              }
+          ]
+      }
+  }
+  ```
+
+---
+
+### 10. Create Job
+Create a new job requisition. Notifies all Department Managers.
+- **Endpoint:** `POST /v1/jobs`
+- **Auth Required:** Yes
+- **Roles Allowed:** `HR_ADMIN`
+- **Request Body:**
+  - `title` (string, required)
+  - `description` (string, required)
+  - `department` (string, required)
+  - `experience_level` (integer, required)
+  - `skills` (array of strings, optional)
+- **Response (201 Created):**
+  ```json
+  {
+      "message": "Job created successfully. Waiting for department manager approval.",
+      "job": { ... }
+  }
+  ```
+
+---
+
+### 11. Get Job Details
+Fetch specific job details including the creator and status updater.
+- **Endpoint:** `GET /v1/jobs/{job}`
+- **Auth Required:** Yes
+- **Roles Allowed:** All authenticated users who can view jobs.
+- **Response (200 OK):**
+  ```json
+  {
+      "job": { ... }
+  }
+  ```
+
+---
+
+### 12. Approve Job
+Approve a pending job requisition. Notifies the HR Admin who created the job.
+- **Endpoint:** `POST /v1/jobs/{job}/approve`
+- **Auth Required:** Yes
+- **Roles Allowed:** `DEPARTMENT_MANAGER`
+- **Request Body:**
+  - `reason` (string, required)
+- **Response (200 OK):**
+  ```json
+  {
+      "message": "Job approved successfully. HR has been notified.",
+      "job": { ... }
+  }
+  ```
+
+---
+
+### 13. Reject Job
+Reject a pending job requisition. Notifies the HR Admin who created the job.
+- **Endpoint:** `POST /v1/jobs/{job}/reject`
+- **Auth Required:** Yes
+- **Roles Allowed:** `DEPARTMENT_MANAGER`
+- **Request Body:**
+  - `reason` (string, required)
+- **Response (200 OK):**
+  ```json
+  {
+      "message": "Job rejected. HR has been notified.",
+      "job": { ... }
+  }
+  ```
+
+---
+
+### 14. Get Unread Notifications
+Retrieve all unread system and job notifications for the authenticated user.
+- **Endpoint:** `GET /v1/notifications/unread`
+- **Auth Required:** Yes
+- **Response (200 OK):**
+  ```json
+  {
+      "notifications": [
+          {
+              "id": "uuid",
+              "type": "App\\Notifications\\JobRequiresApprovalNotification",
+              "data": {
+                  "job_id": 1,
+                  "message": "New job requires approval: Software Engineer"
+              },
+              "read_at": null
+          }
+      ]
+  }
+  ```
+
+---
+
+### 15. Mark Notification as Read
+Mark a specific notification as read.
+- **Endpoint:** `POST /v1/notifications/{id}/read`
+- **Auth Required:** Yes
+- **Response (200 OK):**
+  ```json
+  {
+      "message": "Notification marked as read"
+  }
+  ```
+
 ## Endpoint Summary
 
 | # | Method | URL | Auth | Description |
@@ -647,3 +785,51 @@ Generated automatically on first save. Guaranteed unique via DB check loop.
       "job": { ... }
   }
   ```
+
+ # # #   1 6 .   S t a r t   A s s e s s m e n t   A t t e m p t 
+ I n i t i a l i z e   c a n d i d a t e   t e s t   d y n a m i c a l l y   a d h e r i n g   t o   d i s t r i b u t i o n   r u l e s . 
+ 
+ |   P r o p e r t y   |   V a l u e   | 
+ | - - - - - - - - - - | - - - - - - - | 
+ |   * * U R L * *   |   \ / a p i / v 1 / a s s e s s m e n t s / { a s s e s s m e n t _ i d } / s t a r t \   | 
+ |   * * M e t h o d * *   |   \ P O S T \   | 
+ |   * * A u t h * *   |   '  R e q u i r e d   | 
+ |   * * C o n t e n t - T y p e * *   |   \  p p l i c a t i o n / j s o n \   | 
+ 
+ # # # #   R e q u e s t   B o d y 
+ |   F i e l d   |   T y p e   |   R e q u i r e d   |   D e s c r i p t i o n   | 
+ | - - - - - - - | - - - - - - | - - - - - - - - - - | - - - - - - - - - - - - - | 
+ |   \  p p l i c a t i o n _ i d \   |   \ i n t e g e r \   |   '  |   C a n d i d a t e   A p p l i c a t i o n   I D   | 
+ 
+ - - - 
+ 
+ # # #   1 7 .   B a t c h   P u s h   A t t e m p t   L o g s   ( A n t i - C h e a t ) 
+ H i g h - t h r o u g h p u t   t r a c k i n g   b u l k   l o g g i n g   l o g i c   b y p a s s i n g   u p d a t e d _ a t   f o r   p e r f o r m a n c e . 
+ 
+ |   P r o p e r t y   |   V a l u e   | 
+ | - - - - - - - - - - | - - - - - - - | 
+ |   * * U R L * *   |   \ / a p i / v 1 / a s s e s s m e n t s / { a t t e m p t _ i d } / l o g s \   | 
+ |   * * M e t h o d * *   |   \ P O S T \   | 
+ |   * * A u t h * *   |   '  R e q u i r e d   | 
+ |   * * C o n t e n t - T y p e * *   |   \  p p l i c a t i o n / j s o n \   | 
+ 
+ # # # #   R e q u e s t   B o d y 
+ |   F i e l d   |   T y p e   |   R e q u i r e d   |   D e s c r i p t i o n   | 
+ | - - - - - - - | - - - - - - | - - - - - - - - - - | - - - - - - - - - - - - - | 
+ |   \ l o g s \   |   \  r r a y \   |   '  |   B a t c h   e v e n t s   p a y l o a d   | 
+ |   \ l o g s . * . e v e n t _ t y p e \   |   \ s t r i n g \   |   '  |   e . g .   T A B _ S W I T C H   | 
+ |   \ l o g s . * . o c c u r r e d _ a t \   |   \ d a t e t i m e \   |   '  |   Y - m - d   H : i : s . v   m s   p r e c i s i o n   | 
+ 
+ - - - 
+ 
+ # # #   1 8 .   M i c r o s e r v i c e   M O S S   W e b h o o k 
+ N o d e . j s   w o r k e r   r e p o r t i n g   b a c k   p l a g i a r i s m   s c o r e s . 
+ 
+ |   P r o p e r t y   |   V a l u e   | 
+ | - - - - - - - - - - | - - - - - - - | 
+ |   * * U R L * *   |   \ / a p i / v 1 / w e b h o o k s / m o s s - r e s u l t s \   | 
+ |   * * M e t h o d * *   |   \ P O S T \   | 
+ |   * * A u t h * *   |   L'  I n t e r n a l   A P I   | 
+ |   * * C o n t e n t - T y p e * *   |   \  p p l i c a t i o n / j s o n \   | 
+  
+ 

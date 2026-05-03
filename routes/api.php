@@ -3,6 +3,9 @@
 use App\Http\Controllers\AuthController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\JobRequisitionController;
+use App\Http\Controllers\API\AssessmentController;
+use App\Http\Controllers\API\AssessmentLogController;
+use App\Http\Controllers\API\WebhookController;
 
 // Public Routes for Candidates
 Route::prefix('v1/public/auth')->group(function () {
@@ -53,4 +56,15 @@ Route::middleware('auth:sanctum')->prefix('v1/notifications')->group(function ()
             'message' => 'Notification marked as read'
         ], 200);
     });
+});
+
+// Phase 3 & 4: Assessment & Monitoring Endpoints
+Route::prefix('v1/assessments')->group(function () {
+    Route::post('/{assessment_id}/start', [AssessmentController::class, 'startAttempt']);
+    Route::post('/{attempt_id}/logs', [AssessmentLogController::class, 'storeBatch']);
+});
+
+// Phase 4: Webhooks
+Route::prefix('v1/webhooks')->group(function () {
+    Route::post('/moss-results', [WebhookController::class, 'mossResults']);
 });

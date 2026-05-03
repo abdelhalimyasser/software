@@ -192,6 +192,141 @@ components:
 #  Paths
 # ─────────────────────────────────────────────
 paths:
+  /api/v1/jobs:
+    get:
+      summary: Get Jobs
+      description: Returns all jobs for HR Admins, or matched approved jobs for Candidates.
+      tags: [Job Requisitions]
+      security:
+        - bearerAuth: []
+      responses:
+        '200':
+          description: List of jobs
+    post:
+      summary: Create Job Requisition
+      description: HR Admin creates a new job post. Notifies Department Managers.
+      tags: [Job Requisitions]
+      security:
+        - bearerAuth: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required: [title, description, department, experience_level]
+              properties:
+                title:
+                  type: string
+                description:
+                  type: string
+                department:
+                  type: string
+                experience_level:
+                  type: integer
+                skills:
+                  type: array
+                  items:
+                    type: string
+      responses:
+        '201':
+          description: Job created
+
+  /api/v1/jobs/{job}:
+    get:
+      summary: Get Job Details
+      tags: [Job Requisitions]
+      security:
+        - bearerAuth: []
+      parameters:
+        - name: job
+          in: path
+          required: true
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: Job details
+
+  /api/v1/jobs/{job}/approve:
+    post:
+      summary: Approve Job
+      description: Department Manager approves a pending job.
+      tags: [Job Requisitions]
+      security:
+        - bearerAuth: []
+      parameters:
+        - name: job
+          in: path
+          required: true
+          schema:
+            type: integer
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required: [reason]
+              properties:
+                reason:
+                  type: string
+      responses:
+        '200':
+          description: Job approved
+
+  /api/v1/jobs/{job}/reject:
+    post:
+      summary: Reject Job
+      description: Department Manager rejects a pending job.
+      tags: [Job Requisitions]
+      security:
+        - bearerAuth: []
+      parameters:
+        - name: job
+          in: path
+          required: true
+          schema:
+            type: integer
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required: [reason]
+              properties:
+                reason:
+                  type: string
+      responses:
+        '200':
+          description: Job rejected
+
+  /api/v1/notifications/unread:
+    get:
+      summary: Get Unread Notifications
+      tags: [Notifications]
+      security:
+        - bearerAuth: []
+      responses:
+        '200':
+          description: List of unread notifications
+
+  /api/v1/notifications/{id}/read:
+    post:
+      summary: Mark Notification as Read
+      tags: [Notifications]
+      security:
+        - bearerAuth: []
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Marked as read
 
   # ══════════════════════════════════════════
   #  1. Register Candidate
@@ -899,3 +1034,85 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/ErrorResponse"
+
+     / a p i / v 1 / a s s e s s m e n t s / { a s s e s s m e n t _ i d } / s t a r t : 
+         p o s t : 
+             s u m m a r y :   S t a r t   A s s e s s m e n t   A t t e m p t 
+             t a g s :   [ A s s e s s m e n t ] 
+             s e c u r i t y : 
+                 -   B e a r e r A u t h :   [ ] 
+             p a r a m e t e r s : 
+                 -   i n :   p a t h 
+                     n a m e :   a s s e s s m e n t _ i d 
+                     r e q u i r e d :   t r u e 
+                     s c h e m a : 
+                         t y p e :   i n t e g e r 
+             r e q u e s t B o d y : 
+                 r e q u i r e d :   t r u e 
+                 c o n t e n t : 
+                     a p p l i c a t i o n / j s o n : 
+                         s c h e m a : 
+                             t y p e :   o b j e c t 
+                             p r o p e r t i e s : 
+                                 a p p l i c a t i o n _ i d : 
+                                     t y p e :   i n t e g e r 
+             r e s p o n s e s : 
+                 " 2 0 1 " : 
+                     d e s c r i p t i o n :   S t a r t e d   s u c c e s s f u l l y 
+                 " 4 0 3 " : 
+                     d e s c r i p t i o n :   C o o l d o w n   a c t i v e 
+     / a p i / v 1 / a s s e s s m e n t s / { a t t e m p t _ i d } / l o g s : 
+         p o s t : 
+             s u m m a r y :   S t o r e   B a t c h e d   A n t i - C h e a t   L o g s 
+             t a g s :   [ A s s e s s m e n t ] 
+             s e c u r i t y : 
+                 -   B e a r e r A u t h :   [ ] 
+             p a r a m e t e r s : 
+                 -   i n :   p a t h 
+                     n a m e :   a t t e m p t _ i d 
+                     r e q u i r e d :   t r u e 
+                     s c h e m a : 
+                         t y p e :   i n t e g e r 
+             r e q u e s t B o d y : 
+                 r e q u i r e d :   t r u e 
+                 c o n t e n t : 
+                     a p p l i c a t i o n / j s o n : 
+                         s c h e m a : 
+                             t y p e :   o b j e c t 
+                             p r o p e r t i e s : 
+                                 l o g s : 
+                                     t y p e :   a r r a y 
+                                     i t e m s : 
+                                         t y p e :   o b j e c t 
+                                         p r o p e r t i e s : 
+                                             e v e n t _ t y p e : 
+                                                 t y p e :   s t r i n g 
+                                             o c c u r r e d _ a t : 
+                                                 t y p e :   s t r i n g 
+                                             m e t a d a t a : 
+                                                 t y p e :   o b j e c t 
+             r e s p o n s e s : 
+                 " 2 0 1 " : 
+                     d e s c r i p t i o n :   C r e a t e d 
+     / a p i / v 1 / w e b h o o k s / m o s s - r e s u l t s : 
+         p o s t : 
+             s u m m a r y :   R e c e i v e   M O S S   P l a g i a r i s m   r u l e s 
+             t a g s :   [ W e b h o o k s ] 
+             r e q u e s t B o d y : 
+                 r e q u i r e d :   t r u e 
+                 c o n t e n t : 
+                     a p p l i c a t i o n / j s o n : 
+                         s c h e m a : 
+                             t y p e :   o b j e c t 
+                             p r o p e r t i e s : 
+                                 a t t e m p t _ i d : 
+                                     t y p e :   i n t e g e r 
+                                 p l a g i a r i s m _ s c o r e : 
+                                     t y p e :   n u m b e r 
+                                 m o s s _ r e p o r t _ u r l : 
+                                     t y p e :   s t r i n g 
+             r e s p o n s e s : 
+                 " 2 0 0 " : 
+                     d e s c r i p t i o n :   U p d a t e d 
+  
+ 
